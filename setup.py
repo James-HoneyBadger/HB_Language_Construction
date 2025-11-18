@@ -26,7 +26,6 @@ setup(
         "Intended Audience :: Education",
         "Topic :: Software Development :: Compilers",
         "Topic :: Software Development :: Interpreters",
-        "License :: OSI Approved :: MIT License",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
@@ -34,6 +33,7 @@ setup(
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
     ],
+    license="MIT",
     python_requires=">=3.7",
     install_requires=[
         # No external dependencies - uses only Python standard library
