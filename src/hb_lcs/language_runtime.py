@@ -17,7 +17,7 @@ from typing import Optional, Dict, Any
 from pathlib import Path
 import os
 
-from language_config import LanguageConfig
+from .language_config import LanguageConfig
 
 
 class LanguageRuntime:
