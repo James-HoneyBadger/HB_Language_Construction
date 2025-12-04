@@ -23,7 +23,7 @@ def main():
         print("\nMake sure hb_lcs is properly installed:")
         print("  pip install -e .")
         sys.exit(1)
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001  # pylint: disable=broad-except
         print(f"Error starting IDE: {e}")
         sys.exit(1)
 

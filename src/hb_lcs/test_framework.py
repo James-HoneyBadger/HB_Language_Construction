@@ -31,6 +31,7 @@ class TestCase:
     expected_ast_nodes: Optional[int] = None
     should_pass: bool = True
     description: str = ""
+    test_type: str = "general"
     tags: List[str] = field(default_factory=list)
 
 
@@ -46,6 +47,11 @@ class TestResult:
     error: Optional[str] = None
     metadata: Dict[str, Any] = field(default_factory=dict)
 
+    @property
+    def error_message(self) -> Optional[str]:
+        """Backwards compatible alias used by older test helpers."""
+        return self.error
+
 
 class LanguageTestRunner:
     """Runs tests for custom languages."""
@@ -55,6 +61,7 @@ class LanguageTestRunner:
         self.parser_gen = ParserGenerator(config)
         self.test_cases: List[TestCase] = []
         self.results: List[TestResult] = []
+        self.last_report: Optional[Dict[str, Any]] = None
 
     def add_test(self, test: TestCase) -> None:
         """Add a test case."""
@@ -64,19 +71,21 @@ class LanguageTestRunner:
         """Add multiple test cases."""
         self.test_cases.extend(tests)
 
-    def run_all_tests(self) -> Dict[str, Any]:
-        """Run all test cases and return results."""
+    def run_all_tests(self, tests: Optional[List[TestCase]] = None) -> List[TestResult]:
+        """Run test cases and return the collected results."""
+        test_suite = tests if tests is not None else self.test_cases
         self.results = []
         start_time = datetime.now()
 
-        for test in self.test_cases:
+        for test in test_suite:
             result = self.run_test(test)
             self.results.append(result)
 
         end_time = datetime.now()
         duration = (end_time - start_time).total_seconds()
 
-        return self.generate_report(duration)
+        self.last_report = self.generate_report(duration)
+        return list(self.results)
 
     def run_test(self, test: TestCase) -> TestResult:
         """Run a single test case."""
@@ -88,17 +97,13 @@ class LanguageTestRunner:
 
             # Check token count if specified
             if test.expected_tokens is not None:
-                actual_tokens = len(
-                    [t for t in tokens if t.type.value != "EOF"]
-                )
+                actual_tokens = len([t for t in tokens if t.type.value != "EOF"])
                 if actual_tokens != test.expected_tokens:
                     return TestResult(
                         test.name,
                         False,
                         f"Token count mismatch: expected {test.expected_tokens}, got {actual_tokens}",  # noqa: E501
-                        execution_time=(
-                            datetime.now() - start_time
-                        ).total_seconds(),
+                        execution_time=(datetime.now() - start_time).total_seconds(),
                     )
 
             # Check AST node count if specified
@@ -109,9 +114,7 @@ class LanguageTestRunner:
                         test.name,
                         False,
                         f"AST node count mismatch: expected {test.expected_ast_nodes}, got {actual_nodes}",  # noqa: E501
-                        execution_time=(
-                            datetime.now() - start_time
-                        ).total_seconds(),
+                        execution_time=(datetime.now() - start_time).total_seconds(),
                     )
 
             # Try to execute the code
@@ -124,9 +127,7 @@ class LanguageTestRunner:
                         test.name,
                         False,
                         "Output mismatch",
-                        execution_time=(
-                            datetime.now() - start_time
-                        ).total_seconds(),
+                        execution_time=(datetime.now() - start_time).total_seconds(),
                         output=output,
                         metadata={
                             "expected": test.expected_output,
@@ -147,16 +148,14 @@ class LanguageTestRunner:
                 },
             )
 
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001  # pylint: disable=broad-except
             # Test failed with exception
             if test.should_pass:
                 return TestResult(
                     test.name,
                     False,
                     f"Test failed with exception: {type(e).__name__}",
-                    execution_time=(
-                        datetime.now() - start_time
-                    ).total_seconds(),
+                    execution_time=(datetime.now() - start_time).total_seconds(),
                     error=str(e),
                     metadata={"traceback": traceback.format_exc()},
                 )
@@ -166,9 +165,7 @@ class LanguageTestRunner:
                     test.name,
                     True,
                     "Test correctly failed as expected",
-                    execution_time=(
-                        datetime.now() - start_time
-                    ).total_seconds(),
+                    execution_time=(datetime.now() - start_time).total_seconds(),
                 )
 
     def execute_code(self, code: str) -> str:
@@ -184,7 +181,7 @@ class LanguageTestRunner:
 
             # Execute in isolated namespace
             namespace = {"__name__": "__main__"}
-            exec(code, namespace)
+            exec(code, namespace)  # noqa: S102  # pylint: disable=exec-used
 
             output = redirected_output.getvalue()
             errors = redirected_error.getvalue()
@@ -268,10 +265,7 @@ class TestGenerator:
 
         # Test 1: Basic keyword recognition
         keywords_sample = " ".join(
-            [
-                kw.custom
-                for kw in list(self.config.keyword_mappings.values())[:3]
-            ]
+            [kw.custom for kw in list(self.config.keyword_mappings.values())[:3]]
         )
         tests.append(
             TestCase(
@@ -401,13 +395,9 @@ class CoverageAnalyzer:
 
         return coverage
 
-    def analyze_keyword_coverage(
-        self, test_cases: List[TestCase]
-    ) -> Dict[str, Any]:
+    def analyze_keyword_coverage(self, test_cases: List[TestCase]) -> Dict[str, Any]:
         """Check which keywords are tested."""
-        all_keywords = set(
-            kw.custom for kw in self.config.keyword_mappings.values()
-        )
+        all_keywords = set(kw.custom for kw in self.config.keyword_mappings.values())
         tested_keywords = set()
 
         for test in test_cases:
@@ -416,9 +406,7 @@ class CoverageAnalyzer:
                     tested_keywords.add(keyword)
 
         coverage_pct = (
-            len(tested_keywords) / len(all_keywords) * 100
-            if all_keywords
-            else 0
+            len(tested_keywords) / len(all_keywords) * 100 if all_keywords else 0
         )
 
         return {
@@ -428,13 +416,9 @@ class CoverageAnalyzer:
             "untested": list(all_keywords - tested_keywords),
         }
 
-    def analyze_function_coverage(
-        self, test_cases: List[TestCase]
-    ) -> Dict[str, Any]:
+    def analyze_function_coverage(self, test_cases: List[TestCase]) -> Dict[str, Any]:
         """Check which functions are tested."""
-        all_functions = set(
-            f.name for f in self.config.builtin_functions.values()
-        )
+        all_functions = set(f.name for f in self.config.builtin_functions.values())
         tested_functions = set()
 
         for test in test_cases:
@@ -443,9 +427,7 @@ class CoverageAnalyzer:
                     tested_functions.add(func)
 
         coverage_pct = (
-            len(tested_functions) / len(all_functions) * 100
-            if all_functions
-            else 0
+            len(tested_functions) / len(all_functions) * 100 if all_functions else 0
         )
 
         return {
@@ -455,9 +437,7 @@ class CoverageAnalyzer:
             "untested": list(all_functions - tested_functions),
         }
 
-    def analyze_syntax_coverage(
-        self, test_cases: List[TestCase]
-    ) -> Dict[str, str]:
+    def analyze_syntax_coverage(self, test_cases: List[TestCase]) -> Dict[str, str]:
         """Check which syntax features are tested."""
         features_tested = {
             "strings": any('"' in t.code or "'" in t.code for t in test_cases),

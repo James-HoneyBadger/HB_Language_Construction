@@ -7,18 +7,17 @@ Test Phase 6: Advanced Productivity & Distribution Features
 - Live Syntax Highlighter
 """
 
-import sys
+# pylint: disable=protected-access,broad-except
+
 import os
+import sys
 import tempfile
 import zipfile
 
-# Add src directory to path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
+import tkinter as tk
 
 from hb_lcs.language_config import LanguageConfig
 from hb_lcs.ide import AdvancedIDE
-import tkinter as tk
-import json
 
 
 def test_version_management():
@@ -186,22 +185,22 @@ def test_package_export():
 
         # Create README
         readme_path = os.path.join(package_dir, "README.md")
-        with open(readme_path, "w") as f:
-            f.write(f"# {package_name}\n\nVersion: {version}\n")
+        with open(readme_path, "w", encoding="utf-8") as file_obj:
+            file_obj.write(f"# {package_name}\n\nVersion: {version}\n")
         print(f"✓ README created: {os.path.basename(readme_path)}")
 
         # Create examples
         examples_dir = os.path.join(package_dir, "examples")
         os.makedirs(examples_dir, exist_ok=True)
         example_path = os.path.join(examples_dir, "hello.txt")
-        with open(example_path, "w") as f:
-            f.write("print('Hello, World!')\n")
+        with open(example_path, "w", encoding="utf-8") as file_obj:
+            file_obj.write("print('Hello, World!')\n")
         print(f"✓ Example file created: examples/{os.path.basename(example_path)}")
 
         # Create ZIP archive
         zip_path = os.path.join(tmpdir, f"{package_name}-{version}.zip")
         with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zf:
-            for root_dir, dirs, files in os.walk(package_dir):
+            for root_dir, _dirs, files in os.walk(package_dir):
                 for file in files:
                     file_path = os.path.join(root_dir, file)
                     arcname = os.path.relpath(file_path, tmpdir)
@@ -294,7 +293,7 @@ def test_syntax_highlighter():
 
     # Find keywords
     keyword_count = 0
-    for key, mapping in ide.current_config.keyword_mappings.items():
+    for mapping in ide.current_config.keyword_mappings.values():
         keyword = mapping.custom
         matches = list(re.finditer(r"\b" + re.escape(keyword) + r"\b", test_text))
         keyword_count += len(matches)

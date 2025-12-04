@@ -1,0 +1,4 @@
+[tool.ruff]
+line-length = 120
+extend-ignore = ["BLE001", "S102"]
+exclude = ["tests"]

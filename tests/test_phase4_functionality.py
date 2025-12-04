@@ -3,10 +3,9 @@
 Quick demo of Phase 4 features functionality
 """
 
-from pathlib import Path
+import re
 from hb_lcs.language_config import LanguageConfig, KeywordMapping
 from hb_lcs.language_runtime import LanguageRuntime
-import re
 
 
 def test_live_preview_translation():
@@ -36,7 +35,10 @@ mientras x < 10:
 
     # Translate (same logic as live preview)
     translated = test_code
-    for custom_kw, original_kw in runtime._keyword_reverse_map.items():
+    for (
+        custom_kw,
+        original_kw,
+    ) in runtime._keyword_reverse_map.items():  # pylint: disable=protected-access
         pattern = r"\b" + re.escape(custom_kw) + r"\b"
         translated = re.sub(pattern, original_kw, translated)
 
@@ -91,12 +93,12 @@ def test_playground_execution():
 
     # Test snippet 1
     code1 = "x = 10"
-    exec(code1, {"__builtins__": {}}, namespace)
+    exec(code1, {"__builtins__": {}}, namespace)  # pylint: disable=exec-used
     print(f"After 'x = 10': namespace = {namespace}")
 
     # Test snippet 2 (variables persist)
     code2 = "y = x + 5"
-    exec(code2, {"__builtins__": {}}, namespace)
+    exec(code2, {"__builtins__": {}}, namespace)  # pylint: disable=exec-used
     print(f"After 'y = x + 5': namespace = {namespace}")
 
     # Test snippet 3
@@ -105,7 +107,7 @@ def test_playground_execution():
         "print": lambda *args: output_lines.append(" ".join(str(a) for a in args))
     }
     code3 = "print(x + y)"
-    exec(code3, {"__builtins__": safe_builtins}, namespace)
+    exec(code3, {"__builtins__": safe_builtins}, namespace)  # pylint: disable=exec-used
     print(f"After 'print(x + y)': output = {output_lines}")
 
     print("✓ Playground persistence working\n")

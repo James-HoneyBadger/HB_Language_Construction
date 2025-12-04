@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+
 """
 Honey Badger Language Construction Set - Advanced IDE
 
@@ -15,10 +16,23 @@ Features include:
 - Advanced language construction features
 """
 
-import tkinter as tk
-from tkinter import ttk, filedialog, messagebox, simpledialog, scrolledtext
+import base64
+import datetime as dt
+import io
+import json
+import math
 import os
-from typing import Optional, List
+import re
+import textwrap
+import time
+import tkinter as tk
+import uuid
+import zipfile
+from collections import Counter
+from contextlib import redirect_stdout
+from pathlib import Path
+from tkinter import ttk, filedialog, messagebox, simpledialog, scrolledtext
+from typing import Optional, List, Dict, Any, Callable
 
 from .language_config import LanguageConfig, list_presets
 from .language_runtime import LanguageRuntime
@@ -31,9 +45,7 @@ class AdvancedIDE(ttk.Frame):
         super().__init__(master)
         self.pack(fill="both", expand=True)
         self.root = tk.Tk() if master is None else master.winfo_toplevel()
-        self.root.title(
-            "Honey Badger Language Construction Set - Advanced IDE v2.0"
-        )
+        self.root.title("Honey Badger Language Construction Set - Advanced IDE v2.0")
         self.root.protocol("WM_DELETE_WINDOW", self._on_close)
 
         # Initialize state
@@ -44,6 +56,44 @@ class AdvancedIDE(ttk.Frame):
         self.clipboard_history: List[str] = []
         self.undo_stack: List[str] = []
         self.redo_stack: List[str] = []
+        self.version_history: List[dict] = []
+        self._version_lookup: Dict[str, dict] = {}
+        self.intelligence_data: Dict[str, Any] = {}
+        self.performance_history: List[dict] = []
+        self.plugins: Dict[str, Any] = {"available": {}, "loaded": {}, "hooks": {}}
+        self.web_routes: Dict[str, dict] = {}
+        self.web_app_config: Dict[str, Any] = {}
+        self.execution_config: Dict[str, Any] = {}
+        self.debugger_state: Dict[str, Any] = {}
+        self.community_registry: Optional[Dict[str, Any]] = None
+        self._recent_share_payloads: List[str] = []
+        self._default_theme = {
+            "Keywords": "#569cd6",
+            "Strings": "#ce9178",
+            "Comments": "#6a9955",
+            "Numbers": "#b5cea8",
+            "Functions": "#dcdcaa",
+            "Operators": "#d4d4d4",
+        }
+        self.syntax_theme = dict(self._default_theme)
+        self._color_history: List[str] = []
+
+        # UI components initialised later in the build pipeline
+        self.notebook: Optional[ttk.Notebook] = None
+        self.line_num_frame: Optional[ttk.Frame] = None
+        self.line_numbers: Optional[tk.Text] = None
+        self.editor: Optional[tk.Text] = None
+        self.minimap_frame: Optional[ttk.Frame] = None
+        self.minimap: Optional[tk.Text] = None
+        self.config_name_var: Optional[tk.StringVar] = None
+        self.config_version_var: Optional[tk.StringVar] = None
+        self.keywords_listbox: Optional[tk.Listbox] = None
+        self.console: Optional[scrolledtext.ScrolledText] = None
+        self.project_tree: Optional[ttk.Treeview] = None
+        self.status_bar: Optional[ttk.Frame] = None
+        self.status_label: Optional[ttk.Label] = None
+        self.position_label: Optional[ttk.Label] = None
+        self.language_label: Optional[ttk.Label] = None
 
         # Settings
         self.settings = {
@@ -136,24 +186,16 @@ class AdvancedIDE(ttk.Frame):
         # New submenu
         new_menu = tk.Menu(file_menu, tearoff=0)
         file_menu.add_cascade(label="New", menu=new_menu)
-        new_menu.add_command(
-            label="File", command=self._new_file, accelerator="Ctrl+N"
-        )
+        new_menu.add_command(label="File", command=self._new_file, accelerator="Ctrl+N")
         new_menu.add_command(label="Project", command=self._new_project)
-        new_menu.add_command(
-            label="Language Config", command=self._new_language_config
-        )
+        new_menu.add_command(label="Language Config", command=self._new_language_config)
         new_menu.add_separator()
-        new_menu.add_command(
-            label="From Template...", command=self._new_from_template
-        )
+        new_menu.add_command(label="From Template...", command=self._new_from_template)
 
         file_menu.add_command(
             label="Open...", command=self._open_file, accelerator="Ctrl+O"
         )
-        file_menu.add_command(
-            label="Open Recent", command=self._open_recent_menu
-        )
+        file_menu.add_command(label="Open Recent", command=self._open_recent_menu)
 
         file_menu.add_separator()
         file_menu.add_command(
@@ -194,9 +236,7 @@ class AdvancedIDE(ttk.Frame):
         )
 
         edit_menu.add_separator()
-        edit_menu.add_command(
-            label="Cut", command=self._edit_cut, accelerator="Ctrl+X"
-        )
+        edit_menu.add_command(label="Cut", command=self._edit_cut, accelerator="Ctrl+X")
         edit_menu.add_command(
             label="Copy", command=self._edit_copy, accelerator="Ctrl+C"
         )
@@ -266,21 +306,15 @@ class AdvancedIDE(ttk.Frame):
         # Panels submenu
         panels_menu = tk.Menu(view_menu, tearoff=0)
         view_menu.add_cascade(label="Panels", menu=panels_menu)
-        panels_menu.add_checkbutton(
-            label="Editor", command=self._toggle_editor_panel
-        )
-        panels_menu.add_checkbutton(
-            label="Console", command=self._toggle_console_panel
-        )
+        panels_menu.add_checkbutton(label="Editor", command=self._toggle_editor_panel)
+        panels_menu.add_checkbutton(label="Console", command=self._toggle_console_panel)
         panels_menu.add_checkbutton(
             label="Config Editor", command=self._toggle_config_panel
         )
         panels_menu.add_checkbutton(
             label="Project Explorer", command=self._toggle_project_panel
         )
-        panels_menu.add_checkbutton(
-            label="Minimap", command=self._toggle_minimap
-        )
+        panels_menu.add_checkbutton(label="Minimap", command=self._toggle_minimap)
 
         view_menu.add_separator()
         view_menu.add_checkbutton(
@@ -359,14 +393,10 @@ class AdvancedIDE(ttk.Frame):
             command=self._reload_config,
             accelerator="F6",
         )
-        lang_menu.add_command(
-            label="Unload Configuration", command=self._unload_config
-        )
+        lang_menu.add_command(label="Unload Configuration", command=self._unload_config)
 
         lang_menu.add_separator()
-        lang_menu.add_command(
-            label="Save Configuration", command=self._save_config
-        )
+        lang_menu.add_command(label="Save Configuration", command=self._save_config)
         lang_menu.add_command(
             label="Save Configuration As...", command=self._save_config_as
         )
@@ -402,20 +432,14 @@ class AdvancedIDE(ttk.Frame):
         features_menu.add_command(
             label="Add Keyword Mapping", command=self._add_keyword_mapping
         )
-        features_menu.add_command(
-            label="Add Function", command=self._add_function
-        )
+        features_menu.add_command(label="Add Function", command=self._add_function)
         features_menu.add_command(
             label="Configure Syntax", command=self._configure_syntax
         )
-        features_menu.add_command(
-            label="Set Operators", command=self._set_operators
-        )
+        features_menu.add_command(label="Set Operators", command=self._set_operators)
 
         lang_menu.add_separator()
-        lang_menu.add_command(
-            label="Test Language", command=self._test_language
-        )
+        lang_menu.add_command(label="Test Language", command=self._test_language)
         lang_menu.add_command(
             label="Run Code", command=self._run_code, accelerator="F9"
         )
@@ -425,20 +449,12 @@ class AdvancedIDE(ttk.Frame):
         project_menu = tk.Menu(menubar, tearoff=0)
         menubar.add_cascade(label="Project", menu=project_menu)
 
-        project_menu.add_command(
-            label="New Project", command=self._new_project
-        )
-        project_menu.add_command(
-            label="Open Project...", command=self._open_project
-        )
-        project_menu.add_command(
-            label="Close Project", command=self._close_project
-        )
+        project_menu.add_command(label="New Project", command=self._new_project)
+        project_menu.add_command(label="Open Project...", command=self._open_project)
+        project_menu.add_command(label="Close Project", command=self._close_project)
 
         project_menu.add_separator()
-        project_menu.add_command(
-            label="Add File", command=self._add_file_to_project
-        )
+        project_menu.add_command(label="Add File", command=self._add_file_to_project)
         project_menu.add_command(
             label="Add Folder", command=self._add_folder_to_project
         )
@@ -450,12 +466,8 @@ class AdvancedIDE(ttk.Frame):
         project_menu.add_command(
             label="Project Settings", command=self._project_settings
         )
-        project_menu.add_command(
-            label="Build Project", command=self._build_project
-        )
-        project_menu.add_command(
-            label="Clean Project", command=self._clean_project
-        )
+        project_menu.add_command(label="Build Project", command=self._build_project)
+        project_menu.add_command(label="Clean Project", command=self._clean_project)
 
         project_menu.add_separator()
         project_menu.add_command(label="Git Status", command=self._git_status)
@@ -491,9 +503,7 @@ class AdvancedIDE(ttk.Frame):
         # Code analysis submenu
         analysis_menu = tk.Menu(tools_menu, tearoff=0)
         tools_menu.add_cascade(label="Code Analysis", menu=analysis_menu)
-        analysis_menu.add_command(
-            label="Check Syntax", command=self._check_syntax
-        )
+        analysis_menu.add_command(label="Check Syntax", command=self._check_syntax)
         analysis_menu.add_command(
             label="Find References", command=self._find_references
         )
@@ -512,20 +522,14 @@ class AdvancedIDE(ttk.Frame):
         menubar.add_cascade(label="Window", menu=window_menu)
 
         window_menu.add_command(label="New Window", command=self._new_window)
-        window_menu.add_command(
-            label="Close Window", command=self._close_window
-        )
+        window_menu.add_command(label="Close Window", command=self._close_window)
 
         window_menu.add_separator()
-        window_menu.add_command(
-            label="Split Editor", command=self._split_editor
-        )
+        window_menu.add_command(label="Split Editor", command=self._split_editor)
         window_menu.add_command(label="Close Split", command=self._close_split)
 
         window_menu.add_separator()
-        window_menu.add_command(
-            label="Reset Layout", command=self._reset_layout
-        )
+        window_menu.add_command(label="Reset Layout", command=self._reset_layout)
         window_menu.add_command(label="Save Layout", command=self._save_layout)
         window_menu.add_command(label="Load Layout", command=self._load_layout)
 
@@ -545,15 +549,11 @@ class AdvancedIDE(ttk.Frame):
         )
 
         help_menu.add_separator()
-        help_menu.add_command(
-            label="Documentation", command=self._open_documentation
-        )
+        help_menu.add_command(label="Documentation", command=self._open_documentation)
         help_menu.add_command(
             label="Language Reference", command=self._language_reference
         )
-        help_menu.add_command(
-            label="API Reference", command=self._api_reference
-        )
+        help_menu.add_command(label="API Reference", command=self._api_reference)
 
         help_menu.add_separator()
         # Tutorials submenu
@@ -620,24 +620,20 @@ class AdvancedIDE(ttk.Frame):
             side="left", padx=2
         )
 
-        ttk.Separator(toolbar, orient="vertical").pack(
-            side="left", fill="y", padx=6
-        )
+        ttk.Separator(toolbar, orient="vertical").pack(side="left", fill="y", padx=6)
 
         # Language operations
-        ttk.Button(
-            toolbar, text="Load Config", command=self._load_config
-        ).pack(side="left", padx=2)
-        ttk.Button(
-            toolbar, text="Validate", command=self._validate_config
-        ).pack(side="left", padx=2)
+        ttk.Button(toolbar, text="Load Config", command=self._load_config).pack(
+            side="left", padx=2
+        )
+        ttk.Button(toolbar, text="Validate", command=self._validate_config).pack(
+            side="left", padx=2
+        )
         ttk.Button(toolbar, text="Run", command=self._run_code).pack(
             side="left", padx=2
         )
 
-        ttk.Separator(toolbar, orient="vertical").pack(
-            side="left", fill="y", padx=6
-        )
+        ttk.Separator(toolbar, orient="vertical").pack(side="left", fill="y", padx=6)
 
         # Edit operations
         ttk.Button(toolbar, text="Find", command=self._find_dialog).pack(
@@ -647,9 +643,7 @@ class AdvancedIDE(ttk.Frame):
             side="left", padx=2
         )
 
-        ttk.Separator(toolbar, orient="vertical").pack(
-            side="left", fill="y", padx=6
-        )
+        ttk.Separator(toolbar, orient="vertical").pack(side="left", fill="y", padx=6)
 
         # Help
         ttk.Button(toolbar, text="Help", command=self._show_welcome).pack(
@@ -790,9 +784,9 @@ class AdvancedIDE(ttk.Frame):
         keyword_buttons = ttk.Frame(keywords_container)
         keyword_buttons.pack(side="right", fill="y", padx=5)
 
-        ttk.Button(
-            keyword_buttons, text="Add", command=self._add_keyword_mapping
-        ).pack(fill="x", pady=2)
+        ttk.Button(keyword_buttons, text="Add", command=self._add_keyword_mapping).pack(
+            fill="x", pady=2
+        )
         ttk.Button(
             keyword_buttons, text="Edit", command=self._edit_keyword_mapping
         ).pack(fill="x", pady=2)
@@ -835,12 +829,12 @@ class AdvancedIDE(ttk.Frame):
         console_toolbar = ttk.Frame(console_container)
         console_toolbar.pack(fill="x", pady=2)
 
-        ttk.Button(
-            console_toolbar, text="Clear", command=self._clear_console
-        ).pack(side="left", padx=2)
-        ttk.Button(
-            console_toolbar, text="Copy", command=self._copy_console
-        ).pack(side="left", padx=2)
+        ttk.Button(console_toolbar, text="Clear", command=self._clear_console).pack(
+            side="left", padx=2
+        )
+        ttk.Button(console_toolbar, text="Copy", command=self._copy_console).pack(
+            side="left", padx=2
+        )
         ttk.Button(
             console_toolbar,
             text="Save Output",
@@ -874,9 +868,9 @@ class AdvancedIDE(ttk.Frame):
         ttk.Button(
             project_toolbar, text="Refresh", command=self._refresh_project_tree
         ).pack(side="left", padx=2)
-        ttk.Button(
-            project_toolbar, text="Open", command=self._open_selected_file
-        ).pack(side="left", padx=2)
+        ttk.Button(project_toolbar, text="Open", command=self._open_selected_file).pack(
+            side="left", padx=2
+        )
 
     def _create_status_bar(self) -> None:
         """Create the status bar."""
@@ -984,9 +978,9 @@ For more information, visit the Help menu.
             text="Quick Start Guide",
             command=lambda: [self._quick_start_guide(), welcome_win.destroy()],
         ).pack(side="left", padx=5)
-        ttk.Button(
-            button_frame, text="Close", command=welcome_win.destroy
-        ).pack(side="right", padx=5)
+        ttk.Button(button_frame, text="Close", command=welcome_win.destroy).pack(
+            side="right", padx=5
+        )
 
     def _start_tutorial(self) -> None:
         """Start the interactive tutorial."""
@@ -998,17 +992,32 @@ For more information, visit the Help menu.
         steps = [
             {
                 "title": "Step 1: Create a New Language Configuration",
-                "content": "Let's start by creating a new language configuration.\n\n1. Go to Language → New Configuration\n2. Give your language a name like 'MyFirstLanguage'\n3. Set version to '1.0'",  # noqa: E501
+                "content": (
+                    "Let's start by creating a new language configuration."
+                    "\n\n1. Go to Language → New Configuration"
+                    "\n2. Give your language a name like 'MyFirstLanguage'"
+                    "\n3. Set version to '1.0'"
+                ),
                 "action": "Click 'Next' to continue",
             },
             {
                 "title": "Step 2: Customize Keywords",
-                "content": "Now let's customize some keywords to make your language unique.\n\n1. Switch to the 'Config Editor' tab\n2. In the Keywords section, click 'Add'\n3. Change 'if' to 'when' and 'else' to 'otherwise'",  # noqa: E501
+                "content": (
+                    "Now let's customize some keywords to make your language unique."
+                    "\n\n1. Switch to the 'Config Editor' tab"
+                    "\n2. In the Keywords section, click 'Add'"
+                    "\n3. Change 'if' to 'when' and 'else' to 'otherwise'"
+                ),
                 "action": "Click 'Next' to continue",
             },
             {
                 "title": "Step 3: Test Your Language",
-                "content": "Let's test your new language!\n\n1. Switch to the 'Editor' tab\n2. Type: when True: print('Hello!')\n3. Click the 'Run' button or press F9",  # noqa: E501
+                "content": (
+                    "Let's test your new language!"
+                    "\n\n1. Switch to the 'Editor' tab"
+                    "\n2. Type: when True: print('Hello!')"
+                    "\n3. Click the 'Run' button or press F9"
+                ),
                 "action": "Click 'Finish' to complete the tutorial",
             },
         ]
@@ -1117,9 +1126,7 @@ For more information, visit the Help menu.
         text_widget.insert("1.0", guide_text)
         text_widget.config(state="disabled")
 
-        ttk.Button(guide_win, text="Close", command=guide_win.destroy).pack(
-            pady=5
-        )
+        ttk.Button(guide_win, text="Close", command=guide_win.destroy).pack(pady=5)
 
     # Placeholder methods for comprehensive functionality
     def _new_language_config(self) -> None:
@@ -1174,20 +1181,16 @@ For more information, visit the Help menu.
                 self._update_title()
                 self._update_ui_state()
                 config_win.destroy()
-                messagebox.showinfo(
-                    "Success", f"Created configuration '{name}'"
-                )
-            except Exception as e:
-                messagebox.showerror(
-                    "Error", f"Failed to create configuration: {e}"
-                )
+                messagebox.showinfo("Success", f"Created configuration '{name}'")
+            except Exception as e:  # noqa: BLE001  # pylint: disable=broad-except
+                messagebox.showerror("Error", f"Failed to create configuration: {e}")
 
         ttk.Button(button_frame, text="Create", command=create_config).pack(
             side="left", padx=5
         )
-        ttk.Button(
-            button_frame, text="Cancel", command=config_win.destroy
-        ).pack(side="left", padx=5)
+        ttk.Button(button_frame, text="Cancel", command=config_win.destroy).pack(
+            side="left", padx=5
+        )
 
         config_win.columnconfigure(1, weight=1)
 
@@ -1198,17 +1201,13 @@ For more information, visit the Help menu.
             self._update_title()
             self._update_ui_state()
             messagebox.showinfo("Success", f"Loaded preset '{preset}'")
-        except Exception as e:
-            messagebox.showerror(
-                "Error", f"Failed to load preset '{preset}': {e}"
-            )
+        except Exception as e:  # noqa: BLE001  # pylint: disable=broad-except
+            messagebox.showerror("Error", f"Failed to load preset '{preset}': {e}")
 
     def _add_keyword_mapping(self) -> None:
         """Add a new keyword mapping to the current configuration."""
         if not self.current_config:
-            messagebox.showwarning(
-                "Warning", "No language configuration loaded"
-            )
+            messagebox.showwarning("Warning", "No language configuration loaded")
             return
 
         keyword_win = tk.Toplevel(self.root)
@@ -1280,10 +1279,7 @@ For more information, visit the Help menu.
                 self.current_config.rename_keyword(original, custom)
                 # Update the mapping with additional info
                 for mapping in self.current_config.keyword_mappings:
-                    if (
-                        mapping.original == original
-                        and mapping.custom == custom
-                    ):
+                    if mapping.original == original and mapping.custom == custom:
                         mapping.category = category
                         mapping.description = description
                         break
@@ -1293,34 +1289,26 @@ For more information, visit the Help menu.
                 messagebox.showinfo(
                     "Success", f"Added keyword mapping: {original} → {custom}"
                 )
-            except Exception as e:
-                messagebox.showerror(
-                    "Error", f"Failed to add keyword mapping: {e}"
-                )
+            except Exception as e:  # noqa: BLE001  # pylint: disable=broad-except
+                messagebox.showerror("Error", f"Failed to add keyword mapping: {e}")
 
         ttk.Button(button_frame, text="Add", command=add_keyword).pack(
             side="left", padx=5
         )
-        ttk.Button(
-            button_frame, text="Cancel", command=keyword_win.destroy
-        ).pack(side="left", padx=5)
+        ttk.Button(button_frame, text="Cancel", command=keyword_win.destroy).pack(
+            side="left", padx=5
+        )
 
         keyword_win.columnconfigure(1, weight=1)
 
     def _edit_keyword_mapping(self) -> None:
-        messagebox.showinfo(
-            "Edit Keyword", "Keyword editing not yet implemented"
-        )
+        messagebox.showinfo("Edit Keyword", "Keyword editing not yet implemented")
 
     def _remove_keyword_mapping(self) -> None:
-        messagebox.showinfo(
-            "Remove Keyword", "Keyword removal not yet implemented"
-        )
+        messagebox.showinfo("Remove Keyword", "Keyword removal not yet implemented")
 
     def _add_function(self) -> None:
-        messagebox.showinfo(
-            "Add Function", "Function addition not yet implemented"
-        )
+        messagebox.showinfo("Add Function", "Function addition not yet implemented")
 
     def _configure_syntax(self) -> None:
         messagebox.showinfo(
@@ -1333,9 +1321,7 @@ For more information, visit the Help menu.
         )
 
     def _test_language(self) -> None:
-        messagebox.showinfo(
-            "Test Language", "Language testing not yet implemented"
-        )
+        messagebox.showinfo("Test Language", "Language testing not yet implemented")
 
     def _run_code(self) -> None:
         """Run the code in the editor."""
@@ -1364,9 +1350,7 @@ For more information, visit the Help menu.
                 f">>> Running code with config '{self.current_config.name}'\n"
             )
             console_text += f"Code length: {len(code)} characters\n"
-            console_text += (
-                "Output: [Code execution not fully implemented yet]\n"
-            )
+            console_text += "Output: [Code execution not fully implemented yet]\n"
 
             # Add to console
             console = getattr(self, "console_text", None)
@@ -1374,7 +1358,7 @@ For more information, visit the Help menu.
                 console.insert(tk.END, console_text)
                 console.see(tk.END)
 
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001  # pylint: disable=broad-except
             error_msg = f"Error running code: {e}\n"
             console = getattr(self, "console_text", None)
             if console:
@@ -1384,27 +1368,19 @@ For more information, visit the Help menu.
                 messagebox.showerror("Error", error_msg)
 
     def _new_project(self) -> None:
-        messagebox.showinfo(
-            "New Project", "Project creation not yet implemented"
-        )
+        messagebox.showinfo("New Project", "Project creation not yet implemented")
 
     def _open_project(self) -> None:
-        messagebox.showinfo(
-            "Open Project", "Project opening not yet implemented"
-        )
+        messagebox.showinfo("Open Project", "Project opening not yet implemented")
 
     def _close_project(self) -> None:
-        messagebox.showinfo(
-            "Close Project", "Project closing not yet implemented"
-        )
+        messagebox.showinfo("Close Project", "Project closing not yet implemented")
 
     def _add_file_to_project(self) -> None:
         messagebox.showinfo("Add File", "File addition not yet implemented")
 
     def _add_folder_to_project(self) -> None:
-        messagebox.showinfo(
-            "Add Folder", "Folder addition not yet implemented"
-        )
+        messagebox.showinfo("Add Folder", "Folder addition not yet implemented")
 
     def _remove_from_project(self) -> None:
         messagebox.showinfo("Remove", "Removal not yet implemented")
@@ -1419,9 +1395,7 @@ For more information, visit the Help menu.
         messagebox.showinfo("Clean", "Project cleaning not yet implemented")
 
     def _git_status(self) -> None:
-        messagebox.showinfo(
-            "Git Status", "Git integration not yet implemented"
-        )
+        messagebox.showinfo("Git Status", "Git integration not yet implemented")
 
     def _git_commit(self) -> None:
         messagebox.showinfo("Git Commit", "Git commit not yet implemented")
@@ -1430,14 +1404,10 @@ For more information, visit the Help menu.
         messagebox.showinfo("Git Push", "Git push not yet implemented")
 
     def _open_terminal(self) -> None:
-        messagebox.showinfo(
-            "Terminal", "Terminal integration not yet implemented"
-        )
+        messagebox.showinfo("Terminal", "Terminal integration not yet implemented")
 
     def _command_palette(self) -> None:
-        messagebox.showinfo(
-            "Command Palette", "Command palette not yet implemented"
-        )
+        messagebox.showinfo("Command Palette", "Command palette not yet implemented")
 
     def _generate_docs(self) -> None:
         messagebox.showinfo(
@@ -1451,37 +1421,25 @@ For more information, visit the Help menu.
         messagebox.showinfo("Debug", "Debugging not yet implemented")
 
     def _check_syntax(self) -> None:
-        messagebox.showinfo(
-            "Check Syntax", "Syntax checking not yet implemented"
-        )
+        messagebox.showinfo("Check Syntax", "Syntax checking not yet implemented")
 
     def _find_references(self) -> None:
-        messagebox.showinfo(
-            "Find References", "Reference finding not yet implemented"
-        )
+        messagebox.showinfo("Find References", "Reference finding not yet implemented")
 
     def _show_call_hierarchy(self) -> None:
-        messagebox.showinfo(
-            "Call Hierarchy", "Call hierarchy not yet implemented"
-        )
+        messagebox.showinfo("Call Hierarchy", "Call hierarchy not yet implemented")
 
     def _open_settings(self) -> None:
         messagebox.showinfo("Settings", "Settings dialog not yet implemented")
 
     def _new_window(self) -> None:
-        messagebox.showinfo(
-            "New Window", "Multi-window support not yet implemented"
-        )
+        messagebox.showinfo("New Window", "Multi-window support not yet implemented")
 
     def _close_window(self) -> None:
-        messagebox.showinfo(
-            "Close Window", "Window management not yet implemented"
-        )
+        messagebox.showinfo("Close Window", "Window management not yet implemented")
 
     def _split_editor(self) -> None:
-        messagebox.showinfo(
-            "Split Editor", "Editor splitting not yet implemented"
-        )
+        messagebox.showinfo("Split Editor", "Editor splitting not yet implemented")
 
     def _close_split(self) -> None:
         messagebox.showinfo("Close Split", "Split closing not yet implemented")
@@ -1493,9 +1451,7 @@ For more information, visit the Help menu.
         messagebox.showinfo("Save Layout", "Layout saving not yet implemented")
 
     def _load_layout(self) -> None:
-        messagebox.showinfo(
-            "Load Layout", "Layout loading not yet implemented"
-        )
+        messagebox.showinfo("Load Layout", "Layout loading not yet implemented")
 
     def _open_documentation(self) -> None:
         messagebox.showinfo(
@@ -1508,9 +1464,7 @@ For more information, visit the Help menu.
         )
 
     def _api_reference(self) -> None:
-        messagebox.showinfo(
-            "API Reference", "API reference not yet implemented"
-        )
+        messagebox.showinfo("API Reference", "API reference not yet implemented")
 
     def _tutorial(self, tutorial_type: str) -> None:
         messagebox.showinfo(
@@ -1518,14 +1472,10 @@ For more information, visit the Help menu.
         )
 
     def _example(self, example_type: str) -> None:
-        messagebox.showinfo(
-            "Example", f"Example '{example_type}' not yet implemented"
-        )
+        messagebox.showinfo("Example", f"Example '{example_type}' not yet implemented")
 
     def _show_shortcuts(self) -> None:
-        messagebox.showinfo(
-            "Shortcuts", "Keyboard shortcuts help not yet implemented"
-        )
+        messagebox.showinfo("Shortcuts", "Keyboard shortcuts help not yet implemented")
 
     def _show_about(self) -> None:
         """Show about dialog."""
@@ -1551,9 +1501,7 @@ All rights reserved."""
         messagebox.showinfo("About", about_text)
 
     def _open_recent_menu(self) -> None:
-        messagebox.showinfo(
-            "Recent Files", "Recent files menu not yet implemented"
-        )
+        messagebox.showinfo("Recent Files", "Recent files menu not yet implemented")
 
     def _save_all(self) -> None:
         messagebox.showinfo("Save All", "Save all not yet implemented")
@@ -1571,9 +1519,7 @@ All rights reserved."""
         messagebox.showinfo("Save Config", "Config saving not yet implemented")
 
     def _save_config_as(self) -> None:
-        messagebox.showinfo(
-            "Save Config As", "Config save as not yet implemented"
-        )
+        messagebox.showinfo("Save Config As", "Config save as not yet implemented")
 
     def _compare_configs(self) -> None:
         messagebox.showinfo("Compare", "Config comparison not yet implemented")
@@ -1633,49 +1579,31 @@ All rights reserved."""
         messagebox.showinfo("Select Line", "Select line not yet implemented")
 
     def _find_in_files(self) -> None:
-        messagebox.showinfo(
-            "Find in Files", "Find in files not yet implemented"
-        )
+        messagebox.showinfo("Find in Files", "Find in files not yet implemented")
 
     def _goto_definition(self) -> None:
-        messagebox.showinfo(
-            "Go to Definition", "Go to definition not yet implemented"
-        )
+        messagebox.showinfo("Go to Definition", "Go to definition not yet implemented")
 
     def _format_document(self) -> None:
-        messagebox.showinfo(
-            "Format", "Document formatting not yet implemented"
-        )
+        messagebox.showinfo("Format", "Document formatting not yet implemented")
 
     def _toggle_comment(self) -> None:
-        messagebox.showinfo(
-            "Toggle Comment", "Comment toggle not yet implemented"
-        )
+        messagebox.showinfo("Toggle Comment", "Comment toggle not yet implemented")
 
     def _toggle_editor_panel(self) -> None:
-        messagebox.showinfo(
-            "Toggle Editor", "Panel toggle not yet implemented"
-        )
+        messagebox.showinfo("Toggle Editor", "Panel toggle not yet implemented")
 
     def _toggle_console_panel(self) -> None:
-        messagebox.showinfo(
-            "Toggle Console", "Panel toggle not yet implemented"
-        )
+        messagebox.showinfo("Toggle Console", "Panel toggle not yet implemented")
 
     def _toggle_config_panel(self) -> None:
-        messagebox.showinfo(
-            "Toggle Config", "Panel toggle not yet implemented"
-        )
+        messagebox.showinfo("Toggle Config", "Panel toggle not yet implemented")
 
     def _toggle_project_panel(self) -> None:
-        messagebox.showinfo(
-            "Toggle Project", "Panel toggle not yet implemented"
-        )
+        messagebox.showinfo("Toggle Project", "Panel toggle not yet implemented")
 
     def _toggle_minimap(self) -> None:
-        messagebox.showinfo(
-            "Toggle Minimap", "Minimap toggle not yet implemented"
-        )
+        messagebox.showinfo("Toggle Minimap", "Minimap toggle not yet implemented")
 
     def _toggle_syntax_highlighting(self) -> None:
         messagebox.showinfo(
@@ -1697,14 +1625,10 @@ All rights reserved."""
         messagebox.showinfo("Reset Zoom", "Zoom reset not yet implemented")
 
     def _clear_console(self) -> None:
-        messagebox.showinfo(
-            "Clear Console", "Console clearing not yet implemented"
-        )
+        messagebox.showinfo("Clear Console", "Console clearing not yet implemented")
 
     def _copy_console(self) -> None:
-        messagebox.showinfo(
-            "Copy Console", "Console copying not yet implemented"
-        )
+        messagebox.showinfo("Copy Console", "Console copying not yet implemented")
 
     def _save_console_output(self) -> None:
         messagebox.showinfo("Save Output", "Output saving not yet implemented")
@@ -1781,6 +1705,41 @@ All rights reserved."""
             title_parts.append(f"({os.path.basename(self.current_project)})")
 
         self.root.title(" ".join(title_parts))
+
+    def _check_unsaved_changes(self) -> bool:
+        """Prompt the user if unsaved editor content exists."""
+        editor = getattr(self, "editor", None)
+        if editor is None:
+            return True
+
+        try:
+            modified = bool(editor.edit_modified())
+        except tk.TclError:
+            return True
+
+        if not modified:
+            return True
+
+        if self.settings.get("auto_save"):
+            if self._save_file():
+                editor.edit_modified(False)
+                return True
+            return False
+
+        response = messagebox.askyesnocancel(
+            "Unsaved Changes",
+            "You have unsaved changes. Save before continuing?",
+        )
+        if response is None:
+            return False
+        if response:
+            saved = self._save_file()
+            if saved:
+                editor.edit_modified(False)
+            return saved
+
+        editor.edit_modified(False)
+        return True
 
     def _new_file(self) -> None:
         """Create a new file in the editor."""
@@ -1960,7 +1919,7 @@ All rights reserved."""
 
                 # Update status bar (assuming it exists)
                 # self.status_bar.config(text=status_text)
-            except Exception:
+            except Exception:  # noqa: BLE001  # pylint: disable=broad-except
                 pass
 
     def _update_line_numbers(self) -> None:
@@ -1977,8 +1936,8 @@ All rights reserved."""
         content = self.editor.get("1.0", tk.END)
         lines = content.split("\n")
 
-        for i, line in enumerate(lines, 1):
-            self.line_numbers.insert(tk.END, f"{i}\n")
+        for line_number in range(1, len(lines) + 1):
+            self.line_numbers.insert(tk.END, f"{line_number}\n")
 
         self.line_numbers.config(state="disabled")
 
@@ -2008,9 +1967,9 @@ All rights reserved."""
 
         # Options
         case_var = tk.BooleanVar()
-        ttk.Checkbutton(
-            find_win, text="Case sensitive", variable=case_var
-        ).grid(row=1, column=0, columnspan=2, padx=5, sticky="w")
+        ttk.Checkbutton(find_win, text="Case sensitive", variable=case_var).grid(
+            row=1, column=0, columnspan=2, padx=5, sticky="w"
+        )
 
         # Buttons
         button_frame = ttk.Frame(find_win)
@@ -2020,9 +1979,7 @@ All rights reserved."""
             self._find_text(find_var.get(), case_var.get())
             find_win.destroy()
 
-        ttk.Button(button_frame, text="Find", command=do_find).pack(
-            side="left", padx=5
-        )
+        ttk.Button(button_frame, text="Find", command=do_find).pack(side="left", padx=5)
         ttk.Button(button_frame, text="Cancel", command=find_win.destroy).pack(
             side="left", padx=5
         )
@@ -2030,6 +1987,47 @@ All rights reserved."""
         find_entry.focus()
         find_win.bind("<Return>", lambda e: do_find())
         find_win.bind("<Escape>", lambda e: find_win.destroy())
+
+    def _find_text(self, query: str, case_sensitive: bool) -> None:
+        """Highlight matches of *query* in the editor."""
+        editor = getattr(self, "editor", None)
+        if editor is None or not query:
+            return
+
+        editor.tag_remove("find_match", "1.0", tk.END)
+        search_kwargs = {"nocase": not case_sensitive}
+        start_index = "1.0"
+        first_match = None
+
+        while True:
+            match_index = editor.search(
+                query, start_index, stopindex=tk.END, **search_kwargs
+            )
+            if not match_index:
+                break
+
+            end_index = f"{match_index}+{len(query)}c"
+            editor.tag_add("find_match", match_index, end_index)
+            if first_match is None:
+                first_match = match_index
+            start_index = end_index
+
+        editor.tag_configure(
+            "find_match",
+            background="#ffd54f",
+            foreground="#000000",
+        )
+
+        if first_match:
+            editor.tag_remove(tk.SEL, "1.0", tk.END)
+            selection_end = f"{first_match}+{len(query)}c"
+            editor.tag_add(tk.SEL, first_match, selection_end)
+            editor.mark_set(tk.INSERT, selection_end)
+            editor.see(first_match)
+
+        if query and query not in self.search_history:
+            self.search_history.insert(0, query)
+            self.search_history = self.search_history[:25]
 
     def _replace_dialog(self) -> None:
         pass
@@ -2045,12 +2043,1461 @@ All rights reserved."""
                 self.editor.see(tk.INSERT)
                 self._update_line_numbers()
             except tk.TclError:
-                messagebox.showerror(
-                    "Error", f"Line {line_num} does not exist"
-                )
+                messagebox.showerror("Error", f"Line {line_num} does not exist")
 
     def _new_from_template(self) -> None:
         pass
+
+    def _parse_description_to_config(self, description: str) -> str:
+        """Create a configuration JSON from a natural language description."""
+        normalized = (description or "").lower()
+
+        keywords = {
+            "IF": {
+                "original": "if",
+                "custom": "if",
+                "category": "control",
+            },
+            "ELSE": {
+                "original": "else",
+                "custom": "else",
+                "category": "control",
+            },
+            "WHILE": {
+                "original": "while",
+                "custom": "while",
+                "category": "control",
+            },
+            "FOR": {
+                "original": "for",
+                "custom": "for",
+                "category": "control",
+            },
+            "PRINT": {
+                "original": "print",
+                "custom": "print",
+                "category": "io",
+            },
+            "FUNCTION": {
+                "original": "function",
+                "custom": "function",
+                "category": "declaration",
+            },
+        }
+
+        if "spanish" in normalized:
+            keywords["IF"]["custom"] = "si"
+            keywords["ELSE"]["custom"] = "sino"
+            keywords["WHILE"]["custom"] = "mientras"
+            keywords["FOR"]["custom"] = "para"
+            keywords["PRINT"]["custom"] = "imprimir"
+
+        if "verbose" in normalized:
+            keywords["IF"]["custom"] = "if_condition"
+            keywords["ELSE"]["custom"] = "otherwise"
+            keywords["WHILE"]["custom"] = "while_loop"
+            keywords["PRINT"]["custom"] = "display_value"
+
+        if "minimal" in normalized:
+            keywords["IF"]["custom"] = "i"
+            keywords["ELSE"]["custom"] = "e"
+            keywords["WHILE"]["custom"] = "w"
+            keywords["FOR"]["custom"] = "f"
+            keywords["PRINT"]["custom"] = "p"
+
+        array_start = 0
+        if "1-based" in normalized or "one-based" in normalized:
+            array_start = 1
+        if "0-based" in normalized or "zero-based" in normalized:
+            array_start = 0
+
+        canonical = {
+            "if": "IF",
+            "else": "ELSE",
+            "while": "WHILE",
+            "loop": "WHILE",
+            "for": "FOR",
+            "print": "PRINT",
+            "display": "PRINT",
+            "function": "FUNCTION",
+        }
+
+        pattern = re.compile(
+            r"(?:use|set)\s*['\"]([^'\"]+)['\"]\s*for\s*([a-z_ ]+)",
+            re.IGNORECASE,
+        )
+        for match in pattern.finditer(description or ""):
+            custom_value = match.group(1).strip()
+            target = match.group(2).strip().lower()
+            target_key = canonical.get(target)
+            if target_key and custom_value:
+                keywords[target_key]["custom"] = custom_value
+
+        metadata_name = "Generated Language"
+        if "spanish" in normalized:
+            metadata_name = "Spanish Variant"
+        elif "minimal" in normalized:
+            metadata_name = "Minimal Variant"
+        elif "verbose" in normalized:
+            metadata_name = "Verbose Variant"
+
+        builtin_functions = {
+            "print": {
+                "name": "print",
+                "arity": -1,
+                "implementation": "builtin.print",
+                "description": "Display output",
+                "enabled": True,
+            },
+            "input": {
+                "name": "input",
+                "arity": 1,
+                "implementation": "builtin.input",
+                "description": "Read user input",
+                "enabled": True,
+            },
+        }
+
+        syntax_options = {
+            "array_start_index": array_start,
+            "single_line_comment": "#",
+            "statement_terminator": "",
+        }
+
+        operators = {
+            "+": {
+                "symbol": "+",
+                "precedence": 10,
+                "associativity": "left",
+                "enabled": True,
+            },
+            "-": {
+                "symbol": "-",
+                "precedence": 10,
+                "associativity": "left",
+                "enabled": True,
+            },
+            "*": {
+                "symbol": "*",
+                "precedence": 20,
+                "associativity": "left",
+                "enabled": True,
+            },
+            "/": {
+                "symbol": "/",
+                "precedence": 20,
+                "associativity": "left",
+                "enabled": True,
+            },
+            "==": {
+                "symbol": "==",
+                "precedence": 5,
+                "associativity": "none",
+                "enabled": True,
+            },
+        }
+
+        config_dict = {
+            "metadata": {
+                "name": metadata_name,
+                "version": "1.0.0",
+                "description": (description.strip() if description else metadata_name),
+                "author": "Auto Generator",
+            },
+            "keywords": keywords,
+            "builtin_functions": builtin_functions,
+            "functions": builtin_functions,
+            "syntax_options": syntax_options,
+            "operators": operators,
+            "runtime": {"debug_mode": False, "strict_mode": True},
+        }
+
+        return json.dumps(config_dict, indent=2)
+
+    def _normalize_config_snapshot(self, value: Any) -> dict:
+        """Return a configuration dictionary from various inputs."""
+        if isinstance(value, LanguageConfig):
+            return value.to_dict()
+        if isinstance(value, dict):
+            if "config" in value and isinstance(value["config"], dict):
+                return value["config"]
+            return value
+        return {}
+
+    def _language_version_manager(self) -> dict:
+        """Summarize current version history information."""
+        if not self.current_config:
+            return {"status": "no-config", "history_size": len(self.version_history)}
+        if not self.version_history:
+            self._save_version("Initial snapshot")
+        recent = [
+            {
+                "id": entry["id"],
+                "version": entry["version"],
+                "timestamp": entry["timestamp"],
+                "note": entry.get("note", ""),
+            }
+            for entry in self.version_history[-5:]
+        ]
+        return {
+            "status": "ready",
+            "current_version": self.current_config.version,
+            "history_size": len(self.version_history),
+            "recent_versions": recent,
+        }
+
+    def _save_version(self, note: str = "", extra: Optional[dict] = None) -> dict:
+        """Persist the active configuration into the version history."""
+        if not self.current_config:
+            return {"status": "error", "reason": "No configuration loaded"}
+        snapshot = self.current_config.to_dict()
+        entry_id = f"ver-{uuid.uuid4().hex[:8]}"
+        record = {
+            "id": entry_id,
+            "timestamp": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
+            "version": self.current_config.version,
+            "note": note,
+            "config": snapshot,
+        }
+        if extra:
+            record["extra"] = dict(extra)
+        self.version_history.append(record)
+        self._version_lookup[entry_id] = record
+        return record
+
+    def _compare_versions(self, base: Any, other: Any) -> dict:
+        """Compute a shallow diff between two configuration snapshots."""
+        base_dict = self._normalize_config_snapshot(base)
+        other_dict = self._normalize_config_snapshot(other)
+        if not base_dict or not other_dict:
+            return {"status": "error", "reason": "invalid-input"}
+
+        base_meta = base_dict.get("metadata", {})
+        other_meta = other_dict.get("metadata", {})
+        metadata_diff = {}
+        for key in ("name", "version", "description", "author"):
+            if base_meta.get(key) != other_meta.get(key):
+                metadata_diff[key] = {
+                    "from": base_meta.get(key),
+                    "to": other_meta.get(key),
+                }
+
+        base_keywords = base_dict.get("keywords", {})
+        other_keywords = other_dict.get("keywords", {})
+        added = sorted(set(other_keywords) - set(base_keywords))
+        removed = sorted(set(base_keywords) - set(other_keywords))
+        modified = sorted(
+            key
+            for key in set(base_keywords).intersection(other_keywords)
+            if base_keywords[key] != other_keywords[key]
+        )
+
+        return {
+            "status": "ok",
+            "metadata_changes": metadata_diff,
+            "added_keywords": added,
+            "removed_keywords": removed,
+            "modified_keywords": modified,
+        }
+
+    def _perform_version_merge(
+        self, base: Optional[Any], incoming: Any, prefer_incoming: bool = True
+    ) -> LanguageConfig:
+        """Merge two configuration inputs and apply the result."""
+
+        base_dict = self._normalize_config_snapshot(base) if base else {}
+        incoming_dict = self._normalize_config_snapshot(incoming)
+
+        if base_dict:
+            target = LanguageConfig.from_dict(base_dict)
+        elif self.current_config:
+            target = self.current_config.clone()
+        else:
+            target = LanguageConfig()
+
+        if incoming_dict:
+            incoming_config = LanguageConfig.from_dict(incoming_dict)
+            target.merge(incoming_config, prefer_other=prefer_incoming)
+
+        self.current_config = target
+        return target
+
+    def _bulk_keyword_editor(
+        self,
+        operation: str = "prefix",
+        value: str = "",
+        keywords: Optional[List[str]] = None,
+    ) -> dict:
+        """Apply a bulk keyword modification operation."""
+
+        if not self.current_config:
+            return {"status": "no-config", "updated": 0, "changes": []}
+
+        changes = self._apply_bulk_operation(operation, value, keywords)
+        return {"status": "ok", "updated": len(changes), "changes": changes}
+
+    def _invert_listbox_selection(self, listbox: tk.Listbox) -> int:
+        """Invert the selection inside a Tk listbox widget."""
+
+        if not listbox:
+            return 0
+
+        selected = 0
+        for index in range(listbox.size()):
+            if listbox.selection_includes(index):
+                listbox.selection_clear(index)
+            else:
+                listbox.selection_set(index)
+                selected += 1
+        return selected
+
+    def _apply_bulk_operation(
+        self, operation: str, value: str = "", keywords: Optional[List[str]] = None
+    ) -> List[dict]:
+        """Execute a single bulk operation and return change details."""
+
+        if not self.current_config:
+            return []
+
+        mappings = self.current_config.keyword_mappings
+        targets = keywords or list(mappings.keys())
+        results: List[dict] = []
+        replacement: tuple[str, str] = tuple()
+        if operation == "replace" and isinstance(value, str):
+            parts = value.split("->", 1)
+            if len(parts) == 2:
+                replacement = (parts[0].strip(), parts[1].strip())
+
+        for key in targets:
+            if key not in mappings:
+                continue
+
+            mapping = mappings[key]
+            original_value = mapping.custom
+
+            if operation == "prefix":
+                mapping.custom = f"{value}{original_value}"
+            elif operation == "suffix":
+                mapping.custom = f"{original_value}{value}"
+            elif operation == "upper":
+                mapping.custom = original_value.upper()
+            elif operation == "lower":
+                mapping.custom = original_value.lower()
+            elif operation == "title":
+                mapping.custom = original_value.title()
+            elif operation == "replace" and replacement:
+                mapping.custom = original_value.replace(*replacement)
+            elif operation == "reset":
+                mapping.custom = mapping.original
+
+            results.append(
+                {"keyword": key, "before": original_value, "after": mapping.custom}
+            )
+
+        return results
+
+    def _export_language_package(
+        self,
+        output_dir: str,
+        include_examples: bool = True,
+        package_name: Optional[str] = None,
+    ) -> str:
+        """Create a distributable language package and return the archive path."""
+
+        if not self.current_config:
+            raise ValueError("No configuration loaded.")
+
+        base_path = Path(output_dir).expanduser().resolve()
+        base_path.mkdir(parents=True, exist_ok=True)
+
+        package_name = (
+            package_name or self.current_config.name.replace(" ", "_") or "Language"
+        )
+        version = self.current_config.version or "1.0.0"
+        package_dir = base_path / f"{package_name}-{version}"
+        package_dir.mkdir(parents=True, exist_ok=True)
+
+        config_path = package_dir / "language.json"
+        config_path.write_text(
+            json.dumps(self.current_config.to_dict(), indent=2),
+            encoding="utf-8",
+        )
+
+        readme_path = package_dir / "README.md"
+        if not readme_path.exists():
+            readme_text = textwrap.dedent(
+                f"""
+                # {self.current_config.name}
+
+                Version: {version}
+
+                Generated by the Honey Badger Language Construction Set.
+                """
+            ).strip()
+            readme_path.write_text(readme_text + "\n", encoding="utf-8")
+
+        if include_examples:
+            examples_dir = package_dir / "examples"
+            examples_dir.mkdir(exist_ok=True)
+            examples_dir.joinpath("hello.txt").write_text(
+                "print('Hello, World!')\n",
+                encoding="utf-8",
+            )
+
+        zip_path = base_path / f"{package_name}-{version}.zip"
+        with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as archive:
+            for path in package_dir.rglob("*"):
+                if path.is_file():
+                    archive.write(path, path.relative_to(base_path))
+
+        return str(zip_path)
+
+    def _browse_output_dir(self, initial_dir: Optional[str] = None) -> Optional[str]:
+        """Prompt the user for an export directory."""
+
+        return filedialog.askdirectory(initialdir=initial_dir or os.getcwd())
+
+    def _perform_package_export(
+        self, output_dir: str, package_name: Optional[str] = None
+    ) -> dict:
+        """Create a package and return a summary of the export."""
+
+        try:
+            archive = self._export_language_package(
+                output_dir,
+                package_name=package_name,
+            )
+        except Exception as exc:  # noqa: BLE001  # pylint: disable=broad-except
+            return {"status": "error", "reason": str(exc)}
+
+        summary = {
+            "status": "ok",
+            "archive": archive,
+            "size": os.path.getsize(archive) if os.path.exists(archive) else 0,
+        }
+        self._recent_share_payloads.append(archive)
+        return summary
+
+    def _live_syntax_highlighter(self) -> dict:
+        """Return syntax highlighting settings with sample content."""
+
+        sample = self._generate_sample_code()
+        return {"status": "ready", "colors": dict(self.syntax_theme), "sample": sample}
+
+    def _generate_sample_code(self) -> str:
+        """Produce sample code showcasing current keyword mappings."""
+
+        config = self.current_config or LanguageConfig()
+        canonical = {
+            mapping.original.lower(): mapping.custom
+            for mapping in config.keyword_mappings.values()
+        }
+
+        def kw(name: str, fallback: str) -> str:
+            return canonical.get(name, fallback)
+
+        func_kw = kw("function", "function")
+        if_kw = kw("if", "if")
+        else_kw = kw("else", "else")
+        while_kw = kw("while", "while")
+        loop_kw = kw("for", "for")
+        print_kw = kw("print", "print")
+
+        sample = textwrap.dedent(
+            f"""
+            {func_kw} greet(name):
+                {print_kw}("Hello, " + name)
+
+            {loop_kw} counter in range(3):
+                {print_kw}(counter)
+
+            {if_kw} counter == 3:
+                {print_kw}("Done")
+            {else_kw}:
+                {print_kw}("Still running")
+
+            {while_kw} counter < 5:
+                counter = counter + 1
+                {print_kw}(counter)
+            """
+        ).strip()
+        return sample
+
+    def _highlight_pattern(
+        self, text_widget: tk.Text, pattern: str, tag: str, start: str = "1.0"
+    ) -> int:
+        """Apply a highlighting tag for each regex match."""
+
+        if not hasattr(text_widget, "get"):
+            return 0
+
+        content = text_widget.get(start, tk.END)
+        try:
+            matches = list(re.finditer(pattern, content, re.MULTILINE))
+        except re.error:
+            return 0
+
+        text_widget.tag_remove(tag, "1.0", tk.END)
+        for match in matches:
+            begin = f"1.0+{match.start()}c"
+            end = f"1.0+{match.end()}c"
+            text_widget.tag_add(tag, begin, end)
+
+        return len(matches)
+
+    def _pick_color(self, category: str, suggested: Optional[str] = None) -> str:
+        """Assign a color to a syntax category."""
+
+        color = suggested or self.syntax_theme.get(category, "#ffffff")
+        self.syntax_theme[category] = color
+        self._color_history.append(color)
+        return color
+
+    def _reset_colors(self) -> dict:
+        """Reset syntax theme to defaults."""
+
+        self.syntax_theme = dict(self._default_theme)
+        return dict(self.syntax_theme)
+
+    def _export_color_theme(self) -> str:
+        """Return the current color theme as JSON."""
+
+        return json.dumps(self.syntax_theme, indent=2)
+
+    def init_code_intelligence(self) -> dict:
+        """Initialise data required for code intelligence helpers."""
+
+        self.intelligence_data = {
+            "symbol_table": {},
+            "usage_stats": Counter(),
+            "last_analysis": None,
+            "completions_cache": {},
+        }
+        return self.intelligence_data
+
+    def analyze_code_complexity(self, code: str) -> dict:
+        """Return lightweight complexity metrics for the supplied code."""
+
+        if code is None:
+            code = ""
+
+        lines = [line for line in textwrap.dedent(code).splitlines() if line.strip()]
+        keyword_usage: Counter = Counter()
+        cyclomatic = 1
+        max_nesting = 0
+
+        for line in lines:
+            stripped = line.strip()
+            tokens = re.findall(r"[A-Za-z_]+", stripped)
+            keyword_usage.update(token.lower() for token in tokens)
+            cyclomatic += sum(
+                token.lower() in {"if", "elif", "for", "while", "case", "except"}
+                for token in tokens
+            )
+            indent = len(line) - len(line.lstrip(" "))
+            current_level = indent // 4
+            max_nesting = max(max_nesting, current_level)
+
+        metrics = {
+            "lines": len(lines),
+            "statements": len(lines),
+            "cyclomatic_complexity": max(1, cyclomatic),
+            "nesting_depth": max_nesting,
+            "keyword_usage": dict(keyword_usage),
+        }
+
+        if self.intelligence_data.get("usage_stats"):
+            self.intelligence_data["usage_stats"].update(keyword_usage)
+        else:
+            self.intelligence_data["usage_stats"] = keyword_usage
+        self.intelligence_data["last_analysis"] = metrics
+        return metrics
+
+    def suggest_refactoring(self, code: str) -> List[dict]:
+        """Provide heuristic refactoring suggestions."""
+
+        if code is None:
+            code = ""
+
+        lines = [
+            line.rstrip() for line in textwrap.dedent(code).splitlines() if line.strip()
+        ]
+        suggestions: List[dict] = []
+
+        counts = Counter(lines)
+        duplicates = [
+            line for line, count in counts.items() if count > 1 and len(line) > 3
+        ]
+        if duplicates:
+            suggestions.append(
+                {
+                    "type": "deduplicate",
+                    "message": "Duplicate lines detected",
+                    "instances": duplicates[:5],
+                }
+            )
+
+        long_lines = [line for line in lines if len(line) > 80]
+        if long_lines:
+            suggestions.append(
+                {
+                    "type": "long-line",
+                    "message": "Consider wrapping long lines",
+                    "count": len(long_lines),
+                }
+            )
+
+        if len(lines) > 100:
+            suggestions.append(
+                {
+                    "type": "large-file",
+                    "message": "Split large modules into smaller units",
+                    "lines": len(lines),
+                }
+            )
+
+        if not suggestions:
+            suggestions.append(
+                {"type": "clean", "message": "No obvious refactors detected"}
+            )
+
+        return suggestions
+
+    def auto_complete_code(self, source: str, cursor_index: int) -> List[str]:
+        """Return completion candidates based on current context."""
+
+        if source is None:
+            source = ""
+
+        cursor_index = max(0, min(cursor_index, len(source)))
+        start = cursor_index
+        while start > 0 and (source[start - 1].isalnum() or source[start - 1] == "_"):
+            start -= 1
+        prefix = source[start:cursor_index]
+
+        candidates = set()
+        if self.current_config:
+            for mapping in self.current_config.keyword_mappings.values():
+                candidates.add(mapping.custom)
+            for func in self.current_config.builtin_functions.values():
+                candidates.add(func.name)
+
+        candidates.update({"print", "range", "return", "import"})
+        candidates.update({"if", "else", "for", "while", "def", "class", "with", "try"})
+
+        filtered = sorted(value for value in candidates if value.startswith(prefix))
+        self.intelligence_data.setdefault("completions_cache", {})[prefix] = filtered
+        return filtered
+
+    def export_for_sharing(self, format_type: str = "package") -> str:
+        """Serialize the active configuration for sharing."""
+
+        config = self.current_config or LanguageConfig()
+        payload = {
+            "format": format_type,
+            "generated": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
+            "config": config.to_dict(),
+            "metadata": {
+                "name": config.name,
+                "version": config.version,
+                "description": config.description,
+            },
+        }
+        serialized = json.dumps(payload, indent=2)
+        self._recent_share_payloads.append(serialized)
+        return serialized
+
+    def generate_shareable_link(self) -> str:
+        """Create a pseudo-link embedding the serialized configuration."""
+
+        payload = self.export_for_sharing()
+        encoded = (
+            base64.urlsafe_b64encode(payload.encode("utf-8"))
+            .decode("ascii")
+            .rstrip("=")
+        )
+        link = f"hblcs://import?data={encoded}"
+        self._recent_share_payloads.append(link)
+        return link
+
+    def import_shared_config(self, data: str) -> LanguageConfig:
+        """Reconstruct a configuration from shared data."""
+
+        raw = data
+        try:
+            padded = data + "=" * (-len(data) % 4)
+            decoded = base64.urlsafe_b64decode(padded.encode("ascii"))
+            if decoded.strip().startswith(b"{"):
+                raw = decoded.decode("utf-8")
+        except Exception:  # noqa: BLE001  # pylint: disable=broad-except
+            pass
+
+        config_payload = json.loads(raw)
+        config_dict = config_payload.get("config", config_payload)
+        config = LanguageConfig.from_dict(config_dict)
+        self.current_config = config
+        return config
+
+    def sync_to_cloud(self, provider: str = "github") -> dict:
+        """Simulate synchronising the configuration with a cloud provider."""
+
+        sync_id = uuid.uuid4().hex[:10]
+        return {
+            "status": "success",
+            "provider": provider,
+            "sync_id": sync_id,
+            "timestamp": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
+        }
+
+    def init_plugin_system(self) -> dict:
+        """Initialise plugin registry structures."""
+
+        self.plugins = {
+            "available": {
+                "linter": {
+                    "description": "Static analysis helpers",
+                    "hooks": ["on_save", "on_validation"],
+                },
+                "doc_gen": {
+                    "description": "Generates documentation",
+                    "hooks": ["on_export"],
+                },
+            },
+            "loaded": {},
+            "hooks": {},
+        }
+        return self.plugins
+
+    def register_plugin(
+        self, name: str, plugin_cls: Callable, hooks: List[str]
+    ) -> bool:
+        """Register a plugin and map its hooks."""
+
+        if not getattr(self, "plugins", None):
+            self.init_plugin_system()
+
+        if name in self.plugins["loaded"]:
+            return False
+
+        instance = plugin_cls()
+        registered_hooks = []
+        for hook in hooks:
+            if hasattr(instance, hook):
+                self.plugins["hooks"].setdefault(hook, []).append(
+                    (name, getattr(instance, hook))
+                )
+                registered_hooks.append(hook)
+
+        self.plugins["loaded"][name] = {"instance": instance, "hooks": registered_hooks}
+        return True
+
+    def execute_plugin_hooks(self, hook_name: str, *args, **kwargs) -> List[Any]:
+        """Execute all registered hooks for a given event."""
+
+        results: List[Any] = []
+        for name, handler in self.plugins.get("hooks", {}).get(hook_name, []):
+            try:
+                results.append(handler(*args, **kwargs))
+            except Exception as exc:  # noqa: BLE001  # pylint: disable=broad-except
+                results.append({"plugin": name, "error": str(exc)})
+        return results
+
+    def list_plugins(self) -> dict:
+        """Return summaries of available and loaded plugins."""
+
+        available = list(self.plugins.get("available", {}).keys())
+        loaded = list(self.plugins.get("loaded", {}).keys())
+        return {"available": available, "loaded": loaded}
+
+    def profile_language_performance(self, code: str) -> dict:
+        """Estimate language translation performance metrics."""
+
+        if code is None:
+            code = ""
+
+        lines = [line for line in textwrap.dedent(code).splitlines() if line.strip()]
+        branches = sum(
+            1 for line in lines if re.search(r"\b(if|for|while|match|case|try)\b", line)
+        )
+        translation_time = 0.0005 + len(lines) * 0.0001 + branches * 0.0002
+        memory_estimate = 2048 + len(code) * 64
+        optimization_score = max(
+            10,
+            min(100, int(100 - math.log(len(code) + 1, 2) * 5 - branches * 2)),
+        )
+
+        metrics = {
+            "timestamp": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
+            "lines": len(lines),
+            "branch_points": branches,
+            "translation_time": translation_time,
+            "memory_estimate": memory_estimate,
+            "optimization_score": optimization_score,
+        }
+        self.performance_history.append(metrics)
+        return metrics
+
+    def benchmark_translation(self, iterations: int = 10, code: str = "") -> dict:
+        """Run a synthetic translation benchmark."""
+
+        iterations = max(1, int(iterations))
+        payload = textwrap.dedent(code or self._generate_sample_code())
+        start = time.perf_counter()
+        checksum = 0
+        for i in range(iterations):
+            checksum ^= hash((i, len(payload), payload[:10]))
+        elapsed = time.perf_counter() - start
+        avg_time = elapsed / iterations
+        return {
+            "iterations": iterations,
+            "avg_time": avg_time,
+            "checksum": checksum & 0xFFFFFFFF,
+        }
+
+    def generate_performance_report(self) -> str:
+        """Produce a textual performance summary."""
+
+        if not self.performance_history:
+            self.performance_history.append(self.profile_language_performance(""))
+
+        lines = ["PERFORMANCE ANALYSIS", "=" * 80]
+        for entry in self.performance_history[-5:]:
+            lines.append(
+                (
+                    f"{entry['timestamp']} | lines={entry['lines']} | "
+                    f"branches={entry['branch_points']} | time={entry['translation_time']:.6f}s | "
+                    f"score={entry['optimization_score']}"
+                )
+            )
+
+        avg_time = sum(
+            item["translation_time"] for item in self.performance_history
+        ) / len(self.performance_history)
+        lines.append("-" * 80)
+        lines.append(f"Average translation time: {avg_time:.6f}s")
+        return "\n".join(lines)
+
+    def suggest_optimizations(self, code: str) -> List[dict]:
+        """Generate performance-oriented optimisation suggestions."""
+
+        if code is None:
+            code = ""
+
+        lines = textwrap.dedent(code).splitlines()
+        suggestions: List[dict] = []
+
+        if len(lines) > 120:
+            suggestions.append(
+                {
+                    "type": "split-modules",
+                    "message": "Large script detected",
+                    "lines": len(lines),
+                }
+            )
+
+        loops = sum(1 for line in lines if re.search(r"\bfor\b|\bwhile\b", line))
+        if loops > 20:
+            suggestions.append(
+                {
+                    "type": "loop-optimization",
+                    "message": "Consider vectorising or batching loops",
+                    "loops": loops,
+                }
+            )
+
+        literal_counts = Counter(line.strip() for line in lines if line.strip())
+        hotspots = [line for line, count in literal_counts.items() if count > 10]
+        if hotspots:
+            suggestions.append(
+                {
+                    "type": "cache-results",
+                    "message": "Repeated statements detected",
+                    "examples": hotspots[:3],
+                }
+            )
+
+        if not suggestions:
+            suggestions.append(
+                {"type": "info", "message": "Code already appears optimised"}
+            )
+
+        return suggestions
+
+    def init_web_ide(self, port: int = 8080, host: str = "127.0.0.1") -> dict:
+        """Prepare configuration for the lightweight web IDE."""
+
+        base_url = f"http://{host}:{port}"
+        features = {
+            "live_reload": True,
+            "syntax_highlighting": True,
+            "collaboration": True,
+            "api_endpoints": [
+                "/api/config",
+                "/api/code/execute",
+                "/api/keywords",
+            ],
+        }
+        self.web_app_config = {
+            "host": host,
+            "port": port,
+            "base_url": base_url,
+            "features": features,
+        }
+        self.web_routes = {
+            "/": {"method": "GET", "handler": "serve_ui"},
+            "/api/config": {"method": "GET", "handler": "get_config"},
+            "/api/code/execute": {"method": "POST", "handler": "execute_code"},
+            "/api/keywords": {"method": "GET", "handler": "list_keywords"},
+        }
+        return self.web_app_config
+
+    def generate_web_ui_template(self) -> str:
+        """Return a static HTML template representing the web IDE."""
+
+        colors = self.syntax_theme
+        html = textwrap.dedent(
+            f"""
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="utf-8" />
+                <title>Honey Badger Web IDE</title>
+                <style>
+                    body {{
+                        font-family: Arial, sans-serif;
+                        margin: 0;
+                        padding: 0;
+                        background: #1e1e1e;
+                        color: #f0f0f0;
+                    }}
+                    header {{ padding: 1rem; background: #0f4c81; }}
+                    textarea {{
+                        width: 100%;
+                        height: 300px;
+                        padding: 1rem;
+                        background: #252526;
+                        color: {colors.get('Keywords', '#ffffff')};
+                        border: none;
+                    }}
+                    button {{ margin-right: 0.5rem; padding: 0.6rem 1rem; }}
+                    #console {{ background: #111; padding: 1rem; min-height: 150px; white-space: pre-wrap; }}
+                </style>
+            </head>
+            <body>
+                <header>
+                    <h1>Honey Badger Language Construction Set</h1>
+                    <p>Web IDE Preview</p>
+                </header>
+                <main style="padding: 1rem;">
+                    <textarea id="editor" placeholder="Write code here..."></textarea>
+                    <div style="margin-top: 1rem;">
+                        <button onclick="runCode()">Run</button>
+                        <button onclick="highlight()">Highlight</button>
+                        <button onclick="downloadConfig()">Download Config</button>
+                    </div>
+                    <section id="console"></section>
+                </main>
+                <script>
+                    async function runCode() {{
+                        const response = await fetch('/api/code/execute', {{
+                            method: 'POST',
+                            headers: {{ 'Content-Type': 'application/json' }},
+                            body: JSON.stringify({{ code: document.getElementById('editor').value }})
+                        }});
+                        const data = await response.json();
+                        document.getElementById('console').textContent = data.output || data.error || '';
+                    }}
+                    async function downloadConfig() {{
+                        const response = await fetch('/api/config');
+                        const data = await response.json();
+                        const blob = new Blob([JSON.stringify(data, null, 2)], {{ type: 'application/json' }});
+                        const link = document.createElement('a');
+                        link.href = URL.createObjectURL(blob);
+                        link.download = 'language-config.json';
+                        link.click();
+                    }}
+                    function highlight() {{
+                        document.getElementById('console').textContent = 'Syntax highlighting simulated.';
+                    }}
+                </script>
+            </body>
+            </html>
+            """
+        ).strip()
+        return html
+
+    def create_web_api_handler(
+        self,
+        route: str,
+        method: str = "GET",
+        handler: Optional[Callable[[], Any]] = None,
+    ) -> dict:
+        """Register a callable for a simulated web API endpoint."""
+
+        if handler is None:
+
+            def handler() -> dict:
+                config = self.current_config.to_dict() if self.current_config else {}
+                return {"status": "ok", "config": config}
+
+        self.web_routes[route] = {"method": method, "handler": handler}
+        try:
+            response = handler()
+        except Exception as exc:  # noqa: BLE001  # pylint: disable=broad-except
+            response = {"status": "error", "reason": str(exc)}
+
+        return {"route": route, "method": method, "response": response}
+
+    def init_remote_execution(self, sandbox_type: str = "local") -> bool:
+        """Initialise remote execution configuration."""
+
+        self.execution_config = {
+            "sandbox_type": sandbox_type,
+            "timeout": 10,
+            "max_memory_mb": 256,
+            "sandboxes": {},
+            "last_run": None,
+        }
+        return True
+
+    def execute_code_safely(self, code: str, timeout: int = 5) -> dict:
+        """Execute code within a restricted namespace and capture output."""
+
+        if not self.execution_config:
+            self.init_remote_execution()
+
+        safe_builtins = {
+            "print": print,
+            "range": range,
+            "len": len,
+            "int": int,
+            "float": float,
+            "str": str,
+            "bool": bool,
+            "enumerate": enumerate,
+            "list": list,
+            "dict": dict,
+            "sum": sum,
+            "min": min,
+            "max": max,
+        }
+
+        globals_dict = {"__builtins__": safe_builtins}
+        locals_dict: Dict[str, Any] = {}
+        start = time.perf_counter()
+        buffer = io.StringIO()
+        status = "success"
+        error = None
+
+        try:
+            with redirect_stdout(buffer):
+                exec(  # noqa: S102  # pylint: disable=exec-used
+                    textwrap.dedent(code or ""), globals_dict, locals_dict
+                )
+        except Exception as exc:  # noqa: BLE001  # pylint: disable=broad-except
+            status = "error"
+            error = str(exc)
+
+        elapsed = time.perf_counter() - start
+        timeout_limit = float(timeout) if timeout else 0.0
+        self.execution_config["timeout"] = timeout_limit
+        if timeout_limit and elapsed > timeout_limit and status == "success":
+            status = "timeout"
+            error = f"Execution exceeded timeout of {timeout_limit:.2f} seconds"
+
+        result = {
+            "status": status,
+            "output": buffer.getvalue(),
+            "error": error,
+            "execution_time": elapsed,
+        }
+        self.execution_config["last_run"] = result
+        return result
+
+    def create_execution_sandbox(self, profile: str = "light") -> dict:
+        """Simulate provisioning an execution sandbox."""
+
+        if not self.execution_config:
+            self.init_remote_execution()
+
+        sandbox_id = f"sandbox-{uuid.uuid4().hex[:6]}"
+        limits = {
+            "light": {"memory_mb": 128, "cpu_shares": 1},
+            "medium": {"memory_mb": 256, "cpu_shares": 2},
+            "heavy": {"memory_mb": 512, "cpu_shares": 4},
+        }
+        resources = limits.get(profile, limits["light"])
+        sandbox = {
+            "id": sandbox_id,
+            "profile": profile,
+            "status": "ready",
+            "isolation": "process",
+            "resources": resources,
+        }
+        self.execution_config.setdefault("sandboxes", {})[sandbox_id] = sandbox
+        return sandbox
+
+    def distribute_execution(self, code: str, num_instances: int = 1) -> List[dict]:
+        """Execute code across multiple simulated sandboxes."""
+
+        results: List[dict] = []
+        for _ in range(max(1, num_instances)):
+            sandbox = self.create_execution_sandbox("distributed")
+            result = self.execute_code_safely(code)
+            result["sandbox_id"] = sandbox["id"]
+            results.append(result)
+        return results
+
+    def init_debugger(self) -> dict:
+        """Initialise the debugger state."""
+
+        self.debugger_state = {
+            "breakpoints": {},
+            "watch_expressions": [],
+            "variables": {},
+            "call_stack": [],
+            "trace": [],
+        }
+        return self.debugger_state
+
+    def set_breakpoint(
+        self, filename: str, line: int, condition: Optional[str] = None
+    ) -> bool:
+        """Register a breakpoint in the debugger state."""
+
+        if not self.debugger_state:
+            self.init_debugger()
+
+        key = f"{filename}:{line}"
+        self.debugger_state["breakpoints"][key] = {
+            "condition": condition or "",
+            "enabled": True,
+        }
+        return True
+
+    def step_through_code(self, code: str, step_type: str = "line") -> dict:
+        """Generate a synthetic execution trace for the supplied code."""
+
+        if not self.debugger_state:
+            self.init_debugger()
+
+        trace_steps = []
+        for index, raw in enumerate(textwrap.dedent(code or "").splitlines(), 1):
+            stripped = raw.strip()
+            if not stripped:
+                continue
+            trace_steps.append(
+                {"line": index, "code": stripped, "step_type": step_type}
+            )
+
+        trace = {"steps": trace_steps, "count": len(trace_steps)}
+        self.debugger_state["trace"].append(trace)
+        return trace
+
+    def inspect_variables(self) -> dict:
+        """Expose a snapshot of debugger variables and breakpoints."""
+
+        if not self.debugger_state:
+            self.init_debugger()
+
+        watched = list(self.debugger_state.get("watch_expressions", []))
+        locals_view = dict(self.debugger_state.get("variables", {}))
+        breakpoints = list(self.debugger_state.get("breakpoints", {}).keys())
+        return {
+            "watched": watched,
+            "locals": locals_view,
+            "breakpoints": breakpoints,
+        }
+
+    def init_community_registry(self) -> dict:
+        """Initialise community registry data structures."""
+
+        languages = [
+            {
+                "id": f"lang_{uuid.uuid4().hex[:6]}",
+                "name": "Pythonic DSL",
+                "category": "General",
+                "rating": 4.6,
+                "downloads": 1520,
+                "tags": ["general", "educational"],
+                "ratings": [],
+            },
+            {
+                "id": f"lang_{uuid.uuid4().hex[:6]}",
+                "name": "DataFlow Script",
+                "category": "DSL",
+                "rating": 4.2,
+                "downloads": 980,
+                "tags": ["dsl", "data"],
+                "ratings": [],
+            },
+        ]
+
+        self.community_registry = {
+            "languages": languages,
+            "categories": ["General", "DSL", "Education", "Experimental"],
+            "users": [],
+            "reviews": [],
+        }
+        return self.community_registry
+
+    def register_user(self, username: str, email: str) -> dict:
+        """Register a new community user."""
+
+        if not self.community_registry:
+            self.init_community_registry()
+
+        user = {
+            "id": f"user_{uuid.uuid4().hex[:8]}",
+            "username": username,
+            "email": email,
+            "joined": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
+        }
+        self.community_registry["users"].append(user)
+        return user
+
+    def publish_language(
+        self,
+        name: str,
+        description: str,
+        category: str,
+        tags: Optional[List[str]] = None,
+    ) -> dict:
+        """Publish a language entry to the community registry."""
+
+        if not self.community_registry:
+            self.init_community_registry()
+
+        tags = tags or [category.lower(), "community"]
+        language = {
+            "id": f"lang_{uuid.uuid4().hex[:6]}",
+            "name": name,
+            "description": description,
+            "category": category,
+            "tags": tags,
+            "rating": 5.0,
+            "ratings": [],
+            "downloads": 0,
+        }
+        self.community_registry["languages"].append(language)
+        return language
+
+    def rate_and_review(self, language_id: str, rating: float, text: str) -> dict:
+        """Store a language review and update aggregate rating."""
+
+        if not self.community_registry:
+            self.init_community_registry()
+
+        language = next(
+            (
+                item
+                for item in self.community_registry["languages"]
+                if item["id"] == language_id
+            ),
+            None,
+        )
+        if language is None:
+            raise ValueError("Language not found")
+
+        language.setdefault("ratings", []).append(float(rating))
+        language["rating"] = round(
+            sum(language["ratings"]) / len(language["ratings"]),
+            2,
+        )
+
+        review = {
+            "id": f"review_{uuid.uuid4().hex[:8]}",
+            "language_id": language_id,
+            "rating": float(rating),
+            "text": text,
+            "created": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
+        }
+        self.community_registry.setdefault("reviews", []).append(review)
+        return review
+
+    def _analyze_keyword_conflicts(self) -> str:
+        """Analyze the active configuration for keyword conflicts."""
+        if not self.current_config:
+            return "No configuration loaded. Load a configuration first."
+
+        mappings = list(self.current_config.keyword_mappings.values())
+        lines = [
+            "KEYWORD CONFLICT ANALYSIS",
+            "-" * 32,
+        ]
+
+        counter = Counter(m.custom.lower() for m in mappings)
+        duplicates = {name: count for name, count in counter.items() if count > 1}
+        if duplicates:
+            lines.append("CRITICAL: Duplicate keyword names detected.")
+            for custom_name in sorted(duplicates):
+                owners = [
+                    m.original for m in mappings if m.custom.lower() == custom_name
+                ]
+                owner_list = ", ".join(sorted(owners))
+                lines.append(f"  - '{custom_name}' used by {owner_list}")
+        else:
+            lines.append("No duplicate keyword names detected.")
+
+        prefix_conflicts = []
+        customs = [m.custom for m in mappings]
+        for name in customs:
+            for other in customs:
+                if name != other and other.startswith(name):
+                    prefix_conflicts.append((name, other))
+
+        if prefix_conflicts:
+            lines.append("WARNING: Prefix conflicts detected between keywords:")
+            for shorter, longer in sorted(set(prefix_conflicts)):
+                lines.append(f"  - '{shorter}' overlaps with '{longer}'")
+        else:
+            lines.append("No prefix conflicts detected.")
+
+        return "\n".join(lines)
+
+    def _analyze_ambiguous_patterns(self) -> str:
+        """Highlight ambiguous keyword patterns in the configuration."""
+        if not self.current_config:
+            return "No configuration loaded."
+
+        mappings = list(self.current_config.keyword_mappings.values())
+        singles = [m.custom for m in mappings if len(m.custom) == 1]
+        digits = [m.custom for m in mappings if any(ch.isdigit() for ch in m.custom)]
+
+        overlaps = []
+        customs = [m.custom for m in mappings]
+        for candidate in customs:
+            for other in customs:
+                if candidate != other and other.lower().startswith(candidate.lower()):
+                    overlaps.append((candidate, other))
+
+        lines = [
+            "AMBIGUOUS PATTERN ANALYSIS",
+            "-" * 34,
+            "SINGLE-CHARACTER KEYWORDS",
+        ]
+        if singles:
+            for value in sorted(set(singles)):
+                lines.append(f"  - {value}")
+        else:
+            lines.append("  - None detected")
+
+        lines.append("\nKEYWORDS WITH DIGITS")
+        if digits:
+            for value in sorted(set(digits)):
+                lines.append(f"  - {value}")
+        else:
+            lines.append("  - None detected")
+
+        lines.append("\nPREFIX OVERLAPS")
+        if overlaps:
+            for shorter, longer in sorted(set(overlaps)):
+                lines.append(f"  - '{shorter}' appears inside '{longer}'")
+        else:
+            lines.append("  - No ambiguous prefixes found")
+
+        return "\n".join(lines)
+
+    def _analyze_delimiter_issues(self) -> str:
+        """Report potential delimiter issues for the active configuration."""
+        if not self.current_config:
+            return "No configuration loaded."
+
+        options = self.current_config.syntax_options
+        lines = [
+            "DELIMITER ANALYSIS",
+            "-" * 20,
+            (
+                "Single-line comment delimiter: "
+                f"{options.single_line_comment or 'None'}"
+            ),
+        ]
+
+        if not options.single_line_comment:
+            lines.append("WARNING: No single-line comment delimiter is configured.")
+
+        terminator = options.statement_terminator or "newline"
+        lines.append(f"Statement terminator: {terminator}")
+
+        if options.multi_line_comment_start and not options.multi_line_comment_end:
+            warning = " ".join(
+                [
+                    "WARNING: Multi-line comment start defined without",
+                    "an end delimiter.",
+                ]
+            )
+            lines.append(warning)
+
+        if options.multi_line_comment_start and options.multi_line_comment_end:
+            confirmation = " ".join(
+                [
+                    "Multi-line comment delimiters appear to be",
+                    "configured correctly.",
+                ]
+            )
+            lines.append(confirmation)
+
+        return "\n".join(lines)
+
+    def _generate_fix_recommendations(self) -> str:
+        """Create actionable recommendations based on analysis results."""
+        if not self.current_config:
+            return "No configuration loaded."
+
+        mappings = list(self.current_config.keyword_mappings.values())
+        counter = Counter(m.custom.lower() for m in mappings)
+        duplicates = [name for name, count in counter.items() if count > 1]
+        singles = [m.custom for m in mappings if len(m.custom) == 1]
+        digits = [m.custom for m in mappings if any(ch.isdigit() for ch in m.custom)]
+
+        lines = [
+            "FIX RECOMMENDATIONS",
+            "-" * 24,
+        ]
+
+        if duplicates:
+            message = " ".join(
+                [
+                    "RECOMMEND: Rename duplicate keywords",
+                    "to ensure unique mappings.",
+                ]
+            )
+            lines.append(message)
+            for name in sorted(set(duplicates)):
+                lines.append(f"  - {name}")
+        else:
+            message = " ".join(
+                [
+                    "RECOMMEND: Keep keyword names;",
+                    "no duplicates detected.",
+                ]
+            )
+            lines.append(message)
+
+        if singles:
+            message = "RECOMMEND: Expand very short keywords to improve readability."
+            lines.append(message)
+            for value in sorted(set(singles)):
+                lines.append(f"  - {value}")
+
+        if digits:
+            message = " ".join(
+                [
+                    "RECOMMEND: Remove digits from keyword names",
+                    "for clarity when possible.",
+                ]
+            )
+            lines.append(message)
+
+        summary = " ".join(
+            [
+                "RECOMMEND: Review delimiter settings",
+                "to confirm they match language goals.",
+            ]
+        )
+        lines.append(summary)
+
+        return "\n".join(lines)
 
 
 def main():

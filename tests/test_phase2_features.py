@@ -9,13 +9,9 @@ Comprehensive tests for Phase 2 features:
 
 import sys
 import os
-from pathlib import Path
-
-# Add src to path
-sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
 from hb_lcs.language_config import LanguageConfig
-from hb_lcs.parser_generator import ParserGenerator, Lexer, Parser, TokenType
+from hb_lcs.parser_generator import ParserGenerator, TokenType
 from hb_lcs.test_framework import (
     TestCase,
     LanguageTestRunner,
@@ -24,7 +20,6 @@ from hb_lcs.test_framework import (
 )
 from hb_lcs.language_validator import (
     LanguageValidator,
-    ValidationIssue,
     validate_config,
 )
 
@@ -287,7 +282,7 @@ def test_integration():
     print("\n3. Generating parser and tokenizing...")
     parser_gen = ParserGenerator(config)
     test_code = "x = 10"
-    tokens, ast = parser_gen.parse(test_code)
+    tokens, _ = parser_gen.parse(test_code)
     print(f"   Parsed '{test_code}' -> {len(tokens)} tokens")
 
     # Step 4: Generate and run tests
@@ -343,12 +338,6 @@ def main():
 
     except AssertionError as e:
         print(f"\n✗ TEST FAILED: {e}")
-        return 1
-    except Exception as e:
-        print(f"\n✗ ERROR: {e}")
-        import traceback
-
-        traceback.print_exc()
         return 1
 
 

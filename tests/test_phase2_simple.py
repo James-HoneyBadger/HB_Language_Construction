@@ -5,13 +5,10 @@ Tests validator and framework functionality.
 """
 
 import sys
-from pathlib import Path
-
-sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
 from hb_lcs.language_config import LanguageConfig, KeywordMapping
 from hb_lcs.language_validator import LanguageValidator, validate_config
-from hb_lcs.test_framework import TestCase, LanguageTestRunner, TestGenerator
+from hb_lcs.test_framework import TestGenerator
 
 
 def test_language_validator():
@@ -169,7 +166,7 @@ def test_preset_loading():
         try:
             config = LanguageConfig.from_preset(preset_name)
             print(f"   ✓ {preset_name}: {config.name}")
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-except
             print(f"   ✗ {preset_name}: {e}")
 
     print("\n✓ Preset loading tests passed")
@@ -216,7 +213,7 @@ def main():
             print(f"\n✗ {total - passed} test suite(s) failed")
             return 1
 
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-except
         print(f"\n✗ ERROR: {e}")
         import traceback
 

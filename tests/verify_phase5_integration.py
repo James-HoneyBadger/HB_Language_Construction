@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# pylint: disable=protected-access,no-member,broad-except,wrong-import-position
 """
 Verify Phase 5 Integration
 - Menu items properly added
@@ -7,10 +8,6 @@ Verify Phase 5 Integration
 """
 
 import sys
-import os
-
-# Add src directory to path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
 from hb_lcs.ide import AdvancedIDE
 import tkinter as tk
@@ -75,7 +72,7 @@ def verify_phase5_integration():
         test_desc = "Create a Spanish language"
         result = ide._parse_description_to_config(test_desc)
         if result and "keywords" in result:
-            print(f"  ✓ Parser generates valid config")
+            print("  ✓ Parser generates valid config")
         else:
             print(f"  ⚠ Parser returned: {result[:100]}...")
     except Exception as e:

@@ -72,9 +72,7 @@ class VisualConfigEditor(ttk.Frame):
     def _refresh_keywords(self) -> None:
         self.kw_list.delete(0, tk.END)
         for km in self.config_obj.keyword_mappings.values():
-            self.kw_list.insert(
-                tk.END, f"{km.original} → {km.custom} ({km.category})"
-            )
+            self.kw_list.insert(tk.END, f"{km.original} → {km.custom} ({km.category})")
 
     def _add_keyword(self) -> None:
         self._keyword_dialog()
@@ -106,9 +104,7 @@ class VisualConfigEditor(ttk.Frame):
         ttk.Label(win, text="Original:").grid(
             row=0, column=0, padx=6, pady=6, sticky="w"
         )
-        ttk.Label(win, text="Custom:").grid(
-            row=1, column=0, padx=6, pady=6, sticky="w"
-        )
+        ttk.Label(win, text="Custom:").grid(row=1, column=0, padx=6, pady=6, sticky="w")
         ttk.Label(win, text="Category:").grid(
             row=2, column=0, padx=6, pady=6, sticky="w"
         )
@@ -168,7 +164,9 @@ class VisualConfigEditor(ttk.Frame):
                 if self.on_save:
                     try:
                         self.on_save(self.config_obj)
-                    except Exception as cb_err:
+                    except (
+                        Exception
+                    ) as cb_err:  # noqa: BLE001  # pylint: disable=broad-except
                         messagebox.showwarning(
                             "Update Warning",
                             f"Saved, but IDE update failed: {cb_err}",

@@ -6,14 +6,10 @@ Test Phase 5: Advanced Language Design Features
 """
 
 import sys
-import os
-
-# Add src directory to path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
+import json
 
 from hb_lcs.language_config import LanguageConfig
 from hb_lcs.ide import AdvancedIDE
-import json
 
 
 def test_template_description_parsing():
@@ -31,7 +27,9 @@ def test_template_description_parsing():
 
     # Test Spanish description
     spanish_desc = "I want Spanish keywords. Use 'si' for if and 'sino' for else."
-    config_json = ide._parse_description_to_config(spanish_desc)
+    config_json = ide._parse_description_to_config(
+        spanish_desc
+    )  # pylint: disable=protected-access
     config_dict = json.loads(config_json)
 
     print(f"Description: {spanish_desc[:50]}...")
@@ -50,7 +48,9 @@ def test_template_description_parsing():
 
     # Test verbose description
     verbose_desc = "Create a verbose language with descriptive keywords"
-    config_json = ide._parse_description_to_config(verbose_desc)
+    config_json = ide._parse_description_to_config(
+        verbose_desc
+    )  # pylint: disable=protected-access
     config_dict = json.loads(config_json)
 
     print(f"\nDescription: {verbose_desc}")
@@ -59,7 +59,9 @@ def test_template_description_parsing():
 
     # Test minimal description
     minimal_desc = "Make a minimal language with shortest keywords"
-    config_json = ide._parse_description_to_config(minimal_desc)
+    config_json = ide._parse_description_to_config(
+        minimal_desc
+    )  # pylint: disable=protected-access
     config_dict = json.loads(config_json)
 
     print(f"\nDescription: {minimal_desc}")
@@ -68,7 +70,9 @@ def test_template_description_parsing():
 
     # Test custom mapping extraction
     custom_desc = "Use 'cuando' for while and 'imprimir' for print"
-    config_json = ide._parse_description_to_config(custom_desc)
+    config_json = ide._parse_description_to_config(
+        custom_desc
+    )  # pylint: disable=protected-access
     config_dict = json.loads(config_json)
 
     print(f"\nDescription: {custom_desc}")
@@ -76,7 +80,7 @@ def test_template_description_parsing():
 
     # Check if custom mappings were extracted
     found_custom = False
-    for key, value in config_dict["keywords"].items():
+    for value in config_dict["keywords"].values():
         if value["custom"] in ["cuando", "imprimir"]:
             print(f"✓ Found custom mapping: {value['original']} → {value['custom']}")
             found_custom = True
@@ -88,7 +92,9 @@ def test_template_description_parsing():
 
     # Test array indexing detection
     array_desc = "Use 1-based indexing for arrays"
-    config_json = ide._parse_description_to_config(array_desc)
+    config_json = ide._parse_description_to_config(
+        array_desc
+    )  # pylint: disable=protected-access
     config_dict = json.loads(config_json)
 
     print(f"\nDescription: {array_desc}")
@@ -160,7 +166,9 @@ def test_conflict_analysis():
 
     # Test keyword conflict analysis
     print("\nRunning keyword conflict analysis...")
-    conflict_report = ide._analyze_keyword_conflicts()
+    conflict_report = (
+        ide._analyze_keyword_conflicts()
+    )  # pylint: disable=protected-access
     print(conflict_report[:500])  # Print first 500 chars
 
     assert (
@@ -170,7 +178,9 @@ def test_conflict_analysis():
 
     # Test ambiguous pattern analysis
     print("\nRunning ambiguous pattern analysis...")
-    pattern_report = ide._analyze_ambiguous_patterns()
+    pattern_report = (
+        ide._analyze_ambiguous_patterns()
+    )  # pylint: disable=protected-access
     print(pattern_report[:500])
 
     assert (
@@ -185,7 +195,9 @@ def test_conflict_analysis():
 
     # Test delimiter analysis
     print("\nRunning delimiter analysis...")
-    delimiter_report = ide._analyze_delimiter_issues()
+    delimiter_report = (
+        ide._analyze_delimiter_issues()
+    )  # pylint: disable=protected-access
     print(delimiter_report[:300])
 
     assert "DELIMITER" in delimiter_report, "Delimiter section missing"
@@ -193,7 +205,9 @@ def test_conflict_analysis():
 
     # Test recommendations
     print("\nRunning fix recommendations...")
-    recommendations = ide._generate_fix_recommendations()
+    recommendations = (
+        ide._generate_fix_recommendations()
+    )  # pylint: disable=protected-access
     print(recommendations[:500])
 
     assert (
@@ -220,11 +234,13 @@ def test_config_generation_and_application():
 
     # Generate a config
     desc = "Spanish language with Python syntax"
-    config_json = ide._parse_description_to_config(desc)
+    config_json = ide._parse_description_to_config(
+        desc
+    )  # pylint: disable=protected-access
     config_dict = json.loads(config_json)
 
     print(f"Generated config for: {desc}")
-    print(f"Config structure:")
+    print("Config structure:")
     print(f"  - Metadata: {config_dict['metadata']['name']}")
     print(f"  - Keywords: {len(config_dict['keywords'])} defined")
     print(f"  - Syntax options: {len(config_dict['syntax_options'])} settings")
@@ -245,7 +261,7 @@ def test_config_generation_and_application():
     try:
         generated_config = LanguageConfig.from_dict(config_dict)
         ide.current_config = generated_config
-        print(f"\n✓ Config successfully loaded into IDE")
+        print("\n✓ Config successfully loaded into IDE")
         print(f"  Active keywords: {len(generated_config.keyword_mappings)}")
 
         # Verify some keywords
@@ -305,23 +321,27 @@ def test_conflict_free_config():
     ide.current_config = LanguageConfig.from_dict(clean_config)
 
     # Run analysis
-    conflict_report = ide._analyze_keyword_conflicts()
-    pattern_report = ide._analyze_ambiguous_patterns()
+    conflict_report = (
+        ide._analyze_keyword_conflicts()
+    )  # pylint: disable=protected-access
+    pattern_report = (
+        ide._analyze_ambiguous_patterns()
+    )  # pylint: disable=protected-access
 
     print("Analyzing clean configuration...")
-    print(f"\nKeyword conflicts: ", end="")
+    print("\nKeyword conflicts: ", end="")
     if "No duplicate" in conflict_report:
         print("✓ None detected")
     else:
         print("⚠ Issues found")
 
-    print(f"Ambiguous patterns: ", end="")
+    print("Ambiguous patterns: ", end="")
     if "No ambiguous" in pattern_report:
         print("✓ None detected")
     else:
         print("⚠ Some patterns flagged (may be acceptable)")
 
-    print(f"\n✓ Clean config analyzed successfully")
+    print("\n✓ Clean config analyzed successfully")
 
     root.destroy()
     print("\n✅ Conflict-free config tests passed!")
@@ -347,7 +367,7 @@ def main():
         try:
             result = test_func()
             results.append((test_name, "PASS" if result else "FAIL"))
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-except
             print(f"\n❌ {test_name} FAILED: {e}")
             import traceback
 

@@ -12,10 +12,6 @@ import os
 import sys
 import tempfile
 import json
-from pathlib import Path
-
-# Add src to path
-sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
 from hb_lcs.language_config import LanguageConfig, KeywordMapping
 
@@ -69,7 +65,9 @@ def test_code_execution():
 
     output = io.StringIO()
     with contextlib.redirect_stdout(output):
-        exec(python_code, {"__builtins__": {"print": print, "True": True}})
+        exec(  # pylint: disable=exec-used
+            python_code, {"__builtins__": {"print": print, "True": True}}
+        )
 
     result = output.getvalue()
     assert "hola" in result
@@ -92,7 +90,7 @@ def test_settings_persistence():
 
     try:
         # Load settings
-        with open(settings_path, "r") as f:
+        with open(settings_path, "r", encoding="utf-8") as f:
             loaded = json.load(f)
 
         assert loaded["theme"] == "dark"
@@ -172,7 +170,7 @@ def test_integration():
 
     output = io.StringIO()
     with contextlib.redirect_stdout(output):
-        exec(
+        exec(  # pylint: disable=exec-used
             python_code,
             {"__builtins__": {"print": print, "True": True}},
         )
@@ -227,7 +225,7 @@ def main():
     except AssertionError as e:
         print(f"\n✗ Test failed: {e}")
         return 1
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-except
         print(f"\n✗ Unexpected error: {e}")
         import traceback
 

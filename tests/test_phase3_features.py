@@ -9,7 +9,9 @@ from hb_lcs.language_validator import LanguageValidator
 def test_config_load_save_reload(tmp_path):
     # Create a simple config programmatically to avoid YAML issues
     config = LanguageConfig(
-        name="Test Language", version="1.0", description="Test config for Phase 3"
+        name="Test Language",
+        version="1.0",
+        description="Test config for Phase 3",
     )
     config.keyword_mappings["IF"] = KeywordMapping(
         original="if", custom="si", category="control"
@@ -32,7 +34,9 @@ def test_config_load_save_reload(tmp_path):
 
 def test_validator_report_contains_sections():
     config = LanguageConfig(
-        name="Test Language", version="1.0", description="Test config for validation"
+        name="Test Language",
+        version="1.0",
+        description="Test config for validation",
     )
     config.keyword_mappings["IF"] = KeywordMapping(
         original="if", custom="if", category="control"
@@ -51,7 +55,9 @@ def test_validator_report_contains_sections():
 
 def test_runtime_load_and_keyword_translation():
     config = LanguageConfig(
-        name="Test Language", version="1.0", description="Test config for runtime"
+        name="Test Language",
+        version="1.0",
+        description="Test config for runtime",
     )
 
     LanguageRuntime.load_config(config)

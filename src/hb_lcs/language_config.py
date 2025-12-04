@@ -521,6 +521,17 @@ class LanguageConfig:
 
         return cls.from_dict(data)
 
+    @classmethod
+    def load_preset(cls, preset_name: str) -> "LanguageConfig":
+        """Compatibility helper that proxies to ``from_preset``.
+
+        The IDE historically expected a ``load_preset`` classmethod.  Pylint
+        flagged its absence, so we delegate to :meth:`from_preset` to keep the
+        public surface area intuitive while avoiding duplicated logic.
+        """
+
+        return cls.from_preset(preset_name)
+
     # === CRUD Operations ===
 
     def update(self, updates: dict[str, Any], merge: bool = True) -> None:
