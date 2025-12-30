@@ -434,7 +434,7 @@ Configurations can be saved as JSON or YAML:
 {
   "metadata": {
     "name": "My Language",
-    "version": "1.0",
+    "version": "2.0",
     "description": "A custom variant",
     "author": "Your Name"
   },
@@ -467,7 +467,7 @@ Configurations can be saved as JSON or YAML:
 ```yaml
 metadata:
   name: My Language
-  version: "1.0"
+  version: "2.0"
   description: A custom variant
   author: Your Name
 
