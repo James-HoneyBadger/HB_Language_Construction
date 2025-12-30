@@ -1343,7 +1343,7 @@ For more information, visit the Help menu.
         if not self.current_config:
             messagebox.showwarning(
                 "Warning",
-                "No language configuration loaded. Please create or load a configuration first.",  # noqa: E501
+                "No language configuration loaded. Please create or load a configuration first.",  # noqa: E501 pylint: disable=line-too-long
             )
             return
 
@@ -3704,8 +3704,8 @@ All rights reserved."""
                         color: {colors.get('Keywords', '#ffffff')};
                         border: none;
                     }}
-                    button {{ margin-right: 0.5rem; padding: 0.6rem 1rem; }}  # noqa: E501
-                    #console {{ background: #111; padding: 1rem; min-height: 150px; white-space: pre-wrap; }}  # noqa: E501
+                    button {{ margin-right: 0.5rem; padding: 0.6rem 1rem; }}  # noqa: E501 pylint: disable=line-too-long
+                    #console {{ background: #111; padding: 1rem; min-height: 150px; white-space: pre-wrap; }}  # noqa: E501 pylint: disable=line-too-long
                 </style>
             </head>
             <body>
@@ -3724,18 +3724,18 @@ All rights reserved."""
                 </main>
                 <script>
                     async function runCode() {{
-                        const response = await fetch('/api/code/execute', {{  # noqa: E501
+                        const response = await fetch('/api/code/execute', {{  # noqa: E501 pylint: disable=line-too-long
                             method: 'POST',
-                            headers: {{ 'Content-Type': 'application/json' }},
-                            body: JSON.stringify({{ code: document.getElementById('editor').value }})  # noqa: E501
+                            headers: {{ 'Content-Type': 'application/json' }},  # pylint: disable=line-too-long
+                            body: JSON.stringify({{ code: document.getElementById('editor').value }})  # noqa: E501 pylint: disable=line-too-long
                         }});
                         const data = await response.json();
-                        document.getElementById('console').textContent = data.output || data.error || '';  # noqa: E501
+                        document.getElementById('console').textContent = data.output || data.error || '';  # noqa: E501 pylint: disable=line-too-long
                     }}
                     async function downloadConfig() {{
                         const response = await fetch('/api/config');
                         const data = await response.json();
-                        const blob = new Blob([JSON.stringify(data, null, 2)], {{ type: 'application/json' }});  # noqa: E501
+                        const blob = new Blob([JSON.stringify(data, null, 2)], {{ type: 'application/json' }});  # pylint: disable=line-too-long  # noqa: E501
                         const link = document.createElement('a');
                         link.href = URL.createObjectURL(blob);
                         link.download = 'language-config.json';

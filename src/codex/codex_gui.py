@@ -32,17 +32,17 @@ from typing import Any, Dict, Optional
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 # noqa: E402 - Local imports after sys.path modification
-from codex.codex_components import (  # noqa: E402
+from codex.codex_components import (  # noqa: E402 pylint: disable=wrong-import-position
     CodeExConsole,
     CodeExEditor,
     CodeExMenu,
     CodeExProjectExplorer,
 )
-from hb_lcs.interpreter_generator import (  # noqa: E402
+from hb_lcs.interpreter_generator import (  # noqa: E402 pylint: disable=wrong-import-position
     InterpreterGenerator,
     InterpreterPackage,
 )
-from hb_lcs.language_config import LanguageConfig  # noqa: E402
+from hb_lcs.language_config import LanguageConfig  # noqa: E402 pylint: disable=wrong-import-position
 
 
 class CodeExIDE(ttk.Frame):
@@ -198,7 +198,7 @@ class CodeExIDE(ttk.Frame):
         recent = self.settings.get("recent_projects", [])
         self.interpreter_combo["values"] = recent if recent else ["No recent projects"]
 
-    def _on_interpreter_selected(self, event: Optional[tk.Event] = None) -> None:
+    def _on_interpreter_selected(self, _event: Optional[tk.Event] = None) -> None:
         """Handle interpreter selection."""
         selected = self.interpreter_var.get()
         interpreter = self.interpreter_generator.get_interpreter(selected)

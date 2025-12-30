@@ -13,9 +13,9 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 
 # noqa: E402 - Local imports after sys.path modification
-from ide import AdvancedIDE  # noqa: E402
-from ide_teachscript_integration import TeachScriptIDEIntegration  # noqa: E402
-from teachscript_highlighting import (  # noqa: E402
+from ide import AdvancedIDE  # noqa: E402 pylint: disable=wrong-import-position
+from ide_teachscript_integration import TeachScriptIDEIntegration  # noqa: E402 pylint: disable=wrong-import-position
+from teachscript_highlighting import (  # noqa: E402 pylint: disable=wrong-import-position
     TeachScriptCodeCompletion,
     TeachScriptHighlighter,
 )

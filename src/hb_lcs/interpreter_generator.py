@@ -40,7 +40,7 @@ class InterpreterPackage:
         self.runtime = LanguageRuntime(config)
 
     def execute(
-        self, code: str, context: Optional[Dict[str, Any]] = None
+        self, code: str, _context: Optional[Dict[str, Any]] = None
     ) -> Dict[str, Any]:
         """
         Execute code with this interpreter.

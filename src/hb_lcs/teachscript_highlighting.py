@@ -194,11 +194,11 @@ class TeachScriptHighlighter:
                     self.text.tag_add("comment", start, end)
                     break
 
-    def _on_change(self, event):
+    def _on_change(self, _event):
         """Called when text changes."""
         self.highlight_all()
 
-    def _on_return(self, event):
+    def _on_return(self, _event):
         """Called when return key is pressed."""
         # Auto-indent based on previous line
         self.text.after(10, self._auto_indent)
@@ -244,7 +244,7 @@ class TeachScriptCodeCompletion:
 
         self.text.bind("<Control-space>", self._show_completions)
 
-    def _show_completions(self, event):
+    def _show_completions(self, _event):
         """Show code completion suggestions."""
         # Get word at cursor
         line = self.text.get("insert linestart", "insert")
@@ -294,7 +294,7 @@ class TeachScriptCodeCompletion:
         for completion in completions:
             listbox.insert(tk.END, completion)
 
-        def select(event):
+        def select(_event):
             selection = listbox.curselection()
             if selection:
                 completion = completions[selection[0]]

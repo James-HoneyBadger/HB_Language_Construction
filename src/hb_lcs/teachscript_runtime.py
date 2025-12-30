@@ -25,19 +25,13 @@ from typing import Callable, List, Optional, Tuple
 class TeachScriptError(Exception):
     """Base exception for TeachScript runtime errors."""
 
-    pass
-
 
 class TeachScriptSyntaxError(TeachScriptError):
     """Raised when there's a syntax error in TeachScript code."""
 
-    pass
-
 
 class TeachScriptRuntimeError(TeachScriptError):
     """Raised when there's a runtime error during execution."""
-
-    pass
 
 
 class TeachScriptTranspiler:
@@ -129,7 +123,7 @@ class TeachScriptTranspiler:
             except Exception as e:
                 raise TeachScriptSyntaxError(
                     f"Error on line {line_num}: {line}\n{str(e)}"
-                )
+                ) from e
 
         return "\n".join(translated_lines)
 
@@ -256,7 +250,7 @@ class TeachScriptEnvironment:
         }
 
     def execute(
-        self, python_code: str, timeout: Optional[float] = None
+        self, python_code: str, _timeout: Optional[float] = None
     ) -> Tuple[str, str]:
         """
         Execute Python code in the environment.
@@ -278,7 +272,7 @@ class TeachScriptEnvironment:
             with redirect_stdout(stdout_capture), redirect_stderr(stderr_capture):
                 exec(python_code, self.namespace)
         except Exception as e:
-            raise TeachScriptRuntimeError(f"Execution error: {str(e)}")
+            raise TeachScriptRuntimeError(f"Execution error: {str(e)}") from e
 
         return stdout_capture.getvalue(), stderr_capture.getvalue()
 

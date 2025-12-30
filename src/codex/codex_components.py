@@ -70,7 +70,7 @@ class CodeExEditor(ttk.Frame):
         # Operators
         self.text.tag_configure("operator", foreground="#0066cc")
 
-    def _update_line_numbers(self, event=None):
+    def _update_line_numbers(self, _event=None):
         """Update line number display."""
         self.line_numbers.config(state="normal")
         self.line_numbers.delete("1.0", "end")
@@ -83,7 +83,7 @@ class CodeExEditor(ttk.Frame):
 
         self.line_numbers.config(state="disabled")
 
-    def _update_syntax_highlighting(self, event=None):
+    def _update_syntax_highlighting(self, _event=None):
         """Update syntax highlighting."""
         # Remove all tags
         for tag in self.text.tag_names():
@@ -217,7 +217,7 @@ class CodeExProjectExplorer(ttk.Frame):
 
                 if item.is_dir() and item.name not in ("__pycache__", ".git"):
                     self._load_tree(item, node_id)
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught
             print(f"Error loading tree: {e}")
 
     def refresh(self):
