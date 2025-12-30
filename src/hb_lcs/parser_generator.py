@@ -10,9 +10,9 @@ Generates parsers from language configurations with support for:
 """
 
 import json
-from typing import List, Dict, Any, Optional, Tuple
 from dataclasses import dataclass, field
 from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple
 
 from .language_config import LanguageConfig
 
@@ -76,9 +76,7 @@ class Lexer:
 
     def __init__(self, config: LanguageConfig):
         self.config = config
-        self.keywords = set(
-            kw.custom for kw in config.keyword_mappings.values()
-        )
+        self.keywords = set(kw.custom for kw in config.keyword_mappings.values())
         self.operators = set()
         if config.operators:
             self.operators = set(op.symbol for op in config.operators.values())
@@ -102,9 +100,7 @@ class Lexer:
                 # Check for comments
                 comment_style = self.config.syntax_options.single_line_comment
                 if comment_style and line[i:].startswith(comment_style):
-                    tokens.append(
-                        Token(TokenType.COMMENT, line[i:], line_num, column)
-                    )
+                    tokens.append(Token(TokenType.COMMENT, line[i:], line_num, column))
                     break
 
                 # Check for strings
@@ -120,9 +116,7 @@ class Lexer:
                     if j < len(line):
                         j += 1  # Include closing quote
                         tokens.append(
-                            Token(
-                                TokenType.STRING, line[i:j], line_num, column
-                            )
+                            Token(TokenType.STRING, line[i:j], line_num, column)
                         )
                         column += j - i
                         i = j
@@ -132,18 +126,14 @@ class Lexer:
                 if line[i].isdigit():
                     j = i
                     has_dot = False
-                    while j < len(line) and (
-                        line[j].isdigit() or line[j] == "."
-                    ):
+                    while j < len(line) and (line[j].isdigit() or line[j] == "."):
                         if line[j] == ".":
                             if has_dot:
                                 break
                             has_dot = True
                         j += 1
 
-                    tokens.append(
-                        Token(TokenType.NUMBER, line[i:j], line_num, column)
-                    )
+                    tokens.append(Token(TokenType.NUMBER, line[i:j], line_num, column))
                     column += j - i
                     i = j
                     continue
@@ -152,9 +142,7 @@ class Lexer:
                 matched_op = False
                 for op in sorted(self.operators, key=len, reverse=True):
                     if line[i:].startswith(op):
-                        tokens.append(
-                            Token(TokenType.OPERATOR, op, line_num, column)
-                        )
+                        tokens.append(Token(TokenType.OPERATOR, op, line_num, column))
                         column += len(op)
                         i += len(op)
                         matched_op = True
@@ -166,9 +154,7 @@ class Lexer:
                 # Check for identifiers and keywords
                 if line[i].isalpha() or line[i] == "_":
                     j = i
-                    while j < len(line) and (
-                        line[j].isalnum() or line[j] == "_"
-                    ):
+                    while j < len(line) and (line[j].isalnum() or line[j] == "_"):
                         j += 1
 
                     word = line[i:j]
@@ -193,9 +179,7 @@ class Lexer:
                     continue
 
                 # Unknown character
-                tokens.append(
-                    Token(TokenType.UNKNOWN, line[i], line_num, column)
-                )
+                tokens.append(Token(TokenType.UNKNOWN, line[i], line_num, column))
                 column += 1
                 i += 1
 
@@ -238,9 +222,7 @@ class Parser:
 
         # Expression statement
         expr = self.parse_expression()
-        return (
-            ASTNode("ExpressionStatement", children=[expr]) if expr else None
-        )
+        return ASTNode("ExpressionStatement", children=[expr]) if expr else None
 
     def parse_keyword_statement(self) -> Optional[ASTNode]:
         """Parse keyword-based statements."""
@@ -291,9 +273,7 @@ class Parser:
         node.children.append(body)
         return node
 
-    def parse_loop_statement(
-        self, keyword_token: Token, loop_type: str
-    ) -> ASTNode:
+    def parse_loop_statement(self, keyword_token: Token, loop_type: str) -> ASTNode:
         """Parse loop statement."""
         node = ASTNode(f"{loop_type.capitalize()}Loop", token=keyword_token)
 
@@ -416,10 +396,7 @@ class Parser:
 
     def is_at_end(self) -> bool:
         """Check if we've reached the end of tokens."""
-        return (
-            self.current >= len(self.tokens)
-            or self.peek().type == TokenType.EOF
-        )
+        return self.current >= len(self.tokens) or self.peek().type == TokenType.EOF
 
 
 class ParserGenerator:
@@ -455,9 +432,7 @@ class ParserGenerator:
 
         output.append(f"\nTotal tokens: {len(tokens) - 1}")  # -1 for EOF
         output.append("\nToken types found:")
-        for token_type, token_list in sorted(
-            by_type.items(), key=lambda x: x[0].value
-        ):
+        for token_type, token_list in sorted(by_type.items(), key=lambda x: x[0].value):
             output.append(f"  {token_type.value}: {len(token_list)}")
 
         output.append("\nDetailed token list:")

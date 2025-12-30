@@ -11,12 +11,11 @@ Integrates TeachScript support directly into the CodeCraft IDE, providing:
 """
 
 import tkinter as tk
-from tkinter import ttk, messagebox, filedialog
-import json
 from pathlib import Path
-from typing import Optional, Callable
+from tkinter import filedialog, messagebox, ttk
+from typing import Optional
 
-from .teachscript_runtime import get_runtime, TeachScriptError
+from .teachscript_runtime import get_runtime
 
 
 class TeachScriptIDEIntegration:
@@ -158,42 +157,34 @@ repeat_while guess opposite equals secret:
 
         # New TeachScript Project
         teachscript_menu.add_command(
-            label="New TeachScript Project",
-            command=self._show_project_templates
+            label="New TeachScript Project", command=self._show_project_templates
         )
 
         teachscript_menu.add_separator()
 
         # Run TeachScript
         teachscript_menu.add_command(
-            label="Run TeachScript (Ctrl+Shift+T)",
-            command=self._run_teachscript
+            label="Run TeachScript (Ctrl+Shift+T)", command=self._run_teachscript
         )
 
         # Preview Transpiled Code
         teachscript_menu.add_command(
-            label="Preview Python Code",
-            command=self._show_transpiled_code
+            label="Preview Python Code", command=self._show_transpiled_code
         )
 
         # Check Syntax
-        teachscript_menu.add_command(
-            label="Check Syntax",
-            command=self._check_syntax
-        )
+        teachscript_menu.add_command(label="Check Syntax", command=self._check_syntax)
 
         teachscript_menu.add_separator()
 
         # TeachScript Tutorial
         teachscript_menu.add_command(
-            label="Interactive Tutorial",
-            command=self._show_tutorial
+            label="Interactive Tutorial", command=self._show_tutorial
         )
 
         # TeachScript Reference
         teachscript_menu.add_command(
-            label="Language Reference",
-            command=self._show_reference
+            label="Language Reference", command=self._show_reference
         )
 
     def add_teachscript_keyboard_shortcuts(self, root: tk.Tk):
@@ -210,7 +201,7 @@ repeat_while guess opposite equals secret:
         ttk.Label(
             dialog,
             text="Select a template to start a new TeachScript project:",
-            wraplength=480
+            wraplength=480,
         ).pack(pady=10, padx=10)
 
         # Template list
@@ -221,10 +212,7 @@ repeat_while guess opposite equals secret:
         scrollbar.pack(side="right", fill="y")
 
         listbox = tk.Listbox(
-            frame,
-            yscrollcommand=scrollbar.set,
-            height=12,
-            font=("Courier", 10)
+            frame, yscrollcommand=scrollbar.set, height=12, font=("Courier", 10)
         )
         listbox.pack(side="left", fill="both", expand=True)
         scrollbar.config(command=listbox.yview)
@@ -245,8 +233,12 @@ repeat_while guess opposite equals secret:
                 template_key = template_names[selection[0]]
                 self._create_project_from_template(template_key, dialog)
 
-        ttk.Button(button_frame, text="Create", command=create_project).pack(side="left", padx=5)
-        ttk.Button(button_frame, text="Cancel", command=dialog.destroy).pack(side="left", padx=5)
+        ttk.Button(button_frame, text="Create", command=create_project).pack(
+            side="left", padx=5
+        )
+        ttk.Button(button_frame, text="Cancel", command=dialog.destroy).pack(
+            side="left", padx=5
+        )
 
     def _create_project_from_template(self, template_key: str, dialog: tk.Toplevel):
         """Create a new project from a template."""
@@ -256,7 +248,7 @@ repeat_while guess opposite equals secret:
         filepath = filedialog.asksaveasfilename(
             defaultextension=self.EXTENSION,
             filetypes=[("TeachScript files", "*.teach"), ("All files", "*.*")],
-            initialfile=f"{template_key}{self.EXTENSION}"
+            initialfile=f"{template_key}{self.EXTENSION}",
         )
 
         if filepath:
@@ -271,8 +263,7 @@ repeat_while guess opposite equals secret:
                 self.ide.current_file = filepath
 
             messagebox.showinfo(
-                "Success",
-                f"Created {template['name']} project at:\n{filepath}"
+                "Success", f"Created {template['name']} project at:\n{filepath}"
             )
             dialog.destroy()
 
@@ -294,14 +285,12 @@ repeat_while guess opposite equals secret:
             # Display output in console
             if self.ide.console:
                 self.ide.console.config(state="normal")
-                self.ide.console.insert(tk.END, f"=== TeachScript Output ===\n")
+                self.ide.console.insert(tk.END, "=== TeachScript Output ===\n")
                 if output:
                     self.ide.console.insert(tk.END, output)
                 if error:
                     self.ide.console.insert(
-                        tk.END,
-                        f"\n=== Errors ===\n{error}",
-                        "error"
+                        tk.END, f"\n=== Errors ===\n{error}", "error"
                     )
                 self.ide.console.insert(tk.END, "\n" + "=" * 40 + "\n")
                 self.ide.console.config(state="disabled")
@@ -335,9 +324,9 @@ repeat_while guess opposite equals secret:
             ttk.Button(
                 preview,
                 text="Copy to Clipboard",
-                command=lambda: self.ide.root.clipboard_clear() or
-                        self.ide.root.clipboard_append(python_code) or
-                        messagebox.showinfo("Copied", "Code copied to clipboard")
+                command=lambda: self.ide.root.clipboard_clear()
+                or self.ide.root.clipboard_append(python_code)
+                or messagebox.showinfo("Copied", "Code copied to clipboard"),
             ).pack(pady=5)
 
         except Exception as e:
@@ -364,39 +353,6 @@ repeat_while guess opposite equals secret:
 
         except Exception as e:
             messagebox.showerror("Error", str(e))
-
-    def _show_transpiled_code(self):
-        """Show the transpiled Python code."""
-        if not self.ide.editor:
-            messagebox.showerror("Error", "No editor available")
-            return
-
-        code = self.ide.editor.get("1.0", tk.END)
-
-        try:
-            python_code = self.runtime.get_transpiled_code(code)
-
-            # Create preview window
-            preview = tk.Toplevel(self.ide.root)
-            preview.title("Transpiled Python Code")
-            preview.geometry("700x500")
-
-            text = tk.Text(preview, font=("Courier", 10), wrap="word")
-            text.pack(fill="both", expand=True, padx=10, pady=10)
-
-            text.insert("1.0", python_code)
-            text.config(state="disabled")
-
-            ttk.Button(
-                preview,
-                text="Copy to Clipboard",
-                command=lambda: self.ide.root.clipboard_clear() or
-                        self.ide.root.clipboard_append(python_code) or
-                        messagebox.showinfo("Copied", "Code copied to clipboard")
-            ).pack(pady=5)
-
-        except Exception as e:
-            messagebox.showerror("Transpilation Error", str(e))
 
     def _show_tutorial(self):
         """Show interactive TeachScript tutorial."""
@@ -511,10 +467,7 @@ repeat_while count < 10:
         notebook.add(keywords_frame, text="Keywords")
 
         keywords_text = tk.Text(
-            keywords_frame,
-            font=("Courier", 10),
-            wrap="word",
-            height=25
+            keywords_frame, font=("Courier", 10), wrap="word", height=25
         )
         keywords_text.pack(fill="both", expand=True, padx=10, pady=10)
 
@@ -557,10 +510,7 @@ Variables:
         notebook.add(functions_frame, text="Built-in Functions")
 
         functions_text = tk.Text(
-            functions_frame,
-            font=("Courier", 10),
-            wrap="word",
-            height=25
+            functions_frame, font=("Courier", 10), wrap="word", height=25
         )
         functions_text.pack(fill="both", expand=True, padx=10, pady=10)
 

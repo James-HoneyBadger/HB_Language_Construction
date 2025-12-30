@@ -9,12 +9,12 @@ Provides automated testing capabilities for custom languages including:
 - Regression testing
 """
 
-import sys
 import io
+import sys
 import traceback
-from typing import List, Dict, Any, Optional
 from dataclasses import dataclass, field
 from datetime import datetime
+from typing import Any, Dict, List, Optional
 
 from .language_config import LanguageConfig
 from .parser_generator import ParserGenerator

@@ -7,7 +7,7 @@ Ensures compatibility with Python and other common languages.
 """
 
 import re
-from typing import Tuple, Optional, List, Any
+from typing import Any, List, Optional, Tuple
 
 
 class IdentifierValidator:
@@ -15,18 +15,51 @@ class IdentifierValidator:
 
     # Python reserved words that should be avoided
     PYTHON_RESERVED = {
-        "and", "as", "assert", "break", "class", "continue", "def", "del",
-        "elif", "else", "except", "finally", "for", "from", "global", "if",
-        "import", "in", "is", "lambda", "nonlocal", "not", "or", "pass",
-        "raise", "return", "try", "while", "with", "yield", "True", "False",
-        "None", "__name__", "__file__", "__doc__", "__dict__", "__class__",
+        "and",
+        "as",
+        "assert",
+        "break",
+        "class",
+        "continue",
+        "def",
+        "del",
+        "elif",
+        "else",
+        "except",
+        "finally",
+        "for",
+        "from",
+        "global",
+        "if",
+        "import",
+        "in",
+        "is",
+        "lambda",
+        "nonlocal",
+        "not",
+        "or",
+        "pass",
+        "raise",
+        "return",
+        "try",
+        "while",
+        "with",
+        "yield",
+        "True",
+        "False",
+        "None",
+        "__name__",
+        "__file__",
+        "__doc__",
+        "__dict__",
+        "__class__",
     }
 
     # Common naming patterns
-    SNAKE_CASE_PATTERN = re.compile(r'^[a-z_][a-z0-9_]*$')
-    CAMEL_CASE_PATTERN = re.compile(r'^[a-z][a-zA-Z0-9]*$')
-    PASCAL_CASE_PATTERN = re.compile(r'^[A-Z][a-zA-Z0-9]*$')
-    SCREAMING_SNAKE_CASE_PATTERN = re.compile(r'^[A-Z][A-Z0-9_]*$')
+    SNAKE_CASE_PATTERN = re.compile(r"^[a-z_][a-z0-9_]*$")
+    CAMEL_CASE_PATTERN = re.compile(r"^[a-z][a-zA-Z0-9]*$")
+    PASCAL_CASE_PATTERN = re.compile(r"^[A-Z][a-zA-Z0-9]*$")
+    SCREAMING_SNAKE_CASE_PATTERN = re.compile(r"^[A-Z][A-Z0-9_]*$")
 
     @staticmethod
     def is_valid_identifier(name: str) -> bool:
@@ -90,7 +123,9 @@ class IdentifierValidator:
             if not allow_reserved:
                 return False, [f"'{name}' is a Python reserved word"]
             else:
-                warnings.append(f"'{name}' is a Python reserved word (may cause issues)")
+                warnings.append(
+                    f"'{name}' is a Python reserved word (may cause issues)"
+                )
 
         # Check custom reserved set
         if reserved_set and name in reserved_set:
@@ -116,7 +151,7 @@ class IdentifierValidator:
     def suggest_name(invalid_name: str, style: str = "snake_case") -> str:
         """Suggest a valid alternative name based on the invalid one."""
         # Remove invalid characters
-        cleaned = re.sub(r'[^a-zA-Z0-9_]', '_', invalid_name)
+        cleaned = re.sub(r"[^a-zA-Z0-9_]", "_", invalid_name)
 
         # Ensure starts with letter or underscore
         if cleaned and cleaned[0].isdigit():
@@ -125,18 +160,18 @@ class IdentifierValidator:
         # Apply naming style
         if style == "snake_case":
             # Convert camelCase to snake_case
-            cleaned = re.sub(r'(?<!^)(?=[A-Z])', '_', cleaned).lower()
+            cleaned = re.sub(r"(?<!^)(?=[A-Z])", "_", cleaned).lower()
         elif style == "camelCase":
             # Convert snake_case to camelCase
-            parts = cleaned.split('_')
-            cleaned = parts[0] + ''.join(word.capitalize() for word in parts[1:])
+            parts = cleaned.split("_")
+            cleaned = parts[0] + "".join(word.capitalize() for word in parts[1:])
         elif style == "PascalCase":
             # Convert to PascalCase
-            parts = cleaned.split('_')
-            cleaned = ''.join(word.capitalize() for word in parts)
+            parts = cleaned.split("_")
+            cleaned = "".join(word.capitalize() for word in parts)
         elif style == "SCREAMING_SNAKE_CASE":
             # Convert to SCREAMING_SNAKE_CASE
-            cleaned = re.sub(r'(?<!^)(?=[A-Z])', '_', cleaned).upper()
+            cleaned = re.sub(r"(?<!^)(?=[A-Z])", "_", cleaned).upper()
 
         return cleaned or "identifier"
 

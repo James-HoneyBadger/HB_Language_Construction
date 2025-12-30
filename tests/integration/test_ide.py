@@ -4,6 +4,7 @@ Test script for the Advanced IDE
 """
 
 import tkinter as tk
+
 from src.hb_lcs.ide import AdvancedIDE
 
 
@@ -13,8 +14,8 @@ def main():
     root.title("CodeCraft IDE - Language Configuration Editor")
     root.geometry("1200x800")
 
-    # Create the IDE (variable name prefixed with _ to indicate intentional non-use)
-    _ide = AdvancedIDE(root)
+    # Create the IDE (instance kept alive by mainloop)
+    AdvancedIDE(root)
 
     # Start the main event loop
     root.mainloop()

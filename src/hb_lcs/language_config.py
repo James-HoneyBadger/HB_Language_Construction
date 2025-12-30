@@ -24,11 +24,12 @@ Usage:
 """
 
 from __future__ import annotations
+
 import json
+from copy import deepcopy
+from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any, Optional, Union
-from dataclasses import dataclass, field, asdict
-from copy import deepcopy
 
 # Optional YAML support
 try:
@@ -212,34 +213,40 @@ class LanguageConfig:
             "while": KeywordMapping("while", "while", "control", "While loop"),
             "for": KeywordMapping("for", "for", "control", "For loop"),
             "break": KeywordMapping("break", "break", "control", "Break statement"),
-            "continue": KeywordMapping("continue", "continue", "control", "Continue statement"),
+            "continue": KeywordMapping(
+                "continue", "continue", "control", "Continue statement"
+            ),
             "pass": KeywordMapping("pass", "pass", "control", "Pass statement"),
             "when": KeywordMapping("when", "when", "control", "Reactive programming"),
-
             # Functions and definitions
             "def": KeywordMapping("def", "def", "function", "Function definition"),
-            "function": KeywordMapping("function", "function", "function", "Function definition"),
+            "function": KeywordMapping(
+                "function", "function", "function", "Function definition"
+            ),
             "return": KeywordMapping("return", "return", "function", "Return value"),
-            "lambda": KeywordMapping("lambda", "lambda", "function", "Lambda expression"),
+            "lambda": KeywordMapping(
+                "lambda", "lambda", "function", "Lambda expression"
+            ),
             "yield": KeywordMapping("yield", "yield", "function", "Yield statement"),
-
             # Exception handling
             "try": KeywordMapping("try", "try", "exception", "Try block"),
-            "except": KeywordMapping("except", "except", "exception", "Exception handler"),
-            "finally": KeywordMapping("finally", "finally", "exception", "Finally block"),
-
+            "except": KeywordMapping(
+                "except", "except", "exception", "Exception handler"
+            ),
+            "finally": KeywordMapping(
+                "finally", "finally", "exception", "Finally block"
+            ),
             # Imports and modules
             "import": KeywordMapping("import", "import", "import", "Import module"),
             "from": KeywordMapping("from", "from", "import", "From import"),
             "as": KeywordMapping("as", "as", "import", "Import alias"),
-
             # Context management
             "with": KeywordMapping("with", "with", "context", "Context manager"),
-
             # Variables and constants
-            "const": KeywordMapping("const", "const", "variable", "Constant declaration"),
+            "const": KeywordMapping(
+                "const", "const", "variable", "Constant declaration"
+            ),
             "var": KeywordMapping("var", "var", "variable", "Variable declaration"),
-
             # Object-oriented
             "class": KeywordMapping("class", "class", "oop", "Class definition"),
         }
@@ -288,6 +295,7 @@ class LanguageConfig:
 
         # Validate new name
         from .identifier_validator import IdentifierValidator
+
         is_valid, warnings = IdentifierValidator.validate_identifier(new_name)
         if not is_valid:
             raise ValueError(f"Invalid keyword name '{new_name}': {warnings[0]}")
@@ -750,7 +758,15 @@ class LanguageConfig:
 
 def list_presets() -> list[str]:
     """Get list of available presets."""
-    return ["python_like", "js_like", "minimal", "ruby_like", "golang_like", "rust_like", "clike"]
+    return [
+        "python_like",
+        "js_like",
+        "minimal",
+        "ruby_like",
+        "golang_like",
+        "rust_like",
+        "clike",
+    ]
 
 
 def create_custom_config_interactive() -> LanguageConfig:

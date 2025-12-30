@@ -13,6 +13,7 @@ def main():
     try:
         # Prefer importing the module and constructing the IDE directly
         import tkinter as tk
+
         from hb_lcs.ide import AdvancedIDE
 
         root = tk.Tk()

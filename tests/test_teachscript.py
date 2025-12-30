@@ -9,7 +9,6 @@ import subprocess
 import sys
 from pathlib import Path
 
-
 EXAMPLES_DIR = Path(__file__).parent.parent / "demos" / "teachscript" / "examples"
 RUNNER = Path(__file__).parent.parent / "demos" / "teachscript" / "run_teachscript.py"
 
@@ -97,7 +96,7 @@ def main():
         print(f"  - {filename}")
     print()
     print("Run these manually with:")
-    print(f"  python3 run_teachscript.py teachscript_examples/<filename>")
+    print("  python3 run_teachscript.py teachscript_examples/<filename>")
     print()
 
     # Summary

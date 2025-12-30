@@ -9,9 +9,9 @@ Provides comprehensive validation for language configurations:
 - Identifies potential issues
 """
 
-from typing import List, Dict, Tuple, Optional
-from dataclasses import dataclass
 from collections import defaultdict
+from dataclasses import dataclass
+from typing import Dict, List, Optional, Tuple
 
 from .language_config import LanguageConfig
 
@@ -271,8 +271,7 @@ class LanguageValidator:
 
         # Check fractional indexing with non-zero start
         if (
-            syntax_opts.allow_fractional_indexing
-            and syntax_opts.array_start_index != 0
+            syntax_opts.allow_fractional_indexing and syntax_opts.array_start_index != 0
         ):  # noqa: E501
             self.issues.append(
                 ValidationIssue(

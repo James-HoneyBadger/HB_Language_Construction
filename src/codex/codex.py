@@ -16,14 +16,15 @@ Features:
 - Version control integration
 """
 
-import tkinter as tk
 import sys
+import tkinter as tk
 from pathlib import Path
 
 # Add src directory to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from codex.codex_gui import CodeExIDE
+# Local imports must come after sys.path modification
+from codex.codex_gui import CodeExIDE  # noqa: E402
 
 
 def main():

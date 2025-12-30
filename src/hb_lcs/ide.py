@@ -45,8 +45,8 @@ import zipfile
 from collections import Counter
 from contextlib import redirect_stdout
 from pathlib import Path
-from tkinter import ttk, filedialog, messagebox, simpledialog, scrolledtext
-from typing import Optional, List, Dict, Any, Callable
+from tkinter import filedialog, messagebox, scrolledtext, simpledialog, ttk
+from typing import Any, Callable, Dict, List, Optional
 
 from .language_config import LanguageConfig, list_presets
 from .language_runtime import LanguageRuntime
@@ -1582,8 +1582,9 @@ Functions:
             tutorials[tutorial_type]()
         else:
             messagebox.showwarning(
-                "Tutorial", f"Tutorial '{tutorial_type}' not found. "
-                f"Available: {', '.join(tutorials.keys())}"
+                "Tutorial",
+                f"Tutorial '{tutorial_type}' not found. "
+                f"Available: {', '.join(tutorials.keys())}",
             )
 
     def _tutorial_basics(self) -> None:
@@ -1864,13 +1865,10 @@ TRY IT: Build a small project using multiple concepts!
     def _example(self, example_type: str) -> None:
         """Show practical code examples."""
         examples = {
-            "hello_world": (
-                "Hello World",
-                'print("Hello, World!")'
-            ),
+            "hello_world": ("Hello World", 'print("Hello, World!")'),
             "variables": (
                 "Variables & Types",
-                '''name = "Alice"
+                """name = "Alice"
 age = 30
 height = 5.7
 is_student = true
@@ -1878,11 +1876,11 @@ is_student = true
 print(name)
 print(age)
 print(height)
-print(is_student)'''
+print(is_student)""",
             ),
             "conditionals": (
                 "Conditionals (If/Else)",
-                '''x = 15
+                """x = 15
 
 if (x > 20) {
   print("x is greater than 20")
@@ -1890,11 +1888,11 @@ if (x > 20) {
   print("x is between 10 and 20")
 } else {
   print("x is 10 or less")
-}'''
+}""",
             ),
             "loops": (
                 "Loops (For/While)",
-                '''# For loop
+                """# For loop
 for i in range(5) {
   print(i)
 }
@@ -1904,11 +1902,11 @@ x = 0
 while (x < 5) {
   print(x)
   x = x + 1
-}'''
+}""",
             ),
             "functions": (
                 "Functions",
-                '''function greet(name) {
+                """function greet(name) {
   return "Hello, " + name
 }
 
@@ -1917,11 +1915,11 @@ function add(a, b) {
 }
 
 print(greet("Alice"))
-print(add(5, 3))'''
+print(add(5, 3))""",
             ),
             "lists": (
                 "Lists/Arrays",
-                '''numbers = [1, 2, 3, 4, 5]
+                """numbers = [1, 2, 3, 4, 5]
 names = ["Alice", "Bob", "Charlie"]
 
 # Access elements
@@ -1935,11 +1933,11 @@ length = len(numbers)
 # Loop through
 for num in numbers {
   print(num)
-}'''
+}""",
             ),
             "dictionaries": (
                 "Dictionaries/Objects",
-                '''person = {
+                """person = {
   "name": "Alice",
   "age": 30,
   "city": "NYC"
@@ -1954,18 +1952,18 @@ person["job"] = "Engineer"
 # Loop through
 for key in person.keys() {
   print(key + ": " + person[key])
-}'''
+}""",
             ),
             "recursion": (
                 "Recursion",
-                '''function factorial(n) {
+                """function factorial(n) {
   if (n <= 1) {
     return 1
   }
   return n * factorial(n - 1)
 }
 
-print(factorial(5))  # 120'''
+print(factorial(5))  # 120""",
             ),
         }
 
@@ -1975,8 +1973,8 @@ print(factorial(5))  # 120'''
         else:
             available = ", ".join(examples.keys())
             messagebox.showwarning(
-                "Example", f"Example '{example_type}' not found.\n"
-                f"Available: {available}"
+                "Example",
+                f"Example '{example_type}' not found.\n" f"Available: {available}",
             )
 
     def _show_example_window(self, title: str, code: str) -> None:
@@ -2003,7 +2001,9 @@ print(factorial(5))  # 120'''
             messagebox.showinfo("Success", "Code copied to clipboard!")
 
         ttk.Button(btn_frame, text="Copy", command=copy_code).pack(side="left", padx=2)
-        ttk.Button(btn_frame, text="Close", command=top.destroy).pack(side="right", padx=2)
+        ttk.Button(btn_frame, text="Close", command=top.destroy).pack(
+            side="right", padx=2
+        )
 
     def _show_shortcuts(self) -> None:
         """Show comprehensive keyboard shortcuts help."""
@@ -2126,7 +2126,9 @@ All rights reserved."""
         recent_files = getattr(self, "_recent_files", [])
 
         if not recent_files:
-            messagebox.showinfo("Recent Files", "No recent files found.\n\nOpen some files first!")
+            messagebox.showinfo(
+                "Recent Files", "No recent files found.\n\nOpen some files first!"
+            )
             return
 
         # Create popup menu
@@ -2135,7 +2137,7 @@ All rights reserved."""
         for filepath in recent_files[-5:]:  # Last 5 files
             popup.add_command(
                 label=Path(filepath).name,
-                command=lambda f=filepath: self._open_file_direct(f)
+                command=lambda f=filepath: self._open_file_direct(f),
             )
 
         popup.add_separator()
@@ -2147,7 +2149,7 @@ All rights reserved."""
     def _open_file_direct(self, filepath: str) -> None:
         """Open a file directly by path."""
         try:
-            with open(filepath, 'r', encoding='utf-8') as f:
+            with open(filepath, "r", encoding="utf-8") as f:
                 content = f.read()
             self.input_text.config(state="normal")
             self.input_text.delete("1.0", "end")
@@ -2168,31 +2170,37 @@ All rights reserved."""
 
         try:
             # Save current code if it exists
-            if hasattr(self, 'input_text'):
+            if hasattr(self, "input_text"):
                 code_content = self.input_text.get("1.0", "end-1c")
                 if code_content:
                     default_path = "current_code.txt"
                     filepath = filedialog.asksaveasfilename(
                         initialfile=default_path,
-                        filetypes=[("Text files", "*.txt"), ("All files", "*.*")]
+                        filetypes=[("Text files", "*.txt"), ("All files", "*.*")],
                     )
                     if filepath:
-                        with open(filepath, 'w', encoding='utf-8') as f:
+                        with open(filepath, "w", encoding="utf-8") as f:
                             f.write(code_content)
                         saved_count += 1
 
             # Save current language configuration if it exists
-            if hasattr(self, 'current_config') and self.current_config:
+            if hasattr(self, "current_config") and self.current_config:
                 config_path = filedialog.asksaveasfilename(
                     initialfile="language_config.json",
-                    filetypes=[("JSON files", "*.json"), ("YAML files", "*.yaml"), ("All files", "*.*")]
+                    filetypes=[
+                        ("JSON files", "*.json"),
+                        ("YAML files", "*.yaml"),
+                        ("All files", "*.*"),
+                    ],
                 )
                 if config_path:
                     self.current_config.save(config_path)
                     saved_count += 1
 
             if saved_count > 0:
-                messagebox.showinfo("Success", f"Saved {saved_count} item(s) successfully!")
+                messagebox.showinfo(
+                    "Success", f"Saved {saved_count} item(s) successfully!"
+                )
             else:
                 messagebox.showinfo("Info", "Nothing to save")
 
@@ -2204,13 +2212,13 @@ All rights reserved."""
         if messagebox.askyesno("Confirm", "Close all files and reset IDE?"):
             try:
                 # Clear editor
-                if hasattr(self, 'input_text'):
+                if hasattr(self, "input_text"):
                     self.input_text.config(state="normal")
                     self.input_text.delete("1.0", "end")
                     self.input_text.config(state="normal")
 
                 # Clear console
-                if hasattr(self, 'console_output'):
+                if hasattr(self, "console_output"):
                     self.console_output.config(state="normal")
                     self.console_output.delete("1.0", "end")
                     self.console_output.config(state="disabled")
@@ -3696,8 +3704,8 @@ All rights reserved."""
                         color: {colors.get('Keywords', '#ffffff')};
                         border: none;
                     }}
-                    button {{ margin-right: 0.5rem; padding: 0.6rem 1rem; }}
-                    #console {{ background: #111; padding: 1rem; min-height: 150px; white-space: pre-wrap; }}
+                    button {{ margin-right: 0.5rem; padding: 0.6rem 1rem; }}  # noqa: E501
+                    #console {{ background: #111; padding: 1rem; min-height: 150px; white-space: pre-wrap; }}  # noqa: E501
                 </style>
             </head>
             <body>
@@ -3716,25 +3724,25 @@ All rights reserved."""
                 </main>
                 <script>
                     async function runCode() {{
-                        const response = await fetch('/api/code/execute', {{
+                        const response = await fetch('/api/code/execute', {{  # noqa: E501
                             method: 'POST',
                             headers: {{ 'Content-Type': 'application/json' }},
-                            body: JSON.stringify({{ code: document.getElementById('editor').value }})
+                            body: JSON.stringify({{ code: document.getElementById('editor').value }})  # noqa: E501
                         }});
                         const data = await response.json();
-                        document.getElementById('console').textContent = data.output || data.error || '';
+                        document.getElementById('console').textContent = data.output || data.error || '';  # noqa: E501
                     }}
                     async function downloadConfig() {{
                         const response = await fetch('/api/config');
                         const data = await response.json();
-                        const blob = new Blob([JSON.stringify(data, null, 2)], {{ type: 'application/json' }});
+                        const blob = new Blob([JSON.stringify(data, null, 2)], {{ type: 'application/json' }});  # noqa: E501
                         const link = document.createElement('a');
                         link.href = URL.createObjectURL(blob);
                         link.download = 'language-config.json';
                         link.click();
                     }}
                     function highlight() {{
-                        document.getElementById('console').textContent = 'Syntax highlighting simulated.';
+                        document.getElementById('console').textContent = 'Syntax highlighting simulated.';  # noqa: E501
                     }}
                 </script>
             </body>

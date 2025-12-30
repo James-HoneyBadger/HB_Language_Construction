@@ -6,9 +6,9 @@ Reusable UI components for the CodeEx IDE.
 """
 
 import tkinter as tk
-from tkinter import ttk, scrolledtext
 from pathlib import Path
-from typing import Optional, List
+from tkinter import scrolledtext, ttk
+from typing import Optional
 
 
 class CodeExEditor(ttk.Frame):
@@ -29,17 +29,13 @@ class CodeExEditor(ttk.Frame):
             bg="#f0f0f0",
             fg="#666",
             state="disabled",
-            font=("Courier", 11)
+            font=("Courier", 11),
         )
         self.line_numbers.pack(side="left", fill="y")
 
         # Editor
         self.text = scrolledtext.ScrolledText(
-            editor_frame,
-            wrap="none",
-            font=("Courier", 11),
-            undo=True,
-            maxundo=-1
+            editor_frame, wrap="none", font=("Courier", 11), undo=True, maxundo=-1
         )
         self.text.pack(side="left", fill="both", expand=True)
 
@@ -53,13 +49,17 @@ class CodeExEditor(ttk.Frame):
     def _configure_syntax_tags(self):
         """Configure syntax highlighting tags."""
         # Keywords
-        self.text.tag_configure("keyword", foreground="#0066ff", font=("Courier", 11, "bold"))
+        self.text.tag_configure(
+            "keyword", foreground="#0066ff", font=("Courier", 11, "bold")
+        )
 
         # Strings
         self.text.tag_configure("string", foreground="#009900")
 
         # Comments
-        self.text.tag_configure("comment", foreground="#999999", font=("Courier", 11, "italic"))
+        self.text.tag_configure(
+            "comment", foreground="#999999", font=("Courier", 11, "italic")
+        )
 
         # Numbers
         self.text.tag_configure("number", foreground="#ff6600")
@@ -90,7 +90,7 @@ class CodeExEditor(ttk.Frame):
             if tag not in ("sel",):
                 self.text.tag_remove(tag, "1.0", "end")
 
-        content = self.text.get("1.0", "end-1c")
+        _ = self.text.get("1.0", "end-1c")
 
         # Highlight numbers
         self._highlight_pattern(r"\b\d+\b", "number")
@@ -105,6 +105,7 @@ class CodeExEditor(ttk.Frame):
     def _highlight_pattern(self, pattern: str, tag: str):
         """Highlight text matching pattern."""
         import re
+
         content = self.text.get("1.0", "end-1c")
         for match in re.finditer(pattern, content, re.MULTILINE):
             start = self.text.index(f"1.0+{match.start()}c")
@@ -136,23 +137,23 @@ class CodeExConsole(ttk.Frame):
         header = ttk.Frame(self)
         header.pack(fill="x", padx=5, pady=5)
 
-        ttk.Label(header, text="Output Console", font=("Arial", 10, "bold")).pack(side="left")
+        ttk.Label(header, text="Output Console", font=("Arial", 10, "bold")).pack(
+            side="left"
+        )
         ttk.Button(header, text="Clear", command=self.clear).pack(side="right", padx=2)
 
         # Console text
         self.text = scrolledtext.ScrolledText(
-            self,
-            wrap="word",
-            font=("Courier", 10),
-            bg="#f5f5f5",
-            fg="#000000"
+            self, wrap="word", font=("Courier", 10), bg="#f5f5f5", fg="#000000"
         )
         self.text.pack(fill="both", expand=True, padx=5, pady=5)
         self.text.config(state="disabled")
 
         # Configure tags
         self.text.tag_configure("output", foreground="#000000")
-        self.text.tag_configure("error", foreground="#ff0000", font=("Courier", 10, "bold"))
+        self.text.tag_configure(
+            "error", foreground="#ff0000", font=("Courier", 10, "bold")
+        )
         self.text.tag_configure("success", foreground="#009900")
 
     def write(self, text: str, tag: str = "output"):
@@ -211,10 +212,7 @@ class CodeExProjectExplorer(ttk.Frame):
 
                 icon = "📁" if item.is_dir() else "📄"
                 node_id = self.tree.insert(
-                    parent,
-                    "end",
-                    text=f"{icon} {item.name}",
-                    open=False
+                    parent, "end", text=f"{icon} {item.name}", open=False
                 )
 
                 if item.is_dir() and item.name not in ("__pycache__", ".git"):
@@ -247,25 +245,37 @@ class CodeExMenu(tk.Menu):
         # Edit menu
         edit_menu = tk.Menu(self, tearoff=False)
         self.add_cascade(label="Edit", menu=edit_menu)
-        edit_menu.add_command(label="Undo", command=ide.undo_action, accelerator="Ctrl+Z")
-        edit_menu.add_command(label="Redo", command=ide.redo_action, accelerator="Ctrl+Shift+Z")
+        edit_menu.add_command(
+            label="Undo", command=ide.undo_action, accelerator="Ctrl+Z"
+        )
+        edit_menu.add_command(
+            label="Redo", command=ide.redo_action, accelerator="Ctrl+Shift+Z"
+        )
         edit_menu.add_separator()
         edit_menu.add_command(label="Cut", command=ide.cut_text, accelerator="Ctrl+X")
         edit_menu.add_command(label="Copy", command=ide.copy_text, accelerator="Ctrl+C")
-        edit_menu.add_command(label="Paste", command=ide.paste_text, accelerator="Ctrl+V")
+        edit_menu.add_command(
+            label="Paste", command=ide.paste_text, accelerator="Ctrl+V"
+        )
 
         # Interpreter menu
         interp_menu = tk.Menu(self, tearoff=False)
         self.add_cascade(label="Interpreter", menu=interp_menu)
         interp_menu.add_command(label="Load Interpreter", command=ide.load_interpreter)
-        interp_menu.add_command(label="Create Language Configuration", command=ide.create_language_config)
+        interp_menu.add_command(
+            label="Create Language Configuration", command=ide.create_language_config
+        )
         interp_menu.add_separator()
-        interp_menu.add_command(label="Interpreter Settings", command=ide.interpreter_settings)
+        interp_menu.add_command(
+            label="Interpreter Settings", command=ide.interpreter_settings
+        )
 
         # Run menu
         run_menu = tk.Menu(self, tearoff=False)
         self.add_cascade(label="Run", menu=run_menu)
-        run_menu.add_command(label="Execute Code", command=ide.run_code, accelerator="Ctrl+R")
+        run_menu.add_command(
+            label="Execute Code", command=ide.run_code, accelerator="Ctrl+R"
+        )
         run_menu.add_command(label="Stop", command=ide.stop_execution)
         run_menu.add_separator()
         run_menu.add_command(label="Recent Executions", command=ide.recent_executions)
@@ -274,11 +284,17 @@ class CodeExMenu(tk.Menu):
         view_menu = tk.Menu(self, tearoff=False)
         self.add_cascade(label="View", menu=view_menu)
         view_menu.add_command(label="Toggle Theme", command=ide.toggle_theme)
-        view_menu.add_command(label="Zoom In", command=ide.zoom_in, accelerator="Ctrl++")
-        view_menu.add_command(label="Zoom Out", command=ide.zoom_out, accelerator="Ctrl+-")
+        view_menu.add_command(
+            label="Zoom In", command=ide.zoom_in, accelerator="Ctrl++"
+        )
+        view_menu.add_command(
+            label="Zoom Out", command=ide.zoom_out, accelerator="Ctrl+-"
+        )
         view_menu.add_separator()
         view_menu.add_command(label="Show/Hide Console", command=ide.toggle_console)
-        view_menu.add_command(label="Show/Hide Project Explorer", command=ide.toggle_explorer)
+        view_menu.add_command(
+            label="Show/Hide Project Explorer", command=ide.toggle_explorer
+        )
 
         # Help menu
         help_menu = tk.Menu(self, tearoff=False)
@@ -289,16 +305,19 @@ class CodeExMenu(tk.Menu):
         help_menu.add_separator()
         help_menu.add_command(label="About CodeEx", command=self._show_about)
         help_menu.add_command(label="About CodeCraft", command=ide.show_about_codecraft)
-        help_menu.add_command(label="Help Contents", command=ide.show_help, accelerator="F1")
+        help_menu.add_command(
+            label="Help Contents", command=ide.show_help, accelerator="F1"
+        )
 
     def _show_about(self):
         """Show about dialog."""
         from tkinter import messagebox
+
         messagebox.showinfo(
             "About CodeEx",
             "CodeEx v1.0\n\n"
             "CodeCraft Execution Environment\n\n"
             "Professional IDE for developing and running\n"
             "applications created with CodeCraft.\n\n"
-            "© 2024 CodeCraft Project"
+            "© 2024 CodeCraft Project",
         )

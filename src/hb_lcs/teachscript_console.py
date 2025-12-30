@@ -36,22 +36,16 @@ class TeachScriptConsole(ttk.Frame):
         button_frame.pack(fill="x", padx=5, pady=5)
 
         ttk.Button(
-            button_frame,
-            text="Clear Console",
-            command=self._clear_console
+            button_frame, text="Clear Console", command=self._clear_console
         ).pack(side="left", padx=2)
 
         ttk.Button(
-            button_frame,
-            text="Reset Environment",
-            command=self._reset_environment
+            button_frame, text="Reset Environment", command=self._reset_environment
         ).pack(side="left", padx=2)
 
-        ttk.Button(
-            button_frame,
-            text="Show Globals",
-            command=self._show_globals
-        ).pack(side="left", padx=2)
+        ttk.Button(button_frame, text="Show Globals", command=self._show_globals).pack(
+            side="left", padx=2
+        )
 
         # Console output area
         self.output = scrolledtext.ScrolledText(
@@ -60,14 +54,18 @@ class TeachScriptConsole(ttk.Frame):
             font=("Courier", 10),
             wrap="word",
             bg="#1e1e1e",
-            fg="#d4d4d4"
+            fg="#d4d4d4",
         )
         self.output.pack(fill="both", expand=True, padx=5, pady=5)
 
         # Configure tags
-        self.output.tag_config("prompt", foreground="#569cd6", font=("Courier", 10, "bold"))
+        self.output.tag_config(
+            "prompt", foreground="#569cd6", font=("Courier", 10, "bold")
+        )
         self.output.tag_config("output", foreground="#ce9178")
-        self.output.tag_config("error", foreground="#f48771", font=("Courier", 10, "bold"))
+        self.output.tag_config(
+            "error", foreground="#f48771", font=("Courier", 10, "bold")
+        )
         self.output.tag_config("success", foreground="#6a9955")
 
         # Input area
@@ -78,9 +76,7 @@ class TeachScriptConsole(ttk.Frame):
 
         self.input_var = tk.StringVar()
         self.input_entry = ttk.Entry(
-            input_frame,
-            textvariable=self.input_var,
-            font=("Courier", 10)
+            input_frame, textvariable=self.input_var, font=("Courier", 10)
         )
         self.input_entry.pack(side="left", fill="x", expand=True)
         self.input_entry.bind("<Return>", self._on_input)
@@ -89,7 +85,9 @@ class TeachScriptConsole(ttk.Frame):
 
         # Welcome message
         self.output.insert(tk.END, "TeachScript Interactive Console\n", "prompt")
-        self.output.insert(tk.END, "Type TeachScript code and press Enter to execute.\n", "success")
+        self.output.insert(
+            tk.END, "Type TeachScript code and press Enter to execute.\n", "success"
+        )
         self.output.insert(tk.END, "Type 'help' for commands.\n\n", "success")
         self.output.config(state="disabled")
 
@@ -204,9 +202,7 @@ class TeachScriptConsole(ttk.Frame):
             for name, value in sorted(self.runtime.environment.namespace.items()):
                 if not name.startswith("__"):
                     self.output.insert(
-                        tk.END,
-                        f"  {name}: {type(value).__name__}\n",
-                        "output"
+                        tk.END, f"  {name}: {type(value).__name__}\n", "output"
                     )
         else:
             self.output.insert(tk.END, "  (none)\n", "output")
@@ -218,7 +214,9 @@ class TeachScriptConsole(ttk.Frame):
         """Show help message."""
         self.output.config(state="normal")
         self.output.insert(tk.END, "\n--- TeachScript Console Help ---\n", "prompt")
-        self.output.insert(tk.END, """
+        self.output.insert(
+            tk.END,
+            """
 Commands:
   help      - Show this help message
   clear     - Clear console output
@@ -237,7 +235,9 @@ Examples:
   say("Hello, World!")
   remember name = ask("Your name: ")
   remember numbers = [1, 2, 3, 4, 5]
-""", "output")
+""",
+            "output",
+        )
         self.output.config(state="disabled")
         self.output.see(tk.END)
 

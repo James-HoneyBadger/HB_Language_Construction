@@ -9,12 +9,12 @@ This module extends CodeCraft to support interpreter export for use by external
 applications like CodeEx.
 """
 
+import base64
 import json
 import pickle
-import base64
-from pathlib import Path
-from typing import Dict, Any, Optional
 from datetime import datetime
+from pathlib import Path
+from typing import Any, Dict, Optional
 
 from .language_config import LanguageConfig
 from .language_runtime import LanguageRuntime
@@ -39,7 +39,9 @@ class InterpreterPackage:
         }
         self.runtime = LanguageRuntime(config)
 
-    def execute(self, code: str, context: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    def execute(
+        self, code: str, context: Optional[Dict[str, Any]] = None
+    ) -> Dict[str, Any]:
         """
         Execute code with this interpreter.
 
@@ -174,10 +176,7 @@ class InterpreterGenerator:
 
     def list_interpreters(self) -> Dict[str, Dict[str, Any]]:
         """Get metadata for all loaded interpreters."""
-        return {
-            name: interp.metadata
-            for name, interp in self.interpreters.items()
-        }
+        return {name: interp.metadata for name, interp in self.interpreters.items()}
 
     def get_interpreter(self, name: str) -> Optional[InterpreterPackage]:
         """Get loaded interpreter by name."""

@@ -6,10 +6,10 @@ Provides a simple GUI to edit keyword mappings and functions.
 Integrates with the IDE via Language → Tools → Visual Config Editor.
 """
 import tkinter as tk
-from tkinter import ttk, messagebox
-from typing import Optional, Callable
+from tkinter import messagebox, ttk
+from typing import Callable, Optional
 
-from .language_config import LanguageConfig, KeywordMapping
+from .language_config import KeywordMapping, LanguageConfig
 
 
 class VisualConfigEditor(ttk.Frame):

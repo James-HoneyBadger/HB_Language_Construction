@@ -25,24 +25,24 @@ import sys
 import tkinter as tk
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, Optional
-
 from tkinter import TclError, filedialog, messagebox, scrolledtext, ttk
+from typing import Any, Dict, Optional
 
 # Ensure parent modules are in path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from codex.codex_components import (
+# noqa: E402 - Local imports after sys.path modification
+from codex.codex_components import (  # noqa: E402
     CodeExConsole,
     CodeExEditor,
     CodeExMenu,
     CodeExProjectExplorer,
 )
-from hb_lcs.interpreter_generator import (
+from hb_lcs.interpreter_generator import (  # noqa: E402
     InterpreterGenerator,
     InterpreterPackage,
 )
-from hb_lcs.language_config import LanguageConfig
+from hb_lcs.language_config import LanguageConfig  # noqa: E402
 
 
 class CodeExIDE(ttk.Frame):
@@ -112,36 +112,51 @@ class CodeExIDE(ttk.Frame):
         toolbar.pack(fill="x", padx=5, pady=5)
 
         # Project buttons
-        ttk.Button(toolbar, text="New Project", command=self.new_project).pack(side="left", padx=2)
-        ttk.Button(toolbar, text="Open Project", command=self.open_project).pack(side="left", padx=2)
-        ttk.Button(toolbar, text="Save", command=self.save_file).pack(side="left", padx=2)
+        ttk.Button(toolbar, text="New Project", command=self.new_project).pack(
+            side="left", padx=2
+        )
+        ttk.Button(toolbar, text="Open Project", command=self.open_project).pack(
+            side="left", padx=2
+        )
+        ttk.Button(toolbar, text="Save", command=self.save_file).pack(
+            side="left", padx=2
+        )
 
         ttk.Separator(toolbar, orient="vertical").pack(side="left", fill="y", padx=5)
 
         # Language/Interpreter selector
         ttk.Label(toolbar, text="Interpreter:").pack(side="left", padx=5)
         self.interpreter_combo = ttk.Combobox(
-            toolbar,
-            textvariable=self.interpreter_var,
-            state="readonly",
-            width=20
+            toolbar, textvariable=self.interpreter_var, state="readonly", width=20
         )
         self.interpreter_combo.pack(side="left", padx=5)
-        self.interpreter_combo.bind("<<ComboboxSelected>>", self._on_interpreter_selected)
+        self.interpreter_combo.bind(
+            "<<ComboboxSelected>>", self._on_interpreter_selected
+        )
 
-        ttk.Button(toolbar, text="Load Interpreter", command=self.load_interpreter).pack(side="left", padx=2)
+        ttk.Button(
+            toolbar, text="Load Interpreter", command=self.load_interpreter
+        ).pack(side="left", padx=2)
 
         ttk.Separator(toolbar, orient="vertical").pack(side="left", fill="y", padx=5)
 
         # Execution buttons
-        ttk.Button(toolbar, text="▶ Run", command=self.run_code).pack(side="left", padx=2)
-        ttk.Button(toolbar, text="⏹ Stop", command=self.stop_execution).pack(side="left", padx=2)
+        ttk.Button(toolbar, text="▶ Run", command=self.run_code).pack(
+            side="left", padx=2
+        )
+        ttk.Button(toolbar, text="⏹ Stop", command=self.stop_execution).pack(
+            side="left", padx=2
+        )
 
         ttk.Separator(toolbar, orient="vertical").pack(side="left", fill="y", padx=5)
 
         # Theme toggle
-        ttk.Button(toolbar, text="🌙 Theme", command=self.toggle_theme).pack(side="right", padx=2)
-        ttk.Button(toolbar, text="❓ Help", command=self.show_help).pack(side="right", padx=2)
+        ttk.Button(toolbar, text="🌙 Theme", command=self.toggle_theme).pack(
+            side="right", padx=2
+        )
+        ttk.Button(toolbar, text="❓ Help", command=self.show_help).pack(
+            side="right", padx=2
+        )
 
     def _create_status_bar(self):
         """Create status bar."""
@@ -163,7 +178,7 @@ class CodeExIDE(ttk.Frame):
         """Load user settings."""
         settings_file = Path.home() / ".codex" / "settings.json"
         if settings_file.exists():
-            with open(settings_file, encoding='utf-8') as f:
+            with open(settings_file, encoding="utf-8") as f:
                 return json.load(f)
         return {
             "theme": "light",
@@ -175,7 +190,7 @@ class CodeExIDE(ttk.Frame):
         """Save user settings."""
         settings_file = Path.home() / ".codex" / "settings.json"
         settings_file.parent.mkdir(parents=True, exist_ok=True)
-        with open(settings_file, "w", encoding='utf-8') as f:
+        with open(settings_file, "w", encoding="utf-8") as f:
             json.dump(self.settings, f, indent=2)
 
     def _load_recent_projects(self):
@@ -212,7 +227,7 @@ class CodeExIDE(ttk.Frame):
                 "description": dialog.result.get("description", ""),
             }
 
-            with open(project_path / "project.json", "w", encoding='utf-8') as f:
+            with open(project_path / "project.json", "w", encoding="utf-8") as f:
                 json.dump(metadata, f, indent=2)
 
             self.current_project = str(project_path)
@@ -222,8 +237,7 @@ class CodeExIDE(ttk.Frame):
     def open_project(self):
         """Open existing project."""
         project_path = filedialog.askdirectory(
-            initialdir=str(self.projects_dir),
-            title="Select CodeEx project"
+            initialdir=str(self.projects_dir), title="Select CodeEx project"
         )
         if project_path:
             self.current_project = project_path
@@ -233,7 +247,7 @@ class CodeExIDE(ttk.Frame):
             # Load project metadata
             metadata_file = Path(project_path) / "project.json"
             if metadata_file.exists():
-                with open(metadata_file, encoding='utf-8') as f:
+                with open(metadata_file, encoding="utf-8") as f:
                     metadata = json.load(f)
                     interpreter_name = metadata.get("interpreter", "")
                     if interpreter_name:
@@ -243,7 +257,7 @@ class CodeExIDE(ttk.Frame):
         """Load interpreter from CodeCraft config."""
         config_file = filedialog.askopenfilename(
             filetypes=[("JSON", "*.json"), ("YAML", "*.yaml"), ("All", "*.*")],
-            title="Select CodeCraft language configuration"
+            title="Select CodeCraft language configuration",
         )
         if config_file:
             try:
@@ -268,12 +282,12 @@ class CodeExIDE(ttk.Frame):
         if not self.current_file:
             self.current_file = filedialog.asksaveasfilename(
                 initialdir=str(self.projects_dir / self.current_project or "."),
-                filetypes=[("CodeCraft", "*.cc"), ("All", "*.*")]
+                filetypes=[("CodeCraft", "*.cc"), ("All", "*.*")],
             )
 
         if self.current_file:
             content = self.editor.get_content()
-            with open(self.current_file, "w", encoding='utf-8') as f:
+            with open(self.current_file, "w", encoding="utf-8") as f:
                 f.write(content)
             self.status_label.config(text=f"Saved: {Path(self.current_file).name}")
 
@@ -293,9 +307,9 @@ class CodeExIDE(ttk.Frame):
 
             # Track execution history
             exec_info = {
-                'time': datetime.now().strftime("%H:%M:%S"),
-                'status': result["status"],
-                'interpreter': self.current_interpreter.name
+                "time": datetime.now().strftime("%H:%M:%S"),
+                "status": result["status"],
+                "interpreter": self.current_interpreter.name,
             }
             self._execution_history.append(exec_info)
 
@@ -406,20 +420,22 @@ class CodeExIDE(ttk.Frame):
             },
             "operators": ["+", "-", "*", "/", "=", "==", "!="],
             "comments": "#",
-            "string_delimiters": ["'", "\""]
+            "string_delimiters": ["'", '"'],
         }
 
         save_path = filedialog.asksaveasfilename(
             defaultextension=".json",
             filetypes=[("JSON", "*.json"), ("YAML", "*.yaml")],
-            title="Save language configuration"
+            title="Save language configuration",
         )
 
         if save_path:
             try:
-                with open(save_path, "w", encoding='utf-8') as f:
+                with open(save_path, "w", encoding="utf-8") as f:
                     json.dump(template, f, indent=2)
-                messagebox.showinfo("Success", f"Configuration template created:\n{save_path}")
+                messagebox.showinfo(
+                    "Success", f"Configuration template created:\n{save_path}"
+                )
                 self.status_label.config(text=f"Created: {Path(save_path).name}")
             except (OSError, IOError, ValueError) as e:
                 messagebox.showerror("Error", f"Failed to create config:\n{e}")
@@ -449,7 +465,7 @@ class CodeExIDE(ttk.Frame):
 
     def recent_executions(self):
         """Show recent executions."""
-        if not hasattr(self, '_execution_history'):
+        if not hasattr(self, "_execution_history"):
             self._execution_history = []
 
         if not self._execution_history:
@@ -478,7 +494,7 @@ class CodeExIDE(ttk.Frame):
 
     def toggle_console(self):
         """Toggle console visibility."""
-        if hasattr(self, 'console'):
+        if hasattr(self, "console"):
             current_state = self.console.winfo_viewable()
             if current_state:
                 self.console.pack_forget()
@@ -489,7 +505,7 @@ class CodeExIDE(ttk.Frame):
 
     def toggle_explorer(self):
         """Toggle project explorer visibility."""
-        if hasattr(self, 'project_explorer'):
+        if hasattr(self, "project_explorer"):
             current_state = self.project_explorer.winfo_viewable()
             if current_state:
                 self.project_explorer.pack_forget()
@@ -642,26 +658,40 @@ class NewProjectDialog(tk.Toplevel):
         self.result = None
 
         # Name
-        ttk.Label(self, text="Project Name:").grid(row=0, column=0, sticky="w", padx=10, pady=10)
+        ttk.Label(self, text="Project Name:").grid(
+            row=0, column=0, sticky="w", padx=10, pady=10
+        )
         self.name_var = tk.StringVar()
-        ttk.Entry(self, textvariable=self.name_var, width=30).grid(row=0, column=1, padx=10, pady=10)
+        ttk.Entry(self, textvariable=self.name_var, width=30).grid(
+            row=0, column=1, padx=10, pady=10
+        )
 
         # Description
-        ttk.Label(self, text="Description:").grid(row=1, column=0, sticky="nw", padx=10, pady=10)
+        ttk.Label(self, text="Description:").grid(
+            row=1, column=0, sticky="nw", padx=10, pady=10
+        )
         self.desc_text = scrolledtext.ScrolledText(self, height=5, width=30)
         self.desc_text.grid(row=1, column=1, padx=10, pady=10)
 
         # Interpreter
-        ttk.Label(self, text="Interpreter:").grid(row=2, column=0, sticky="w", padx=10, pady=10)
+        ttk.Label(self, text="Interpreter:").grid(
+            row=2, column=0, sticky="w", padx=10, pady=10
+        )
         self.interp_var = tk.StringVar()
-        ttk.Entry(self, textvariable=self.interp_var, width=30).grid(row=2, column=1, padx=10, pady=10)
+        ttk.Entry(self, textvariable=self.interp_var, width=30).grid(
+            row=2, column=1, padx=10, pady=10
+        )
 
         # Buttons
         button_frame = ttk.Frame(self)
         button_frame.grid(row=3, column=0, columnspan=2, pady=20)
 
-        ttk.Button(button_frame, text="Create", command=self._create).pack(side="left", padx=5)
-        ttk.Button(button_frame, text="Cancel", command=self.destroy).pack(side="left", padx=5)
+        ttk.Button(button_frame, text="Create", command=self._create).pack(
+            side="left", padx=5
+        )
+        ttk.Button(button_frame, text="Cancel", command=self.destroy).pack(
+            side="left", padx=5
+        )
 
         self.transient(parent)
         self.grab_set()

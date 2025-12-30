@@ -5,9 +5,9 @@ Documentation Generator for Language Configurations
 Automatically generates comprehensive documentation from language configurations.
 """
 
-from pathlib import Path
-from typing import Optional
 from datetime import datetime
+from pathlib import Path
+
 from .language_config import LanguageConfig
 
 
@@ -61,7 +61,7 @@ class DocumentationGenerator:
 
         for func in sorted(config.builtin_functions.values(), key=lambda f: f.name):
             name = func.name
-            arity = f"Variadic" if func.arity == -1 else str(func.arity)
+            arity = "Variadic" if func.arity == -1 else str(func.arity)
             status = "✓ Enabled" if func.enabled else "✗ Disabled"
             desc = func.description or "-"
             lines.append(f"| `{name}` | {arity} | {status} | {desc} |")
@@ -74,7 +74,9 @@ class DocumentationGenerator:
         lines.append("| Symbol | Precedence | Associativity | Enabled |")
         lines.append("|--------|------------|---------------|---------|")
 
-        for op in sorted(config.operators.values(), key=lambda o: (-o.precedence, o.symbol)):
+        for op in sorted(
+            config.operators.values(), key=lambda o: (-o.precedence, o.symbol)
+        ):
             symbol = op.symbol
             prec = op.precedence
             assoc = op.associativity
@@ -89,12 +91,22 @@ class DocumentationGenerator:
 
         opts = config.syntax_options
         lines.append(f"- **Array Start Index**: {opts.array_start_index}")
-        lines.append(f"- **Fractional Indexing**: {'Enabled' if opts.allow_fractional_indexing else 'Disabled'}")
+        lines.append(
+            f"- **Fractional Indexing**: "
+            f"{'Enabled' if opts.allow_fractional_indexing else 'Disabled'}"
+        )
         lines.append(f"- **Comment Style**: `{opts.single_line_comment}`")
         if opts.multi_line_comment_start:
-            lines.append(f"- **Multi-line Comments**: `{opts.multi_line_comment_start}...{opts.multi_line_comment_end}`")
-        lines.append(f"- **Statement Terminator**: `{opts.statement_terminator or 'None'}`")
-        lines.append(f"- **Require Semicolons**: {'Yes' if opts.require_semicolons else 'No'}")
+            start_str = opts.multi_line_comment_start
+            end_str = opts.multi_line_comment_end
+            lines.append(
+                f"- **Multi-line Comments**: `{start_str}...{end_str}`"
+            )
+        term = opts.statement_terminator or "None"
+        lines.append(f"- **Statement Terminator**: `{term}`")
+        lines.append(
+            f"- **Require Semicolons**: {'Yes' if opts.require_semicolons else 'No'}"
+        )
         lines.append("")
 
         # Features
@@ -143,17 +155,21 @@ class DocumentationGenerator:
         lines.append("### Function Definition")
         lines.append("")
         lines.append("```")
-        def_kw = config.keyword_mappings.get("def") or config.keyword_mappings.get("function")
+        def_kw = config.keyword_mappings.get("def") or config.keyword_mappings.get(
+            "function"
+        )
         ret_kw = config.keyword_mappings.get("return")
         if def_kw:
             lines.append(f"{def_kw.custom} greet(name){then_sep}")
             if ret_kw:
-                lines.append(f"    {ret_kw.custom} \"Hello, \" + name")
+                lines.append(f'    {ret_kw.custom} "Hello, " + name')
         lines.append("```")
         lines.append("")
 
         lines.append("---")
-        lines.append(f"*Documentation auto-generated for {config.name} v{config.version}*")
+        lines.append(
+            f"*Documentation auto-generated for {config.name} v{config.version}*"
+        )
 
         return "\n".join(lines)
 
@@ -270,32 +286,32 @@ class DocumentationGenerator:
 
         # Convert markdown table to HTML table (simplified)
         in_table = False
-        for line in markdown.split('\n'):
-            if line.startswith('|'):
+        for line in markdown.split("\n"):
+            if line.startswith("|"):
                 if not in_table:
-                    html += '<table>\n'
+                    html += "<table>\n"
                     in_table = True
 
-                if '---' in line:
+                if "---" in line:
                     continue
 
-                html += '<tr>'
-                for cell in line.split('|')[1:-1]:
-                    html += f'<td>{cell.strip()}</td>'
-                html += '</tr>\n'
+                html += "<tr>"
+                for cell in line.split("|")[1:-1]:
+                    html += f"<td>{cell.strip()}</td>"
+                html += "</tr>\n"
             else:
                 if in_table:
-                    html += '</table>\n'
+                    html += "</table>\n"
                     in_table = False
 
-                if line.startswith('# '):
-                    html += f'<h1>{line[2:]}</h1>\n'
-                elif line.startswith('## '):
-                    html += f'<h2>{line[3:]}</h2>\n'
-                elif line.startswith('- '):
-                    html += f'<ul><li>{line[2:]}</li></ul>\n'
+                if line.startswith("# "):
+                    html += f"<h1>{line[2:]}</h1>\n"
+                elif line.startswith("## "):
+                    html += f"<h2>{line[3:]}</h2>\n"
+                elif line.startswith("- "):
+                    html += f"<ul><li>{line[2:]}</li></ul>\n"
                 elif line.strip():
-                    html += f'<p>{line}</p>\n'
+                    html += f"<p>{line}</p>\n"
 
         html += """
     <div class="footer">
@@ -310,10 +326,10 @@ class DocumentationGenerator:
     def save_markdown(config: LanguageConfig, filepath: str) -> None:
         """Save documentation as Markdown file."""
         doc = DocumentationGenerator.generate_markdown(config)
-        Path(filepath).write_text(doc, encoding='utf-8')
+        Path(filepath).write_text(doc, encoding="utf-8")
 
     @staticmethod
     def save_html(config: LanguageConfig, filepath: str) -> None:
         """Save documentation as HTML file."""
         doc = DocumentationGenerator.generate_html(config)
-        Path(filepath).write_text(doc, encoding='utf-8')
+        Path(filepath).write_text(doc, encoding="utf-8")

@@ -14,17 +14,18 @@ Provides specialized libraries for TeachScript:
 import math
 import random
 import time
-from typing import List, Tuple, Dict, Any, Callable, Optional
 from dataclasses import dataclass
 from enum import Enum
-
+from typing import Any, Dict, List, Tuple
 
 # ============================================================================
 # Color Definitions
 # ============================================================================
 
+
 class Color(Enum):
     """Predefined colors for graphics."""
+
     RED = "#FF0000"
     GREEN = "#00FF00"
     BLUE = "#0000FF"
@@ -44,15 +45,17 @@ class Color(Enum):
 # Graphics Library
 # ============================================================================
 
+
 @dataclass
 class Point:
     """A point in 2D space."""
+
     x: float
     y: float
 
     def distance_to(self, other: "Point") -> float:
         """Calculate distance to another point."""
-        return math.sqrt((self.x - other.x)**2 + (self.y - other.y)**2)
+        return math.sqrt((self.x - other.x) ** 2 + (self.y - other.y) ** 2)
 
     def __add__(self, other: "Point") -> "Point":
         return Point(self.x + other.x, self.y + other.y)
@@ -66,6 +69,7 @@ class Point:
 
 class Rectangle:
     """A rectangle shape."""
+
     def __init__(self, x: float, y: float, width: float, height: float):
         self.x = x
         self.y = y
@@ -74,19 +78,24 @@ class Rectangle:
 
     def contains_point(self, point: Point) -> bool:
         """Check if a point is inside the rectangle."""
-        return (self.x <= point.x <= self.x + self.width and
-                self.y <= point.y <= self.y + self.height)
+        return (
+            self.x <= point.x <= self.x + self.width
+            and self.y <= point.y <= self.y + self.height
+        )
 
     def intersects(self, other: "Rectangle") -> bool:
         """Check if this rectangle intersects another."""
-        return (self.x < other.x + other.width and
-                self.x + self.width > other.x and
-                self.y < other.y + other.height and
-                self.y + self.height > other.y)
+        return (
+            self.x < other.x + other.width
+            and self.x + self.width > other.x
+            and self.y < other.y + other.height
+            and self.y + self.height > other.y
+        )
 
 
 class Circle:
     """A circle shape."""
+
     def __init__(self, center: Point, radius: float):
         self.center = center
         self.radius = radius
@@ -132,7 +141,7 @@ class TeachScriptGraphics:
     @staticmethod
     def circle_area(circle: Circle) -> float:
         """Calculate circle area."""
-        return math.pi * circle.radius ** 2
+        return math.pi * circle.radius**2
 
     @staticmethod
     def circle_circumference(circle: Circle) -> float:
@@ -152,9 +161,11 @@ class TeachScriptGraphics:
 # Game Library
 # ============================================================================
 
+
 @dataclass
 class GameObject:
     """A game object."""
+
     name: str
     position: Point
     velocity: Point = None
@@ -177,7 +188,7 @@ class GameObject:
             self.position.x - self.width / 2,
             self.position.y - self.height / 2,
             self.width,
-            self.height
+            self.height,
         )
 
     def collides_with(self, other: "GameObject") -> bool:
@@ -196,8 +207,9 @@ class TeachScriptGame:
         self.level = 1
         self.input_state: Dict[str, bool] = {}
 
-    def create_object(self, name: str, x: float, y: float,
-                     width: float = 10, height: float = 10) -> GameObject:
+    def create_object(
+        self, name: str, x: float, y: float, width: float = 10, height: float = 10
+    ) -> GameObject:
         """Create a game object."""
         obj = GameObject(name, Point(x, y), width=width, height=height)
         self.objects.append(obj)
@@ -217,7 +229,7 @@ class TeachScriptGame:
         """Check for collisions between all objects."""
         collisions = []
         for i, obj1 in enumerate(self.objects):
-            for obj2 in self.objects[i + 1:]:
+            for obj2 in self.objects[i + 1 :]:
                 if obj1.collides_with(obj2):
                     collisions.append((obj1, obj2))
         return collisions
@@ -239,6 +251,7 @@ class TeachScriptGame:
 # Math Library
 # ============================================================================
 
+
 class TeachScriptMath:
     """Advanced math library for TeachScript."""
 
@@ -256,7 +269,7 @@ class TeachScriptMath:
     @staticmethod
     def power(base: float, exponent: float) -> float:
         """Raise to power."""
-        return base ** exponent
+        return base**exponent
 
     @staticmethod
     def sin(x: float) -> float:
@@ -328,6 +341,7 @@ class TeachScriptMath:
 # Animation Library
 # ============================================================================
 
+
 class Animation:
     """Base class for animations."""
 
@@ -387,12 +401,16 @@ class TeachScriptAnimation:
     """Animation library for TeachScript."""
 
     @staticmethod
-    def create_linear_animation(start: float, end: float, duration: float) -> LinearAnimation:
+    def create_linear_animation(
+        start: float, end: float, duration: float
+    ) -> LinearAnimation:
         """Create a linear animation."""
         return LinearAnimation(start, end, duration)
 
     @staticmethod
-    def create_ease_animation(start: float, end: float, duration: float) -> EaseInOutAnimation:
+    def create_ease_animation(
+        start: float, end: float, duration: float
+    ) -> EaseInOutAnimation:
         """Create an eased animation."""
         return EaseInOutAnimation(start, end, duration)
 
@@ -405,6 +423,7 @@ class TeachScriptAnimation:
 # ============================================================================
 # Random Library (Enhanced)
 # ============================================================================
+
 
 class TeachScriptRandom:
     """Random number library for TeachScript."""

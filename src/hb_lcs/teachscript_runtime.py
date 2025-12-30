@@ -14,29 +14,29 @@ language integrated with the CodeCraft IDE. This module provides:
 """
 
 import ast
-import re
-import sys
+import io
 import math
 import random
-import json
-from typing import Dict, Any, List, Tuple, Optional, Callable
-from pathlib import Path
-from contextlib import redirect_stdout, redirect_stderr
-import io
+import re
+from contextlib import redirect_stderr, redirect_stdout
+from typing import Callable, List, Optional, Tuple
 
 
 class TeachScriptError(Exception):
     """Base exception for TeachScript runtime errors."""
+
     pass
 
 
 class TeachScriptSyntaxError(TeachScriptError):
     """Raised when there's a syntax error in TeachScript code."""
+
     pass
 
 
 class TeachScriptRuntimeError(TeachScriptError):
     """Raised when there's a runtime error during execution."""
+
     pass
 
 
@@ -179,35 +179,37 @@ class TeachScriptEnvironment:
 
     def _setup_builtins(self):
         """Set up built-in functions."""
-        self.namespace.update({
-            "print": print,
-            "input": input,
-            "int": int,
-            "float": float,
-            "str": str,
-            "bool": bool,
-            "len": len,
-            "abs": abs,
-            "round": round,
-            "max": max,
-            "min": min,
-            "sum": sum,
-            "type": type,
-            "range": range,
-            "enumerate": enumerate,
-            "sorted": sorted,
-            "reversed": reversed,
-            "list": list,
-            "dict": dict,
-            "set": set,
-            "tuple": tuple,
-            "isinstance": isinstance,
-            "str_join": str.join,
-            "str_split": str.split,
-            "str_lower": str.lower,
-            "str_upper": str.upper,
-            "str_replace": str.replace,
-        })
+        self.namespace.update(
+            {
+                "print": print,
+                "input": input,
+                "int": int,
+                "float": float,
+                "str": str,
+                "bool": bool,
+                "len": len,
+                "abs": abs,
+                "round": round,
+                "max": max,
+                "min": min,
+                "sum": sum,
+                "type": type,
+                "range": range,
+                "enumerate": enumerate,
+                "sorted": sorted,
+                "reversed": reversed,
+                "list": list,
+                "dict": dict,
+                "set": set,
+                "tuple": tuple,
+                "isinstance": isinstance,
+                "str_join": str.join,
+                "str_split": str.split,
+                "str_lower": str.lower,
+                "str_upper": str.upper,
+                "str_replace": str.replace,
+            }
+        )
 
     def _setup_libraries(self):
         """Set up educational libraries."""
@@ -239,7 +241,9 @@ class TeachScriptEnvironment:
         self.namespace["TSGraphics"] = {
             "create_window": lambda w, h, title: print(f"Window: {title} ({w}x{h})"),
             "draw_circle": lambda x, y, r: print(f"Circle at ({x},{y}) r={r}"),
-            "draw_rectangle": lambda x, y, w, h: print(f"Rectangle at ({x},{y}) {w}x{h}"),
+            "draw_rectangle": lambda x, y, w, h: print(
+                f"Rectangle at ({x},{y}) {w}x{h}"
+            ),
             "draw_line": lambda x1, y1, x2, y2: print(f"Line ({x1},{y1})->({x2},{y2})"),
         }
 
@@ -251,7 +255,9 @@ class TeachScriptEnvironment:
             "render": lambda: None,
         }
 
-    def execute(self, python_code: str, timeout: Optional[float] = None) -> Tuple[str, str]:
+    def execute(
+        self, python_code: str, timeout: Optional[float] = None
+    ) -> Tuple[str, str]:
         """
         Execute Python code in the environment.
 

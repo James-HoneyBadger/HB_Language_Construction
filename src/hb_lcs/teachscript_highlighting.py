@@ -12,7 +12,7 @@ Provides syntax highlighting for TeachScript code in the IDE with:
 
 import re
 import tkinter as tk
-from typing import Dict, List, Tuple, Optional
+from typing import Dict, List, Optional, Tuple
 
 
 class TeachScriptHighlighter:
@@ -20,37 +20,72 @@ class TeachScriptHighlighter:
 
     # Color theme for syntax highlighting
     DEFAULT_THEME = {
-        "keyword": "#569cd6",      # Blue for keywords
-        "function": "#dcdcaa",     # Yellow for functions
-        "string": "#ce9178",       # Orange for strings
-        "number": "#b5cea8",       # Green for numbers
-        "comment": "#6a9955",      # Dark green for comments
-        "operator": "#d4d4d4",     # White for operators
-        "normal": "#d4d4d4",       # Default text color
+        "keyword": "#569cd6",  # Blue for keywords
+        "function": "#dcdcaa",  # Yellow for functions
+        "string": "#ce9178",  # Orange for strings
+        "number": "#b5cea8",  # Green for numbers
+        "comment": "#6a9955",  # Dark green for comments
+        "operator": "#d4d4d4",  # White for operators
+        "normal": "#d4d4d4",  # Default text color
     }
 
     # TeachScript keywords
     KEYWORDS = {
         # Control flow
-        "when", "otherwise", "or_when", "repeat_while", "repeat_for",
-        "stop", "skip", "teach", "give_back",
+        "when",
+        "otherwise",
+        "or_when",
+        "repeat_while",
+        "repeat_for",
+        "stop",
+        "skip",
+        "teach",
+        "give_back",
         # Values
-        "yes", "no", "nothing",
+        "yes",
+        "no",
+        "nothing",
         # Operators
-        "and_also", "or_else", "opposite", "inside", "equals",
+        "and_also",
+        "or_else",
+        "opposite",
+        "inside",
+        "equals",
         # Special
-        "remember", "forever",
+        "remember",
+        "forever",
     }
 
     # Built-in functions
     BUILTINS = {
-        "say", "ask", "make_number", "make_decimal", "make_text",
-        "make_boolean", "length_of", "absolute", "round_to", "biggest",
-        "smallest", "total", "type_of", "numbers_from", "count_through",
-        "arrange", "backwards", "is_whole", "join_text", "split_text",
-        "lowercase", "uppercase", "replace_in",
+        "say",
+        "ask",
+        "make_number",
+        "make_decimal",
+        "make_text",
+        "make_boolean",
+        "length_of",
+        "absolute",
+        "round_to",
+        "biggest",
+        "smallest",
+        "total",
+        "type_of",
+        "numbers_from",
+        "count_through",
+        "arrange",
+        "backwards",
+        "is_whole",
+        "join_text",
+        "split_text",
+        "lowercase",
+        "uppercase",
+        "replace_in",
         # Library namespaces
-        "TSMath", "TSRandom", "TSGraphics", "TSGame",
+        "TSMath",
+        "TSRandom",
+        "TSGraphics",
+        "TSGame",
     }
 
     def __init__(self, text_widget: tk.Text, theme: Optional[Dict[str, str]] = None):
@@ -77,8 +112,12 @@ class TeachScriptHighlighter:
             self.text.tag_config(token_type, foreground=color)
 
         # Additional styling
-        self.text.tag_config("keyword", foreground=self.theme["keyword"], font=("Courier", 10, "bold"))
-        self.text.tag_config("function", foreground=self.theme["function"], font=("Courier", 10, "bold"))
+        self.text.tag_config(
+            "keyword", foreground=self.theme["keyword"], font=("Courier", 10, "bold")
+        )
+        self.text.tag_config(
+            "function", foreground=self.theme["function"], font=("Courier", 10, "bold")
+        )
 
     def highlight_all(self):
         """Highlight all text in the editor."""
@@ -108,9 +147,6 @@ class TeachScriptHighlighter:
                 self.text.tag_add("comment", start, end)
             return
 
-        # Track position in line
-        pos = 0
-
         # Highlight strings
         for match in re.finditer(r'["\'](?:\\.|[^\\\"])*["\']', line):
             start = f"{line_num}.{match.start()}"
@@ -118,7 +154,7 @@ class TeachScriptHighlighter:
             self.text.tag_add("string", start, end)
 
         # Highlight numbers
-        for match in re.finditer(r'\b\d+\.?\d*\b', line):
+        for match in re.finditer(r"\b\d+\.?\d*\b", line):
             start = f"{line_num}.{match.start()}"
             end = f"{line_num}.{match.end()}"
             self.text.tag_add("number", start, end)
@@ -145,7 +181,7 @@ class TeachScriptHighlighter:
             in_string = False
             string_char = None
             for i, char in enumerate(line):
-                if char in ('"', "'") and (i == 0 or line[i-1] != "\\"):
+                if char in ('"', "'") and (i == 0 or line[i - 1] != "\\"):
                     if not in_string:
                         in_string = True
                         string_char = char
@@ -233,8 +269,7 @@ class TeachScriptCodeCompletion:
 
         # Filter by prefix
         completions = [
-            item for item in sorted(all_items)
-            if item.startswith(prefix.lower())
+            item for item in sorted(all_items) if item.startswith(prefix.lower())
         ]
 
         return completions[:10]  # Limit to 10 suggestions
@@ -265,10 +300,7 @@ class TeachScriptCodeCompletion:
                 completion = completions[selection[0]]
                 # Replace word with completion
                 word_start = self.text.search(
-                    prefix,
-                    "insert",
-                    backwards=True,
-                    regexp=True
+                    prefix, "insert", backwards=True, regexp=True
                 )
                 if word_start:
                     self.text.delete(word_start, "insert")
@@ -296,7 +328,7 @@ class TeachScriptLinter:
         for line_num, line in enumerate(lines, 1):
             # Check indentation
             if line and not line[0].isspace() and not line.startswith("#"):
-                stripped = line.lstrip()
+                _ = line.lstrip()
                 # Check for hanging colons
                 if ":" in line and not line.rstrip().endswith(":"):
                     # Colon in middle - might be okay (e.g., inside strings)
