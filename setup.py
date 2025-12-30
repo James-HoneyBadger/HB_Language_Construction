@@ -3,8 +3,8 @@
 Setup script for CodeCraft - Custom Language Construction Framework
 """
 
-from setuptools import setup, find_packages
 from pathlib import Path
+from setuptools import setup, find_packages
 
 # Read the README file
 readme_file = Path(__file__).parent / "README.md"

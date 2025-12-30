@@ -7,7 +7,7 @@ Ensures compatibility with Python and other common languages.
 """
 
 import re
-from typing import Tuple, Optional, List
+from typing import Tuple, Optional, List, Any
 
 
 class IdentifierValidator:
@@ -68,7 +68,7 @@ class IdentifierValidator:
     ) -> Tuple[bool, List[str]]:
         """
         Comprehensive validation of an identifier.
-        
+
         Returns:
             Tuple of (is_valid, list_of_warnings)
         """
@@ -117,11 +117,11 @@ class IdentifierValidator:
         """Suggest a valid alternative name based on the invalid one."""
         # Remove invalid characters
         cleaned = re.sub(r'[^a-zA-Z0-9_]', '_', invalid_name)
-        
+
         # Ensure starts with letter or underscore
         if cleaned and cleaned[0].isdigit():
             cleaned = f"_{cleaned}"
-        
+
         # Apply naming style
         if style == "snake_case":
             # Convert camelCase to snake_case
@@ -147,23 +147,23 @@ class ConflictDetector:
     @staticmethod
     def find_duplicate_names(
         items: dict[str, Any],
-        get_custom_name: callable,
+        get_custom_name: Any,
     ) -> List[Tuple[str, str, str]]:
         """Find duplicates where multiple originals map to same custom name."""
         custom_to_originals = {}
-        
+
         for original, item in items.items():
             custom = get_custom_name(item)
             if custom not in custom_to_originals:
                 custom_to_originals[custom] = []
             custom_to_originals[custom].append(original)
-        
+
         duplicates = []
         for custom, originals in custom_to_originals.items():
             if len(originals) > 1:
                 for orig in originals:
                     duplicates.append((orig, custom, "duplicate_mapping"))
-        
+
         return duplicates
 
     @staticmethod
@@ -202,21 +202,21 @@ class ConflictDetector:
     ) -> List[str]:
         """Check for operator precedence issues."""
         issues = []
-        
+
         precedences = {}
         for symbol, op in operators.items():
             prec = op.precedence
             if prec < 0:
                 issues.append(f"Operator '{symbol}' has negative precedence: {prec}")
-            
+
             if op.associativity not in ["left", "right", "none"]:
                 issues.append(
                     f"Operator '{symbol}' has invalid associativity: "
                     f"{op.associativity}"
                 )
-            
+
             if prec not in precedences:
                 precedences[prec] = []
             precedences[prec].append(symbol)
-        
+
         return issues

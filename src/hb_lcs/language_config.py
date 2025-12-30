@@ -215,31 +215,31 @@ class LanguageConfig:
             "continue": KeywordMapping("continue", "continue", "control", "Continue statement"),
             "pass": KeywordMapping("pass", "pass", "control", "Pass statement"),
             "when": KeywordMapping("when", "when", "control", "Reactive programming"),
-            
+
             # Functions and definitions
             "def": KeywordMapping("def", "def", "function", "Function definition"),
             "function": KeywordMapping("function", "function", "function", "Function definition"),
             "return": KeywordMapping("return", "return", "function", "Return value"),
             "lambda": KeywordMapping("lambda", "lambda", "function", "Lambda expression"),
             "yield": KeywordMapping("yield", "yield", "function", "Yield statement"),
-            
+
             # Exception handling
             "try": KeywordMapping("try", "try", "exception", "Try block"),
             "except": KeywordMapping("except", "except", "exception", "Exception handler"),
             "finally": KeywordMapping("finally", "finally", "exception", "Finally block"),
-            
+
             # Imports and modules
             "import": KeywordMapping("import", "import", "import", "Import module"),
             "from": KeywordMapping("from", "from", "import", "From import"),
             "as": KeywordMapping("as", "as", "import", "Import alias"),
-            
+
             # Context management
             "with": KeywordMapping("with", "with", "context", "Context manager"),
-            
+
             # Variables and constants
             "const": KeywordMapping("const", "const", "variable", "Constant declaration"),
             "var": KeywordMapping("var", "var", "variable", "Variable declaration"),
-            
+
             # Object-oriented
             "class": KeywordMapping("class", "class", "oop", "Class definition"),
         }
@@ -285,13 +285,13 @@ class LanguageConfig:
         """Rename a keyword with validation."""
         if original not in self.keyword_mappings:
             raise ValueError(f"Keyword '{original}' not found")
-        
+
         # Validate new name
         from .identifier_validator import IdentifierValidator
         is_valid, warnings = IdentifierValidator.validate_identifier(new_name)
         if not is_valid:
             raise ValueError(f"Invalid keyword name '{new_name}': {warnings[0]}")
-        
+
         self.keyword_mappings[original].custom = new_name
 
     def add_keyword(
@@ -299,12 +299,12 @@ class LanguageConfig:
     ) -> None:
         """Add a new custom keyword with validation."""
         from .identifier_validator import IdentifierValidator
-        
+
         # Validate name
         is_valid, warnings = IdentifierValidator.validate_identifier(name)
         if not is_valid:
             raise ValueError(f"Invalid keyword name '{name}': {warnings[0]}")
-        
+
         self.keyword_mappings[name] = KeywordMapping(name, name, category, description)
 
     def remove_keyword(self, name: str) -> None:

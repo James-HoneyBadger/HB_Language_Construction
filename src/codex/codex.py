@@ -17,9 +17,7 @@ Features:
 """
 
 import tkinter as tk
-from tkinter import ttk
 import sys
-import os
 from pathlib import Path
 
 # Add src directory to path for imports
@@ -33,9 +31,9 @@ def main():
     root = tk.Tk()
     root.title("CodeEx - CodeCraft Execution Environment")
     root.geometry("1600x900")
-    
-    ide = CodeExIDE(root)
-    
+
+    CodeExIDE(root)
+
     root.mainloop()
 
 

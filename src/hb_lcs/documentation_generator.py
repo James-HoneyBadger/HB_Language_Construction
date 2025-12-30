@@ -43,14 +43,14 @@ class DocumentationGenerator:
         lines.append("")
         lines.append("| Original | Custom | Category | Description |")
         lines.append("|----------|--------|----------|-------------|")
-        
+
         for mapping in sorted(config.keyword_mappings.values(), key=lambda m: m.custom):
             orig = mapping.original
             custom = mapping.custom
             cat = mapping.category
             desc = mapping.description or "-"
             lines.append(f"| `{orig}` | `{custom}` | {cat} | {desc} |")
-        
+
         lines.append("")
 
         # Functions
@@ -58,14 +58,14 @@ class DocumentationGenerator:
         lines.append("")
         lines.append("| Function | Arity | Status | Description |")
         lines.append("|----------|-------|--------|-------------|")
-        
+
         for func in sorted(config.builtin_functions.values(), key=lambda f: f.name):
             name = func.name
             arity = f"Variadic" if func.arity == -1 else str(func.arity)
             status = "✓ Enabled" if func.enabled else "✗ Disabled"
             desc = func.description or "-"
             lines.append(f"| `{name}` | {arity} | {status} | {desc} |")
-        
+
         lines.append("")
 
         # Operators
@@ -73,20 +73,20 @@ class DocumentationGenerator:
         lines.append("")
         lines.append("| Symbol | Precedence | Associativity | Enabled |")
         lines.append("|--------|------------|---------------|---------|")
-        
+
         for op in sorted(config.operators.values(), key=lambda o: (-o.precedence, o.symbol)):
             symbol = op.symbol
             prec = op.precedence
             assoc = op.associativity
             enabled = "✓" if op.enabled else "✗"
             lines.append(f"| `{symbol}` | {prec} | {assoc} | {enabled} |")
-        
+
         lines.append("")
 
         # Syntax Options
         lines.append("## Syntax Options")
         lines.append("")
-        
+
         opts = config.syntax_options
         lines.append(f"- **Array Start Index**: {opts.array_start_index}")
         lines.append(f"- **Fractional Indexing**: {'Enabled' if opts.allow_fractional_indexing else 'Disabled'}")
@@ -109,7 +109,7 @@ class DocumentationGenerator:
             features.append("Temporal Variables")
         if opts.enable_quantum_features:
             features.append("Quantum Features")
-        
+
         if features:
             lines.append("## Special Features")
             lines.append("")
@@ -161,7 +161,7 @@ class DocumentationGenerator:
     def generate_html(config: LanguageConfig) -> str:
         """Generate HTML documentation for a configuration."""
         markdown = DocumentationGenerator.generate_markdown(config)
-        
+
         # Simple markdown to HTML conversion
         html = f"""<!DOCTYPE html>
 <html>
@@ -267,7 +267,7 @@ class DocumentationGenerator:
         <p><strong>Generated:</strong> {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</p>
     </div>
 """
-        
+
         # Convert markdown table to HTML table (simplified)
         in_table = False
         for line in markdown.split('\n'):
@@ -275,10 +275,10 @@ class DocumentationGenerator:
                 if not in_table:
                     html += '<table>\n'
                     in_table = True
-                
+
                 if '---' in line:
                     continue
-                
+
                 html += '<tr>'
                 for cell in line.split('|')[1:-1]:
                     html += f'<td>{cell.strip()}</td>'
@@ -287,7 +287,7 @@ class DocumentationGenerator:
                 if in_table:
                     html += '</table>\n'
                     in_table = False
-                
+
                 if line.startswith('# '):
                     html += f'<h1>{line[2:]}</h1>\n'
                 elif line.startswith('## '):
@@ -296,7 +296,7 @@ class DocumentationGenerator:
                     html += f'<ul><li>{line[2:]}</li></ul>\n'
                 elif line.strip():
                     html += f'<p>{line}</p>\n'
-        
+
         html += """
     <div class="footer">
         <p>Language reference documentation - auto-generated</p>

@@ -8,8 +8,7 @@ interactive program development and testing within the IDE.
 
 import tkinter as tk
 from tkinter import scrolledtext, ttk
-import re
-from typing import Optional, List
+from typing import List
 
 from .teachscript_runtime import get_runtime, TeachScriptError
 

@@ -13,7 +13,7 @@ import json
 import pickle
 import base64
 from pathlib import Path
-from typing import Dict, Any, Optional, Callable
+from typing import Dict, Any, Optional
 from datetime import datetime
 
 from .language_config import LanguageConfig
@@ -22,7 +22,7 @@ from .language_runtime import LanguageRuntime
 
 class InterpreterPackage:
     """A packaged interpreter for standalone use in CodeEx."""
-    
+
     def __init__(self, config: LanguageConfig):
         """Initialize interpreter package."""
         self.config = config
@@ -38,15 +38,15 @@ class InterpreterPackage:
             "operators": len(config.operators),
         }
         self.runtime = LanguageRuntime(config)
-    
+
     def execute(self, code: str, context: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """
         Execute code with this interpreter.
-        
+
         Args:
             code: Source code to execute
             context: Optional execution context (variables, settings)
-        
+
         Returns:
             Execution result dict with output, errors, variables
         """
@@ -65,7 +65,7 @@ class InterpreterPackage:
                 "errors": [str(e)],
                 "variables": {},
             }
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Export interpreter as dictionary."""
         return {
@@ -74,27 +74,27 @@ class InterpreterPackage:
             "version": self.version,
             "created_at": self.created_at,
         }
-    
+
     def to_json(self) -> str:
         """Export interpreter as JSON string."""
         return json.dumps(self.to_dict(), indent=2)
-    
+
     def to_pickle(self) -> bytes:
         """Export interpreter as pickled bytes."""
         return pickle.dumps(self)
-    
+
     @staticmethod
     def from_dict(data: Dict[str, Any]) -> "InterpreterPackage":
         """Load interpreter from dictionary."""
         config = LanguageConfig.from_dict(data["config"])
         return InterpreterPackage(config)
-    
+
     @staticmethod
     def from_json(json_str: str) -> "InterpreterPackage":
         """Load interpreter from JSON string."""
         data = json.loads(json_str)
         return InterpreterPackage.from_dict(data)
-    
+
     @staticmethod
     def from_pickle(data: bytes) -> "InterpreterPackage":
         """Load interpreter from pickled bytes."""
@@ -103,40 +103,40 @@ class InterpreterPackage:
 
 class InterpreterGenerator:
     """Generates and manages interpreter packages for CodeEx."""
-    
+
     def __init__(self):
         """Initialize interpreter generator."""
         self.interpreters: Dict[str, InterpreterPackage] = {}
         self.export_dir = Path.home() / ".codecraft" / "interpreters"
         self.export_dir.mkdir(parents=True, exist_ok=True)
-    
+
     def generate(self, config: LanguageConfig) -> InterpreterPackage:
         """
         Generate an interpreter from a language configuration.
-        
+
         Args:
             config: LanguageConfig instance
-        
+
         Returns:
             InterpreterPackage ready for execution
         """
         interpreter = InterpreterPackage(config)
         self.interpreters[config.name] = interpreter
         return interpreter
-    
+
     def export_interpreter(self, config: LanguageConfig, format: str = "json") -> str:
         """
         Export interpreter for use in CodeEx.
-        
+
         Args:
             config: LanguageConfig to export
             format: Export format ("json", "pickle", "file")
-        
+
         Returns:
             Exported interpreter data or file path
         """
         interpreter = self.generate(config)
-        
+
         if format == "json":
             return interpreter.to_json()
         elif format == "pickle":
@@ -148,15 +148,15 @@ class InterpreterGenerator:
             return str(filepath)
         else:
             raise ValueError(f"Unknown format: {format}")
-    
+
     def import_interpreter(self, data: str, format: str = "json") -> InterpreterPackage:
         """
         Import interpreter from exported data.
-        
+
         Args:
             data: Exported interpreter data
             format: Format of data ("json", "pickle")
-        
+
         Returns:
             Loaded InterpreterPackage
         """
@@ -168,17 +168,17 @@ class InterpreterGenerator:
             )
         else:
             raise ValueError(f"Unknown format: {format}")
-        
+
         self.interpreters[interpreter.name] = interpreter
         return interpreter
-    
+
     def list_interpreters(self) -> Dict[str, Dict[str, Any]]:
         """Get metadata for all loaded interpreters."""
         return {
             name: interp.metadata
             for name, interp in self.interpreters.items()
         }
-    
+
     def get_interpreter(self, name: str) -> Optional[InterpreterPackage]:
         """Get loaded interpreter by name."""
         return self.interpreters.get(name)

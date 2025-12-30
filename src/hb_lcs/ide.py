@@ -1552,17 +1552,17 @@ Functions:
   • tuple(sequence) -> Convert to tuple
   • set(sequence) -> Create set
 """
-        
+
         # Create a scrolled text window for better readability
         top = tk.Toplevel(self.root)
         top.title("API Reference")
         top.geometry("800x600")
-        
+
         text_widget = scrolledtext.ScrolledText(top, wrap="word", font=("Courier", 10))
         text_widget.pack(fill="both", expand=True, padx=5, pady=5)
         text_widget.insert("1.0", api_text)
         text_widget.config(state="disabled")
-        
+
         # Add close button
         btn_frame = ttk.Frame(top)
         btn_frame.pack(fill="x", padx=5, pady=5)
@@ -1577,7 +1577,7 @@ Functions:
             "operators": self._tutorial_operators,
             "advanced": self._tutorial_advanced,
         }
-        
+
         if tutorial_type in tutorials:
             tutorials[tutorial_type]()
         else:
@@ -1599,20 +1599,20 @@ Functions:
 2. UNDERSTANDING KEYWORDS
    Keywords are reserved words that have special meaning.
    Examples: if, while, for, function, return, etc.
-   
+
    You can customize keywords to create a unique language!
 
 3. UNDERSTANDING FUNCTIONS
    Functions are reusable blocks of code.
    Syntax: function_name(arg1, arg2) { ... }
-   
+
    Built-in functions are always available.
    Custom functions are user-defined.
 
 4. VARIABLES AND TYPES
    Variables store data values.
    Types: numbers, strings, lists, dictionaries
-   
+
    Example: name = "Alice", age = 25
 
 5. CONTROL FLOW
@@ -1647,12 +1647,12 @@ EXAMPLE CUSTOMIZATIONS:
      • Python: if, while, for, def, return
      • JavaScript: if, while, for, function, return
      • Ruby: if, while, for, def, return
-  
+
   2. Domain-specific languages:
      • When instead of if
      • Teach instead of def
      • Give_back instead of return
-  
+
   3. Natural language style:
      • Si instead of if
      • Mientras instead of while
@@ -1679,7 +1679,7 @@ DEFINING FUNCTIONS:
   Syntax: function greet(name) {
             print("Hello, " + name)
           }
-  
+
   Call: greet("Alice")
   Output: Hello, Alice
 
@@ -1692,7 +1692,7 @@ FUNCTION COMPONENTS:
 PARAMETERS vs ARGUMENTS:
   • Parameters: variables in function definition
     function add(a, b) { ... }
-  
+
   • Arguments: values passed when calling
     add(5, 3)  <- 5 and 3 are arguments
 
@@ -1700,7 +1700,7 @@ RETURN VALUES:
   function add(a, b) {
     return a + b
   }
-  
+
   result = add(5, 3)  # result = 8
 
 SCOPE:
@@ -1711,7 +1711,7 @@ SCOPE:
 
 RECURSION:
   Functions can call themselves!
-  
+
   function factorial(n) {
     if (n <= 1) return 1
     return n * factorial(n - 1)
@@ -1792,7 +1792,7 @@ DATA STRUCTURES:
     nums[0]      # First element = 1
     nums.append(6)  # Add element
     nums.pop()   # Remove last element
-  
+
   Dictionaries (maps):
     person = {"name": "Alice", "age": 30}
     person["name"]  # Get value
@@ -1825,7 +1825,7 @@ ERROR HANDLING:
 MODULES & IMPORTS:
   import math from "stdlib"
   import { sqrt, sin } from "math"
-  
+
   x = sqrt(16)  # = 4
   y = sin(0)    # = 0
 
@@ -1838,7 +1838,7 @@ ASYNC/AWAIT:
 LAMBDAS/ARROW FUNCTIONS:
   square = (x) => x * x
   add = (a, b) => a + b
-  
+
   map((x) => x * 2, [1, 2, 3, 4, 5])
 
 TRY IT: Build a small project using multiple concepts!
@@ -1850,12 +1850,12 @@ TRY IT: Build a small project using multiple concepts!
         top = tk.Toplevel(self.root)
         top.title(title)
         top.geometry("900x700")
-        
+
         text_widget = scrolledtext.ScrolledText(top, wrap="word", font=("Courier", 11))
         text_widget.pack(fill="both", expand=True, padx=5, pady=5)
         text_widget.insert("1.0", content)
         text_widget.config(state="disabled")
-        
+
         # Add close button
         btn_frame = ttk.Frame(top)
         btn_frame.pack(fill="x", padx=5, pady=5)
@@ -1968,7 +1968,7 @@ for key in person.keys() {
 print(factorial(5))  # 120'''
             ),
         }
-        
+
         if example_type in examples:
             title, code = examples[example_type]
             self._show_example_window(title, code)
@@ -1984,7 +1984,7 @@ print(factorial(5))  # 120'''
         top = tk.Toplevel(self.root)
         top.title(f"Example: {title}")
         top.geometry("700x500")
-        
+
         # Code area
         text_widget = scrolledtext.ScrolledText(
             top, wrap="word", font=("Courier", 10), height=15
@@ -1992,16 +1992,16 @@ print(factorial(5))  # 120'''
         text_widget.pack(fill="both", expand=True, padx=5, pady=5)
         text_widget.insert("1.0", code)
         text_widget.config(state="disabled")
-        
+
         # Buttons
         btn_frame = ttk.Frame(top)
         btn_frame.pack(fill="x", padx=5, pady=5)
-        
+
         def copy_code():
             self.root.clipboard_clear()
             self.root.clipboard_append(code)
             messagebox.showinfo("Success", "Code copied to clipboard!")
-        
+
         ttk.Button(btn_frame, text="Copy", command=copy_code).pack(side="left", padx=2)
         ttk.Button(btn_frame, text="Close", command=top.destroy).pack(side="right", padx=2)
 
@@ -2082,16 +2082,16 @@ Shift+F9  : Set breakpoint
 • Mouse wheel to zoom in/out
 • Drag panels to resize layout
 """
-        
+
         top = tk.Toplevel(self.root)
         top.title("Keyboard Shortcuts")
         top.geometry("800x700")
-        
+
         text_widget = scrolledtext.ScrolledText(top, wrap="word", font=("Courier", 10))
         text_widget.pack(fill="both", expand=True, padx=5, pady=5)
         text_widget.insert("1.0", shortcuts_text)
         text_widget.config(state="disabled")
-        
+
         # Add buttons
         btn_frame = ttk.Frame(top)
         btn_frame.pack(fill="x", padx=5, pady=5)
@@ -2124,37 +2124,37 @@ All rights reserved."""
         """Open recent files menu."""
         # Get recent files from config if available
         recent_files = getattr(self, "_recent_files", [])
-        
+
         if not recent_files:
             messagebox.showinfo("Recent Files", "No recent files found.\n\nOpen some files first!")
             return
-        
+
         # Create popup menu
         popup = tk.Menu(self.root, tearoff=0)
-        
+
         for filepath in recent_files[-5:]:  # Last 5 files
             popup.add_command(
                 label=Path(filepath).name,
                 command=lambda f=filepath: self._open_file_direct(f)
             )
-        
+
         popup.add_separator()
         popup.add_command(label="Clear Recent", command=self._clear_recent_files)
-        
+
         # Display popup at mouse position
         popup.post(self.root.winfo_pointerx(), self.root.winfo_pointery())
 
     def _open_file_direct(self, filepath: str) -> None:
         """Open a file directly by path."""
         try:
-            with open(filepath, 'r') as f:
+            with open(filepath, 'r', encoding='utf-8') as f:
                 content = f.read()
             self.input_text.config(state="normal")
             self.input_text.delete("1.0", "end")
             self.input_text.insert("1.0", content)
             self.input_text.config(state="normal")
             messagebox.showinfo("Success", f"Opened: {Path(filepath).name}")
-        except Exception as e:
+        except (OSError, IOError, UnicodeDecodeError) as e:
             messagebox.showerror("Error", f"Failed to open file:\n{e}")
 
     def _clear_recent_files(self) -> None:
@@ -2165,7 +2165,7 @@ All rights reserved."""
     def _save_all(self) -> None:
         """Save all open files and configurations."""
         saved_count = 0
-        
+
         try:
             # Save current code if it exists
             if hasattr(self, 'input_text'):
@@ -2177,10 +2177,10 @@ All rights reserved."""
                         filetypes=[("Text files", "*.txt"), ("All files", "*.*")]
                     )
                     if filepath:
-                        with open(filepath, 'w') as f:
+                        with open(filepath, 'w', encoding='utf-8') as f:
                             f.write(code_content)
                         saved_count += 1
-            
+
             # Save current language configuration if it exists
             if hasattr(self, 'current_config') and self.current_config:
                 config_path = filedialog.asksaveasfilename(
@@ -2190,13 +2190,13 @@ All rights reserved."""
                 if config_path:
                     self.current_config.save(config_path)
                     saved_count += 1
-            
+
             if saved_count > 0:
                 messagebox.showinfo("Success", f"Saved {saved_count} item(s) successfully!")
             else:
                 messagebox.showinfo("Info", "Nothing to save")
-        
-        except Exception as e:
+
+        except (OSError, IOError, ValueError) as e:
             messagebox.showerror("Error", f"Failed to save:\n{e}")
 
     def _close_all(self) -> None:
@@ -2208,22 +2208,22 @@ All rights reserved."""
                     self.input_text.config(state="normal")
                     self.input_text.delete("1.0", "end")
                     self.input_text.config(state="normal")
-                
+
                 # Clear console
                 if hasattr(self, 'console_output'):
                     self.console_output.config(state="normal")
                     self.console_output.delete("1.0", "end")
                     self.console_output.config(state="disabled")
-                
+
                 # Reset configuration
                 self.current_config = None
-                
+
                 # Clear recent files
                 self._recent_files = []
-                
+
                 messagebox.showinfo("Success", "All files closed and IDE reset!")
-            
-            except Exception as e:
+
+            except (OSError, IOError, AttributeError) as e:
                 messagebox.showerror("Error", f"Failed to close all:\n{e}")
 
     def _import_file(self) -> None:
