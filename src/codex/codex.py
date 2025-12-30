@@ -22,10 +22,10 @@ import sys
 import os
 from pathlib import Path
 
-# Add CodeCraft to path
+# Add src directory to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from codex_gui import CodeExIDE
+from codex.codex_gui import CodeExIDE
 
 
 def main():

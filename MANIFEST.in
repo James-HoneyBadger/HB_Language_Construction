@@ -1,8 +1,12 @@
 include README.md
 include LICENSE
+include CHANGELOG.md
 recursive-include configs *.json *.yaml
 recursive-include docs *.md
-recursive-include demos *.py *.teach *.json
+recursive-include demos *.py *.teach *.json *.yaml
 recursive-include tests *.py
+recursive-include src *.json *.yaml
 global-exclude __pycache__
 global-exclude *.py[co]
+global-exclude .DS_Store
+global-exclude *.egg-info

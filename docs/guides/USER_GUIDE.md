@@ -1,8 +1,8 @@
 # User Guide
 
-**Honey Badger Language Construction Set v4.0**  
+**CodeCraft - Custom Language Construction Framework v1.0**  
 Complete User Manual & How-To Guide  
-December 3, 2025
+December 30, 2025
 
 ## Table of Contents
 
@@ -23,7 +23,7 @@ December 3, 2025
 
 ### What is HB Language Construction Set?
 
-The **Honey Badger Language Construction Set** is a toolkit for creating custom programming language variants. It lets you:
+The **CodeCraft** language construction framework is a toolkit for creating custom programming language variants. It lets you:
 
 - **Rename keywords** (`if` → `cuando`, `function` → `def`)
 - **Customize syntax** (comment style, operators, indexing)
@@ -92,7 +92,7 @@ hblcs update spanish.yaml \
 hblcs validate spanish.yaml
 
 # View it
-hblcs info spanish.yaml
+codecraft info spanish.yaml
 ```
 
 ### Your First IDE Session (10 minutes)

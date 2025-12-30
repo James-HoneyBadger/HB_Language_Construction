@@ -53,19 +53,7 @@ setup(
         "console_scripts": [
             "codecraft=hb_lcs.cli:main",
             "codecraft-ide=hb_lcs.launch_ide:main",
-            "codex=src.codex.codex:main",
-        ],
-    },
-    include_package_data=True,
-    package_data={
-        "hb_lcs": ["*.json", "*.yaml"],
-    },
-    python_requires=">=3.7",
-)
-    entry_points={
-        "console_scripts": [
-            "hblcs=hb_lcs.cli:main",
-            "hblcs-ide=hb_lcs.launch_ide:main",
+            "codex=codex.codex:main",
         ],
     },
     include_package_data=True,

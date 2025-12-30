@@ -26,13 +26,17 @@ import json
 from pathlib import Path
 from typing import Optional, Dict, Any
 from datetime import datetime
+import sys
 
-from src.hb_lcs.language_config import LanguageConfig
-from src.hb_lcs.interpreter_generator import (
+# Ensure parent modules are in path
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
+from hb_lcs.language_config import LanguageConfig
+from hb_lcs.interpreter_generator import (
     InterpreterGenerator,
     InterpreterPackage,
 )
-from codex_components import (
+from codex.codex_components import (
     CodeExEditor,
     CodeExConsole,
     CodeExProjectExplorer,

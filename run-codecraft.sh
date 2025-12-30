@@ -8,7 +8,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 VENV_DIR="$SCRIPT_DIR/.venv"
 PYTHON_VERSION="3.9"
 
-echo "🚀 CodeCraft - Honey Badger Language Construction Set"
+echo "🚀 CodeCraft - Custom Language Construction Framework"
 echo "=================================================="
 echo ""
 
