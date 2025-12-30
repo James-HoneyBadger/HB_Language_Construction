@@ -110,14 +110,14 @@ def _handle_repl_command(
     if command == "info":
         print(f"\nLanguage: {config.name}")
         print(f"Version: {config.version}")
-        print(f"Keywords: {len(config.keywords)}")
+        print(f"Keywords: {len(config.keyword_mappings)}")
         print(f"Functions: {len(config.builtin_functions)}\n")
         return True, debug
 
     if command == "keywords":
         print("\nKeywords:")
         for kw in sorted(
-            config.keywords.values(),
+            config.keyword_mappings.values(),
             key=lambda mapping: mapping.custom,
         ):
             print(f"  {kw.custom:20} ({kw.original})")

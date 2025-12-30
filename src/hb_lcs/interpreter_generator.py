@@ -1,0 +1,208 @@
+#!/usr/bin/env python3
+"""
+CodeCraft Interpreter Generator Module
+
+Generates standalone interpreter instances for CodeEx (CodeCraft execution platform).
+Allows CodeCraft-defined languages to be executed within CodeEx IDE.
+
+This module extends CodeCraft to support interpreter export for use by external
+applications like CodeEx.
+"""
+
+import json
+import pickle
+import base64
+from pathlib import Path
+from typing import Dict, Any, Optional, Callable
+from datetime import datetime
+
+from .language_config import LanguageConfig
+from .language_runtime import LanguageRuntime
+
+
+class InterpreterPackage:
+    """A packaged interpreter for standalone use in CodeEx."""
+    
+    def __init__(self, config: LanguageConfig):
+        """Initialize interpreter package."""
+        self.config = config
+        self.name = config.name
+        self.version = "1.0"
+        self.created_at = datetime.now().isoformat()
+        self.metadata: Dict[str, Any] = {
+            "name": config.name,
+            "version": self.version,
+            "created": self.created_at,
+            "keywords": len(config.keywords),
+            "functions": len(config.functions),
+            "operators": len(config.operators),
+        }
+        self.runtime = LanguageRuntime(config)
+    
+    def execute(self, code: str, context: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        """
+        Execute code with this interpreter.
+        
+        Args:
+            code: Source code to execute
+            context: Optional execution context (variables, settings)
+        
+        Returns:
+            Execution result dict with output, errors, variables
+        """
+        try:
+            result = self.runtime.execute(code)
+            return {
+                "status": "success",
+                "output": result,
+                "errors": [],
+                "variables": self.runtime.globals.copy(),
+            }
+        except Exception as e:
+            return {
+                "status": "error",
+                "output": "",
+                "errors": [str(e)],
+                "variables": {},
+            }
+    
+    def to_dict(self) -> Dict[str, Any]:
+        """Export interpreter as dictionary."""
+        return {
+            "metadata": self.metadata,
+            "config": self.config.to_dict(),
+            "version": self.version,
+            "created_at": self.created_at,
+        }
+    
+    def to_json(self) -> str:
+        """Export interpreter as JSON string."""
+        return json.dumps(self.to_dict(), indent=2)
+    
+    def to_pickle(self) -> bytes:
+        """Export interpreter as pickled bytes."""
+        return pickle.dumps(self)
+    
+    @staticmethod
+    def from_dict(data: Dict[str, Any]) -> "InterpreterPackage":
+        """Load interpreter from dictionary."""
+        config = LanguageConfig.from_dict(data["config"])
+        return InterpreterPackage(config)
+    
+    @staticmethod
+    def from_json(json_str: str) -> "InterpreterPackage":
+        """Load interpreter from JSON string."""
+        data = json.loads(json_str)
+        return InterpreterPackage.from_dict(data)
+    
+    @staticmethod
+    def from_pickle(data: bytes) -> "InterpreterPackage":
+        """Load interpreter from pickled bytes."""
+        return pickle.loads(data)
+
+
+class InterpreterGenerator:
+    """Generates and manages interpreter packages for CodeEx."""
+    
+    def __init__(self):
+        """Initialize interpreter generator."""
+        self.interpreters: Dict[str, InterpreterPackage] = {}
+        self.export_dir = Path.home() / ".codecraft" / "interpreters"
+        self.export_dir.mkdir(parents=True, exist_ok=True)
+    
+    def generate(self, config: LanguageConfig) -> InterpreterPackage:
+        """
+        Generate an interpreter from a language configuration.
+        
+        Args:
+            config: LanguageConfig instance
+        
+        Returns:
+            InterpreterPackage ready for execution
+        """
+        interpreter = InterpreterPackage(config)
+        self.interpreters[config.name] = interpreter
+        return interpreter
+    
+    def export_interpreter(self, config: LanguageConfig, format: str = "json") -> str:
+        """
+        Export interpreter for use in CodeEx.
+        
+        Args:
+            config: LanguageConfig to export
+            format: Export format ("json", "pickle", "file")
+        
+        Returns:
+            Exported interpreter data or file path
+        """
+        interpreter = self.generate(config)
+        
+        if format == "json":
+            return interpreter.to_json()
+        elif format == "pickle":
+            return base64.b64encode(interpreter.to_pickle()).decode()
+        elif format == "file":
+            filepath = self.export_dir / f"{config.name}_interpreter.json"
+            with open(filepath, "w") as f:
+                f.write(interpreter.to_json())
+            return str(filepath)
+        else:
+            raise ValueError(f"Unknown format: {format}")
+    
+    def import_interpreter(self, data: str, format: str = "json") -> InterpreterPackage:
+        """
+        Import interpreter from exported data.
+        
+        Args:
+            data: Exported interpreter data
+            format: Format of data ("json", "pickle")
+        
+        Returns:
+            Loaded InterpreterPackage
+        """
+        if format == "json":
+            interpreter = InterpreterPackage.from_json(data)
+        elif format == "pickle":
+            interpreter = InterpreterPackage.from_pickle(
+                base64.b64decode(data.encode())
+            )
+        else:
+            raise ValueError(f"Unknown format: {format}")
+        
+        self.interpreters[interpreter.name] = interpreter
+        return interpreter
+    
+    def list_interpreters(self) -> Dict[str, Dict[str, Any]]:
+        """Get metadata for all loaded interpreters."""
+        return {
+            name: interp.metadata
+            for name, interp in self.interpreters.items()
+        }
+    
+    def get_interpreter(self, name: str) -> Optional[InterpreterPackage]:
+        """Get loaded interpreter by name."""
+        return self.interpreters.get(name)
+
+
+# Global generator instance
+_generator = InterpreterGenerator()
+
+
+def generate_interpreter(config: LanguageConfig) -> InterpreterPackage:
+    """Convenience function to generate interpreter."""
+    return _generator.generate(config)
+
+
+def export_interpreter(config: LanguageConfig, format: str = "json") -> str:
+    """Convenience function to export interpreter."""
+    return _generator.export_interpreter(config, format)
+
+
+def import_interpreter(data: str, format: str = "json") -> InterpreterPackage:
+    """Convenience function to import interpreter."""
+    return _generator.import_interpreter(data, format)
+
+
+def get_all_interpreters() -> Dict[str, InterpreterPackage]:
+    """Get all loaded interpreters."""
+    return _generator.interpreters.copy()

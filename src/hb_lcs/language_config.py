@@ -205,16 +205,42 @@ class LanguageConfig:
     def _load_default_keywords(self):
         """Load default keywords."""
         default_keywords = {
+            # Control flow
             "if": KeywordMapping("if", "if", "control", "Conditional statement"),
+            "else": KeywordMapping("else", "else", "control", "Else clause"),
+            "elif": KeywordMapping("elif", "elif", "control", "Else-if clause"),
+            "while": KeywordMapping("while", "while", "control", "While loop"),
+            "for": KeywordMapping("for", "for", "control", "For loop"),
+            "break": KeywordMapping("break", "break", "control", "Break statement"),
+            "continue": KeywordMapping("continue", "continue", "control", "Continue statement"),
+            "pass": KeywordMapping("pass", "pass", "control", "Pass statement"),
             "when": KeywordMapping("when", "when", "control", "Reactive programming"),
-            "function": KeywordMapping(
-                "function", "function", "function", "Function definition"
-            ),
+            
+            # Functions and definitions
+            "def": KeywordMapping("def", "def", "function", "Function definition"),
+            "function": KeywordMapping("function", "function", "function", "Function definition"),
             "return": KeywordMapping("return", "return", "function", "Return value"),
-            "const": KeywordMapping(
-                "const", "const", "variable", "Constant declaration"
-            ),
+            "lambda": KeywordMapping("lambda", "lambda", "function", "Lambda expression"),
+            "yield": KeywordMapping("yield", "yield", "function", "Yield statement"),
+            
+            # Exception handling
+            "try": KeywordMapping("try", "try", "exception", "Try block"),
+            "except": KeywordMapping("except", "except", "exception", "Exception handler"),
+            "finally": KeywordMapping("finally", "finally", "exception", "Finally block"),
+            
+            # Imports and modules
+            "import": KeywordMapping("import", "import", "import", "Import module"),
+            "from": KeywordMapping("from", "from", "import", "From import"),
+            "as": KeywordMapping("as", "as", "import", "Import alias"),
+            
+            # Context management
+            "with": KeywordMapping("with", "with", "context", "Context manager"),
+            
+            # Variables and constants
+            "const": KeywordMapping("const", "const", "variable", "Constant declaration"),
             "var": KeywordMapping("var", "var", "variable", "Variable declaration"),
+            
+            # Object-oriented
             "class": KeywordMapping("class", "class", "oop", "Class definition"),
         }
         self.keyword_mappings = default_keywords
@@ -256,15 +282,29 @@ class LanguageConfig:
     # === Keyword Management ===
 
     def rename_keyword(self, original: str, new_name: str) -> None:
-        """Rename a keyword."""
+        """Rename a keyword with validation."""
         if original not in self.keyword_mappings:
             raise ValueError(f"Keyword '{original}' not found")
+        
+        # Validate new name
+        from .identifier_validator import IdentifierValidator
+        is_valid, warnings = IdentifierValidator.validate_identifier(new_name)
+        if not is_valid:
+            raise ValueError(f"Invalid keyword name '{new_name}': {warnings[0]}")
+        
         self.keyword_mappings[original].custom = new_name
 
     def add_keyword(
         self, name: str, category: str = "custom", description: str = ""
     ) -> None:
-        """Add a new custom keyword."""
+        """Add a new custom keyword with validation."""
+        from .identifier_validator import IdentifierValidator
+        
+        # Validate name
+        is_valid, warnings = IdentifierValidator.validate_identifier(name)
+        if not is_valid:
+            raise ValueError(f"Invalid keyword name '{name}': {warnings[0]}")
+        
         self.keyword_mappings[name] = KeywordMapping(name, name, category, description)
 
     def remove_keyword(self, name: str) -> None:
@@ -358,7 +398,8 @@ class LanguageConfig:
 
         if preset_name == "python_like":
             config.name = "Python-like"
-            config.rename_keyword("function", "def")
+            # Remove 'function' since 'def' is the Python standard
+            config.remove_keyword("function")
             config.set_array_indexing(0, False)
             config.syntax_options.statement_terminator = ""
             config.syntax_options.require_semicolons = False
@@ -379,6 +420,52 @@ class LanguageConfig:
             for func_name in list(config.builtin_functions.keys()):
                 if func_name not in essential:
                     config.remove_function(func_name)
+
+        elif preset_name == "ruby_like":
+            config.name = "Ruby-like"
+            config.description = "Ruby-inspired syntax for educational purposes"
+            config.remove_keyword("function")
+            config.rename_keyword("def", "define")
+            config.rename_keyword("class", "blueprint")
+            config.rename_keyword("if", "when")
+            config.rename_keyword("else", "otherwise")
+            config.rename_keyword("while", "loop_while")
+            config.set_array_indexing(0, False)
+            config.disable_satirical_keywords()
+
+        elif preset_name == "golang_like":
+            config.name = "Go-like"
+            config.description = "Go/Golang-inspired syntax"
+            config.remove_keyword("function")
+            config.rename_keyword("def", "func")
+            config.rename_keyword("class", "type")
+            config.rename_keyword("return", "return")
+            config.set_array_indexing(0, False)
+            config.syntax_options.statement_terminator = ""
+            config.disable_satirical_keywords()
+
+        elif preset_name == "rust_like":
+            config.name = "Rust-like"
+            config.description = "Rust-inspired syntax for systems programming"
+            config.remove_keyword("function")
+            config.rename_keyword("def", "fn")
+            config.rename_keyword("const", "const")
+            config.rename_keyword("var", "let")
+            config.rename_keyword("class", "struct")
+            config.set_array_indexing(0, False)
+            config.disable_satirical_keywords()
+
+        elif preset_name == "clike":
+            config.name = "C-like"
+            config.description = "C/C++-inspired syntax"
+            config.remove_keyword("function")
+            config.rename_keyword("def", "void")
+            config.rename_keyword("class", "struct")
+            config.rename_keyword("if", "if")
+            config.set_array_indexing(0, False)
+            config.syntax_options.statement_terminator = ";"
+            config.syntax_options.require_semicolons = True
+            config.disable_satirical_keywords()
 
         else:
             raise ValueError(f"Unknown preset: {preset_name}")
@@ -663,7 +750,7 @@ class LanguageConfig:
 
 def list_presets() -> list[str]:
     """Get list of available presets."""
-    return ["python_like", "js_like", "minimal"]
+    return ["python_like", "js_like", "minimal", "ruby_like", "golang_like", "rust_like", "clike"]
 
 
 def create_custom_config_interactive() -> LanguageConfig:

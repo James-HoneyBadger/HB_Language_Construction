@@ -108,8 +108,8 @@ def demo_crud_operations():
     config = LanguageConfig()
 
     # Create
-    config.add_keyword("test_keyword", "prueba", "testing")
-    print("\n✓ Added keyword: test_keyword -> prueba")
+    config.add_keyword("test_keyword", category="testing", description="Test keyword")
+    print("\n✓ Added keyword: test_keyword -> test_keyword")
 
     # Read
     mapping = config.keyword_mappings.get("test_keyword")
@@ -121,7 +121,7 @@ def demo_crud_operations():
     print("✓ Updated: test_keyword -> examen")
 
     # Delete
-    config.delete_keyword("test_keyword")
+    config.remove_keyword("test_keyword")
     print("✓ Deleted: test_keyword")
 
 

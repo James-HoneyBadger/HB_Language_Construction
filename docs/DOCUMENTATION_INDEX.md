@@ -510,6 +510,140 @@ version: "1.0"
 
 ---
 
+## 5️⃣ **[CODEX_QUICKSTART.md](guides/CODEX_QUICKSTART.md)** - CodeEx in 5 Minutes
+**For**: Users who want to start using CodeEx immediately  
+**Length**: ~2,000 words | 5-10 minutes to read  
+**Topics**:
+- Installation verification
+- Launching CodeEx
+- Creating first project
+- Loading a language
+- Writing and running code
+- Keyboard shortcuts
+- Quick reference
+
+**Start here if you**:
+- Want to use CodeEx now
+- Need a quick tutorial
+- Are in a hurry
+- Want essentials only
+
+---
+
+## 6️⃣ **[CODEX_USER_GUIDE.md](guides/CODEX_USER_GUIDE.md)** - CodeEx Complete Manual
+**For**: CodeEx users wanting all features  
+**Length**: ~4,000 words | 30-45 minutes to read  
+**Topics**:
+- Architecture overview
+- Project management
+- Interpreter management
+- Code editor features
+- Execution engine
+- Menu reference
+- Configuration
+- Error handling
+- Menu system
+- Development guide
+
+**Start here if you**:
+- Use CodeEx regularly
+- Want to understand all features
+- Need reference material
+- Are solving problems
+
+---
+
+## 7️⃣ **[CODEX_DEVELOPER_GUIDE.md](guides/CODEX_DEVELOPER_GUIDE.md)** - CodeEx Development
+**For**: Developers extending CodeEx  
+**Length**: ~3,500 words | 30-40 minutes to read  
+**Topics**:
+- Architecture and design patterns
+- Module dependencies
+- Code patterns
+- Extension points
+- Testing strategy
+- Performance optimization
+- Security considerations
+- Debugging guide
+- Version management
+
+**Start here if you**:
+- Want to extend CodeEx
+- Are contributing code
+- Need architecture details
+- Want design patterns
+
+---
+
+## 8️⃣ **[CODEX_INTEGRATION_GUIDE.md](guides/CODEX_INTEGRATION_GUIDE.md)** - CodeCraft ↔ CodeEx
+**For**: Users integrating CodeCraft and CodeEx  
+**Length**: ~3,000 words | 20-30 minutes to read  
+**Topics**:
+- System integration overview
+- Creating languages in CodeCraft
+- Exporting to CodeEx
+- Loading in CodeEx
+- Advanced workflows
+- Troubleshooting
+- Best practices
+- API reference
+
+**Start here if you**:
+- Want to create languages AND applications
+- Need to export from CodeCraft to CodeEx
+- Building educational projects
+- Developing multi-language apps
+
+---
+
+## 🎯 Quick Navigation by Task
+
+### "I just got CodeEx and want to try it"
+1. Read: [CODEX_QUICKSTART.md](guides/CODEX_QUICKSTART.md)
+2. Launch: `python codex.py`
+3. Create a project
+4. Load an interpreter
+5. Write and run code
+
+**Time needed**: 10-15 minutes
+
+---
+
+### "I want to create a language AND use it in CodeEx"
+1. Read: [LANGUAGE_DEVELOPMENT_GUIDE.md](LANGUAGE_DEVELOPMENT_GUIDE.md) → Design section
+2. Design and create language in CodeCraft
+3. Read: [CODEX_INTEGRATION_GUIDE.md](guides/CODEX_INTEGRATION_GUIDE.md)
+4. Export language to CodeEx
+5. Create CodeEx project and load interpreter
+6. Write applications in your language
+
+**Time needed**: 2-3 hours
+
+---
+
+### "I want to use CodeEx for teaching"
+1. Read: [CODEX_USER_GUIDE.md](guides/CODEX_USER_GUIDE.md) → Project Management
+2. Read: [LANGUAGE_DEVELOPMENT_GUIDE.md](LANGUAGE_DEVELOPMENT_GUIDE.md) → Design Principles
+3. Create custom languages in CodeCraft
+4. Export to CodeEx
+5. Create student projects with templates
+6. Students load interpreters and code
+
+**Time needed**: 1 hour setup + ongoing use
+
+---
+
+### "I want to understand full CodeCraft+CodeEx system"
+1. Read: [INSTALL_GUIDE.md](INSTALL_GUIDE.md) - Setup
+2. Read: [LANGUAGE_DEVELOPMENT_GUIDE.md](LANGUAGE_DEVELOPMENT_GUIDE.md) - Language creation
+3. Read: [CODEX_INTEGRATION_GUIDE.md](guides/CODEX_INTEGRATION_GUIDE.md) - Integration
+4. Read: [CODEX_USER_GUIDE.md](guides/CODEX_USER_GUIDE.md) - IDE usage
+5. Read: [TECHNICAL_REFERENCE.md](TECHNICAL_REFERENCE.md) - Deep dive
+
+**Time needed**: 3-4 hours
+
+---
+
 ## 🎯 Next Steps
 
 After reviewing this index:

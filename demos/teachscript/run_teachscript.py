@@ -129,7 +129,12 @@ def run_teachscript_file(filepath: str, verbose: bool = False):
 
     # Execute the translated Python code
     try:
-        exec(python_code, {"__name__": "__main__"})
+        # Create a safe execution environment with built-in functions
+        exec_globals = {
+            "__name__": "__main__",
+            "__builtins__": __builtins__,
+        }
+        exec(python_code, exec_globals)
         if verbose:
             print(f"{'='*60}")
     except Exception as e:

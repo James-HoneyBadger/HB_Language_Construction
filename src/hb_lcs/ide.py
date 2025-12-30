@@ -67,6 +67,7 @@ class AdvancedIDE(ttk.Frame):
         self.debugger_state: Dict[str, Any] = {}
         self.community_registry: Optional[Dict[str, Any]] = None
         self._recent_share_payloads: List[str] = []
+        self._recent_files: List[str] = []
         self._default_theme = {
             "Keywords": "#569cd6",
             "Strings": "#ce9178",
@@ -1464,18 +1465,623 @@ For more information, visit the Help menu.
         )
 
     def _api_reference(self) -> None:
-        messagebox.showinfo("API Reference", "API reference not yet implemented")
+        """Show comprehensive API reference documentation."""
+        api_text = """HONEY BADGER LANGUAGE CONSTRUCTION SET - API REFERENCE
+
+=== LANGUAGE CONFIGURATION ===
+
+LanguageConfig class:
+  • from_preset(preset_name) -> Create from template
+  • add_keyword(name, replacement) -> Add keyword mapping
+  • add_function(name, arity) -> Add function definition
+  • add_operator(symbol, precedence) -> Add operator
+  • rename_keyword(old, new) -> Rename keyword
+  • to_dict() -> Export as dictionary
+  • to_json() -> Export as JSON string
+  • to_yaml() -> Export as YAML string
+  • save(path) -> Save to file
+  • load(path) -> Load from file
+
+=== LANGUAGE RUNTIME ===
+
+LanguageRuntime class:
+  • execute(code, config) -> Execute code with config
+  • translate_keyword(keyword) -> Translate to target lang
+  • validate_syntax(code) -> Check syntax errors
+  • get_globals() -> Get runtime globals
+  • reset() -> Clear runtime state
+
+=== IDE FEATURES ===
+
+Menu Commands:
+  • File: New, Open, Save, Export, Import
+  • Edit: Cut, Copy, Paste, Select All, Undo, Redo
+  • Language: Create, Edit, Validate, Export
+  • Tools: Run Code, Check Syntax, Analyze, Profile
+  • View: Dark/Light Theme, Reset Layout
+  • Help: API Reference, Tutorials, Examples, Shortcuts
+
+Keyboard Shortcuts:
+  • Ctrl+N: New file
+  • Ctrl+O: Open file
+  • Ctrl+S: Save file
+  • Ctrl+R: Run code
+  • Ctrl+B: Check syntax
+  • Ctrl+H: Show help
+  • Ctrl+/: Toggle comment
+  • Tab: Indent
+  • Shift+Tab: Unindent
+
+=== CODE EXECUTION ===
+
+Functions:
+  • print(message) -> Output text
+  • input(prompt) -> Read user input
+  • len(collection) -> Get length
+  • range(start, end) -> Create sequence
+  • enumerate(collection) -> Get indexed items
+  • zip(*collections) -> Combine sequences
+  • map(function, sequence) -> Apply function
+  • filter(predicate, sequence) -> Filter items
+  • sorted(sequence, [key]) -> Sort items
+  • max/min(sequence) -> Find extrema
+  • sum(sequence) -> Sum items
+  • abs(number) -> Absolute value
+  • round(number, [digits]) -> Round number
+  • type(value) -> Get type name
+  • isinstance(value, type) -> Check type
+  • str(value) -> Convert to string
+  • int(value) -> Convert to integer
+  • float(value) -> Convert to float
+  • list(sequence) -> Convert to list
+  • dict(**kwargs) -> Create dictionary
+  • tuple(sequence) -> Convert to tuple
+  • set(sequence) -> Create set
+"""
+        
+        # Create a scrolled text window for better readability
+        top = tk.Toplevel(self.root)
+        top.title("API Reference")
+        top.geometry("800x600")
+        
+        text_widget = scrolledtext.ScrolledText(top, wrap="word", font=("Courier", 10))
+        text_widget.pack(fill="both", expand=True, padx=5, pady=5)
+        text_widget.insert("1.0", api_text)
+        text_widget.config(state="disabled")
+        
+        # Add close button
+        btn_frame = ttk.Frame(top)
+        btn_frame.pack(fill="x", padx=5, pady=5)
+        ttk.Button(btn_frame, text="Close", command=top.destroy).pack(side="right")
 
     def _tutorial(self, tutorial_type: str) -> None:
-        messagebox.showinfo(
-            "Tutorial", f"Tutorial '{tutorial_type}' not yet implemented"
-        )
+        """Show interactive tutorials."""
+        tutorials = {
+            "basics": self._tutorial_basics,
+            "keywords": self._tutorial_keywords,
+            "functions": self._tutorial_functions,
+            "operators": self._tutorial_operators,
+            "advanced": self._tutorial_advanced,
+        }
+        
+        if tutorial_type in tutorials:
+            tutorials[tutorial_type]()
+        else:
+            messagebox.showwarning(
+                "Tutorial", f"Tutorial '{tutorial_type}' not found. "
+                f"Available: {', '.join(tutorials.keys())}"
+            )
+
+    def _tutorial_basics(self) -> None:
+        """Basics tutorial."""
+        content = """TUTORIAL: LANGUAGE BASICS
+
+1. CREATING A LANGUAGE
+   Step 1: Go to Language → Create Language
+   Step 2: Choose a preset (Python-like, JavaScript-like, etc.)
+   Step 3: Configure keywords and operators
+   Step 4: Save your language
+
+2. UNDERSTANDING KEYWORDS
+   Keywords are reserved words that have special meaning.
+   Examples: if, while, for, function, return, etc.
+   
+   You can customize keywords to create a unique language!
+
+3. UNDERSTANDING FUNCTIONS
+   Functions are reusable blocks of code.
+   Syntax: function_name(arg1, arg2) { ... }
+   
+   Built-in functions are always available.
+   Custom functions are user-defined.
+
+4. VARIABLES AND TYPES
+   Variables store data values.
+   Types: numbers, strings, lists, dictionaries
+   
+   Example: name = "Alice", age = 25
+
+5. CONTROL FLOW
+   Use if/else for conditions: if (x > 5) { ... }
+   Use loops to repeat: for i in range(10) { ... }
+   Use while for conditions: while (x < 10) { ... }
+
+TRY IT: Create a language and write your first program!
+"""
+        self._show_tutorial_window("Basics Tutorial", content)
+
+    def _tutorial_keywords(self) -> None:
+        """Keywords tutorial."""
+        content = """TUTORIAL: CUSTOMIZING KEYWORDS
+
+Keywords are the syntax of your language. Customize them!
+
+COMMON KEYWORDS:
+  • if/else/elif - Conditional branching
+  • while/for - Looping constructs
+  • function/def/teach - Function definition
+  • return/give_back - Return value
+  • break/continue - Loop control
+  • import/include - Import modules
+  • try/catch - Error handling
+  • class/type - Type definition
+  • switch/case - Multi-branch selection
+  • default/else - Default case
+
+EXAMPLE CUSTOMIZATIONS:
+  1. Programming languages:
+     • Python: if, while, for, def, return
+     • JavaScript: if, while, for, function, return
+     • Ruby: if, while, for, def, return
+  
+  2. Domain-specific languages:
+     • When instead of if
+     • Teach instead of def
+     • Give_back instead of return
+  
+  3. Natural language style:
+     • Si instead of if
+     • Mientras instead of while
+     • Función instead of function
+
+TO CUSTOMIZE:
+  1. Open Language Editor
+  2. Scroll to Keywords section
+  3. Click Edit next to a keyword
+  4. Enter your custom keyword
+  5. Save language
+
+TRY IT: Create a Spanish-like language!
+"""
+        self._show_tutorial_window("Keywords Tutorial", content)
+
+    def _tutorial_functions(self) -> None:
+        """Functions tutorial."""
+        content = """TUTORIAL: WORKING WITH FUNCTIONS
+
+Functions let you write reusable code blocks.
+
+DEFINING FUNCTIONS:
+  Syntax: function greet(name) {
+            print("Hello, " + name)
+          }
+  
+  Call: greet("Alice")
+  Output: Hello, Alice
+
+FUNCTION COMPONENTS:
+  1. Name: greet
+  2. Parameters: name
+  3. Body: print("Hello, " + name)
+  4. Return: (optional)
+
+PARAMETERS vs ARGUMENTS:
+  • Parameters: variables in function definition
+    function add(a, b) { ... }
+  
+  • Arguments: values passed when calling
+    add(5, 3)  <- 5 and 3 are arguments
+
+RETURN VALUES:
+  function add(a, b) {
+    return a + b
+  }
+  
+  result = add(5, 3)  # result = 8
+
+SCOPE:
+  • Local scope: variables inside function
+  • Global scope: variables outside function
+  • Functions can access global variables
+  • Global variables can be modified with global keyword
+
+RECURSION:
+  Functions can call themselves!
+  
+  function factorial(n) {
+    if (n <= 1) return 1
+    return n * factorial(n - 1)
+  }
+
+ARROW FUNCTIONS:
+  Modern syntax: square = (x) => x * x
+  Traditional: function square(x) { return x * x }
+
+TRY IT: Write a function that calculates Fibonacci numbers!
+"""
+        self._show_tutorial_window("Functions Tutorial", content)
+
+    def _tutorial_operators(self) -> None:
+        """Operators tutorial."""
+        content = """TUTORIAL: OPERATORS AND EXPRESSIONS
+
+Operators combine values into meaningful expressions.
+
+ARITHMETIC OPERATORS:
+  + : Addition       (5 + 3 = 8)
+  - : Subtraction    (5 - 3 = 2)
+  * : Multiplication (5 * 3 = 15)
+  / : Division       (15 / 3 = 5)
+  % : Modulo         (17 % 5 = 2)
+  ** : Power         (2 ** 3 = 8)
+
+COMPARISON OPERATORS:
+  == : Equal         (5 == 5 = true)
+  != : Not equal     (5 != 3 = true)
+  > : Greater than   (5 > 3 = true)
+  < : Less than      (5 < 3 = false)
+  >= : Gte           (5 >= 5 = true)
+  <= : Lte           (3 <= 5 = true)
+
+LOGICAL OPERATORS:
+  && : And           (true && true = true)
+  || : Or            (true || false = true)
+  ! : Not            (!true = false)
+
+ASSIGNMENT OPERATORS:
+  = : Assign         (x = 5)
+  += : Add assign    (x += 3 means x = x + 3)
+  -= : Sub assign    (x -= 3)
+  *= : Mul assign    (x *= 3)
+  /= : Div assign    (x /= 3)
+
+STRING OPERATORS:
+  + : Concatenate    ("Hello" + " " + "World")
+  * : Repeat         ("Ha" * 3 = "HaHaHa")
+  [] : Index         ("Hello"[0] = "H")
+  [a:b] : Slice      ("Hello"[1:4] = "ell")
+
+OPERATOR PRECEDENCE:
+  1. ()              Parentheses
+  2. **              Exponentiation
+  3. *, /, %         Multiplication, Division, Modulo
+  4. +, -            Addition, Subtraction
+  5. <, >, <=, >=    Comparison
+  6. ==, !=          Equality
+  7. &&              Logical AND
+  8. ||              Logical OR
+  9. =               Assignment
+
+TRY IT: Create expressions combining multiple operators!
+"""
+        self._show_tutorial_window("Operators Tutorial", content)
+
+    def _tutorial_advanced(self) -> None:
+        """Advanced tutorial."""
+        content = """TUTORIAL: ADVANCED TECHNIQUES
+
+Master advanced programming concepts!
+
+DATA STRUCTURES:
+  Lists (arrays):
+    nums = [1, 2, 3, 4, 5]
+    nums[0]      # First element = 1
+    nums.append(6)  # Add element
+    nums.pop()   # Remove last element
+  
+  Dictionaries (maps):
+    person = {"name": "Alice", "age": 30}
+    person["name"]  # Get value
+    person["city"] = "NYC"  # Add field
+
+OBJECT-ORIENTED:
+  Classes define blueprints for objects:
+    class Animal {
+      constructor(name) { this.name = name }
+      speak() { print(this.name + " makes sound") }
+    }
+    dog = new Animal("Dog")
+    dog.speak()
+
+FUNCTIONAL PROGRAMMING:
+  Higher-order functions:
+    map(square, [1, 2, 3, 4, 5])
+    filter(isEven, [1, 2, 3, 4, 5])
+    reduce(add, [1, 2, 3, 4, 5])
+
+ERROR HANDLING:
+  try {
+    risky_operation()
+  } catch (error) {
+    print("Error: " + error)
+  } finally {
+    cleanup()
+  }
+
+MODULES & IMPORTS:
+  import math from "stdlib"
+  import { sqrt, sin } from "math"
+  
+  x = sqrt(16)  # = 4
+  y = sin(0)    # = 0
+
+ASYNC/AWAIT:
+  async function fetchData() {
+    data = await getFromAPI()
+    return data
+  }
+
+LAMBDAS/ARROW FUNCTIONS:
+  square = (x) => x * x
+  add = (a, b) => a + b
+  
+  map((x) => x * 2, [1, 2, 3, 4, 5])
+
+TRY IT: Build a small project using multiple concepts!
+"""
+        self._show_tutorial_window("Advanced Tutorial", content)
+
+    def _show_tutorial_window(self, title: str, content: str) -> None:
+        """Display tutorial in a new window."""
+        top = tk.Toplevel(self.root)
+        top.title(title)
+        top.geometry("900x700")
+        
+        text_widget = scrolledtext.ScrolledText(top, wrap="word", font=("Courier", 11))
+        text_widget.pack(fill="both", expand=True, padx=5, pady=5)
+        text_widget.insert("1.0", content)
+        text_widget.config(state="disabled")
+        
+        # Add close button
+        btn_frame = ttk.Frame(top)
+        btn_frame.pack(fill="x", padx=5, pady=5)
+        ttk.Button(btn_frame, text="Close", command=top.destroy).pack(side="right")
 
     def _example(self, example_type: str) -> None:
-        messagebox.showinfo("Example", f"Example '{example_type}' not yet implemented")
+        """Show practical code examples."""
+        examples = {
+            "hello_world": (
+                "Hello World",
+                'print("Hello, World!")'
+            ),
+            "variables": (
+                "Variables & Types",
+                '''name = "Alice"
+age = 30
+height = 5.7
+is_student = true
+
+print(name)
+print(age)
+print(height)
+print(is_student)'''
+            ),
+            "conditionals": (
+                "Conditionals (If/Else)",
+                '''x = 15
+
+if (x > 20) {
+  print("x is greater than 20")
+} else if (x > 10) {
+  print("x is between 10 and 20")
+} else {
+  print("x is 10 or less")
+}'''
+            ),
+            "loops": (
+                "Loops (For/While)",
+                '''# For loop
+for i in range(5) {
+  print(i)
+}
+
+# While loop
+x = 0
+while (x < 5) {
+  print(x)
+  x = x + 1
+}'''
+            ),
+            "functions": (
+                "Functions",
+                '''function greet(name) {
+  return "Hello, " + name
+}
+
+function add(a, b) {
+  return a + b
+}
+
+print(greet("Alice"))
+print(add(5, 3))'''
+            ),
+            "lists": (
+                "Lists/Arrays",
+                '''numbers = [1, 2, 3, 4, 5]
+names = ["Alice", "Bob", "Charlie"]
+
+# Access elements
+print(numbers[0])  # 1
+
+# List operations
+numbers.append(6)
+numbers.pop()
+length = len(numbers)
+
+# Loop through
+for num in numbers {
+  print(num)
+}'''
+            ),
+            "dictionaries": (
+                "Dictionaries/Objects",
+                '''person = {
+  "name": "Alice",
+  "age": 30,
+  "city": "NYC"
+}
+
+# Access values
+print(person["name"])
+
+# Modify
+person["job"] = "Engineer"
+
+# Loop through
+for key in person.keys() {
+  print(key + ": " + person[key])
+}'''
+            ),
+            "recursion": (
+                "Recursion",
+                '''function factorial(n) {
+  if (n <= 1) {
+    return 1
+  }
+  return n * factorial(n - 1)
+}
+
+print(factorial(5))  # 120'''
+            ),
+        }
+        
+        if example_type in examples:
+            title, code = examples[example_type]
+            self._show_example_window(title, code)
+        else:
+            available = ", ".join(examples.keys())
+            messagebox.showwarning(
+                "Example", f"Example '{example_type}' not found.\n"
+                f"Available: {available}"
+            )
+
+    def _show_example_window(self, title: str, code: str) -> None:
+        """Display example code in a new window."""
+        top = tk.Toplevel(self.root)
+        top.title(f"Example: {title}")
+        top.geometry("700x500")
+        
+        # Code area
+        text_widget = scrolledtext.ScrolledText(
+            top, wrap="word", font=("Courier", 10), height=15
+        )
+        text_widget.pack(fill="both", expand=True, padx=5, pady=5)
+        text_widget.insert("1.0", code)
+        text_widget.config(state="disabled")
+        
+        # Buttons
+        btn_frame = ttk.Frame(top)
+        btn_frame.pack(fill="x", padx=5, pady=5)
+        
+        def copy_code():
+            self.root.clipboard_clear()
+            self.root.clipboard_append(code)
+            messagebox.showinfo("Success", "Code copied to clipboard!")
+        
+        ttk.Button(btn_frame, text="Copy", command=copy_code).pack(side="left", padx=2)
+        ttk.Button(btn_frame, text="Close", command=top.destroy).pack(side="right", padx=2)
 
     def _show_shortcuts(self) -> None:
-        messagebox.showinfo("Shortcuts", "Keyboard shortcuts help not yet implemented")
+        """Show comprehensive keyboard shortcuts help."""
+        shortcuts_text = """KEYBOARD SHORTCUTS - HONEY BADGER IDE
+
+=== FILE OPERATIONS ===
+Ctrl+N    : New file
+Ctrl+O    : Open file
+Ctrl+S    : Save file
+Ctrl+Shift+S : Save as
+Ctrl+W    : Close file
+Ctrl+Q    : Quit application
+
+=== EDITING ===
+Ctrl+X    : Cut
+Ctrl+C    : Copy
+Ctrl+V    : Paste
+Ctrl+A    : Select all
+Ctrl+Z    : Undo
+Ctrl+Y    : Redo
+Ctrl+/    : Toggle comment
+Tab       : Indent
+Shift+Tab : Unindent
+Ctrl+L    : Select line
+
+=== CODE EXECUTION ===
+Ctrl+R    : Run code
+Ctrl+Shift+R : Run with arguments
+Ctrl+B    : Check syntax
+Ctrl+E    : Export code
+Ctrl+I    : Import code
+
+=== VIEW & INTERFACE ===
+Ctrl+H    : Toggle highlight
+Ctrl+T    : Toggle theme (light/dark)
+Ctrl+F    : Find
+Ctrl+G    : Go to line
+Alt+1     : Focus editor
+Alt+2     : Focus console
+Alt+3     : Focus config
+
+=== LANGUAGE OPERATIONS ===
+Ctrl+Alt+N : Create new language
+Ctrl+Alt+E : Edit language
+Ctrl+Alt+V : Validate language
+Ctrl+Alt+S : Export language
+Ctrl+Alt+L : Load language
+
+=== HELP & DOCUMENTATION ===
+F1        : Show API reference
+F2        : Show tutorials
+F3        : Show examples
+F4        : Show this shortcuts list
+F5        : Show about dialog
+
+=== NAVIGATION ===
+Ctrl+Home : Go to start of file
+Ctrl+End  : Go to end of file
+Ctrl+↑    : Move to previous error
+Ctrl+↓    : Move to next error
+Ctrl+F    : Find text
+Ctrl+H    : Find and replace
+
+=== DEBUG MODE ===
+F6        : Start debugger
+F7        : Step into
+F8        : Step over
+F9        : Continue
+F10       : Stop debugger
+Shift+F9  : Set breakpoint
+
+=== TIPS ===
+• Press Alt to access menu items
+• Use Ctrl combinations for quick access
+• Customize shortcuts in Settings menu
+• Mouse wheel to zoom in/out
+• Drag panels to resize layout
+"""
+        
+        top = tk.Toplevel(self.root)
+        top.title("Keyboard Shortcuts")
+        top.geometry("800x700")
+        
+        text_widget = scrolledtext.ScrolledText(top, wrap="word", font=("Courier", 10))
+        text_widget.pack(fill="both", expand=True, padx=5, pady=5)
+        text_widget.insert("1.0", shortcuts_text)
+        text_widget.config(state="disabled")
+        
+        # Add buttons
+        btn_frame = ttk.Frame(top)
+        btn_frame.pack(fill="x", padx=5, pady=5)
+        ttk.Button(btn_frame, text="Close", command=top.destroy).pack(side="right")
 
     def _show_about(self) -> None:
         """Show about dialog."""
@@ -1501,13 +2107,110 @@ All rights reserved."""
         messagebox.showinfo("About", about_text)
 
     def _open_recent_menu(self) -> None:
-        messagebox.showinfo("Recent Files", "Recent files menu not yet implemented")
+        """Open recent files menu."""
+        # Get recent files from config if available
+        recent_files = getattr(self, "_recent_files", [])
+        
+        if not recent_files:
+            messagebox.showinfo("Recent Files", "No recent files found.\n\nOpen some files first!")
+            return
+        
+        # Create popup menu
+        popup = tk.Menu(self.root, tearoff=0)
+        
+        for filepath in recent_files[-5:]:  # Last 5 files
+            popup.add_command(
+                label=Path(filepath).name,
+                command=lambda f=filepath: self._open_file_direct(f)
+            )
+        
+        popup.add_separator()
+        popup.add_command(label="Clear Recent", command=self._clear_recent_files)
+        
+        # Display popup at mouse position
+        popup.post(self.root.winfo_pointerx(), self.root.winfo_pointery())
+
+    def _open_file_direct(self, filepath: str) -> None:
+        """Open a file directly by path."""
+        try:
+            with open(filepath, 'r') as f:
+                content = f.read()
+            self.input_text.config(state="normal")
+            self.input_text.delete("1.0", "end")
+            self.input_text.insert("1.0", content)
+            self.input_text.config(state="normal")
+            messagebox.showinfo("Success", f"Opened: {Path(filepath).name}")
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to open file:\n{e}")
+
+    def _clear_recent_files(self) -> None:
+        """Clear recent files list."""
+        self._recent_files = []
+        messagebox.showinfo("Success", "Recent files cleared!")
 
     def _save_all(self) -> None:
-        messagebox.showinfo("Save All", "Save all not yet implemented")
+        """Save all open files and configurations."""
+        saved_count = 0
+        
+        try:
+            # Save current code if it exists
+            if hasattr(self, 'input_text'):
+                code_content = self.input_text.get("1.0", "end-1c")
+                if code_content:
+                    default_path = "current_code.txt"
+                    filepath = filedialog.asksaveasfilename(
+                        initialfile=default_path,
+                        filetypes=[("Text files", "*.txt"), ("All files", "*.*")]
+                    )
+                    if filepath:
+                        with open(filepath, 'w') as f:
+                            f.write(code_content)
+                        saved_count += 1
+            
+            # Save current language configuration if it exists
+            if hasattr(self, 'current_config') and self.current_config:
+                config_path = filedialog.asksaveasfilename(
+                    initialfile="language_config.json",
+                    filetypes=[("JSON files", "*.json"), ("YAML files", "*.yaml"), ("All files", "*.*")]
+                )
+                if config_path:
+                    self.current_config.save(config_path)
+                    saved_count += 1
+            
+            if saved_count > 0:
+                messagebox.showinfo("Success", f"Saved {saved_count} item(s) successfully!")
+            else:
+                messagebox.showinfo("Info", "Nothing to save")
+        
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to save:\n{e}")
 
     def _close_all(self) -> None:
-        messagebox.showinfo("Close All", "Close all not yet implemented")
+        """Close all open files and reset the IDE."""
+        if messagebox.askyesno("Confirm", "Close all files and reset IDE?"):
+            try:
+                # Clear editor
+                if hasattr(self, 'input_text'):
+                    self.input_text.config(state="normal")
+                    self.input_text.delete("1.0", "end")
+                    self.input_text.config(state="normal")
+                
+                # Clear console
+                if hasattr(self, 'console_output'):
+                    self.console_output.config(state="normal")
+                    self.console_output.delete("1.0", "end")
+                    self.console_output.config(state="disabled")
+                
+                # Reset configuration
+                self.current_config = None
+                
+                # Clear recent files
+                self._recent_files = []
+                
+                messagebox.showinfo("Success", "All files closed and IDE reset!")
+            
+            except Exception as e:
+                messagebox.showerror("Error", f"Failed to close all:\n{e}")
 
     def _import_file(self) -> None:
         messagebox.showinfo("Import", "File import not yet implemented")
