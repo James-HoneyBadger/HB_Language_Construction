@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Setup script for CodeCraft - Custom Language Construction Framework
+Setup script for ParserCraft - Custom Language Construction Framework
 """
 
 from pathlib import Path
@@ -11,10 +11,10 @@ readme_file = Path(__file__).parent / "README.md"
 long_description = readme_file.read_text(encoding="utf-8")
 
 setup(
-    name="codecraft",
+    name="parsercraft",
     version="2.0.0",
     author="James HoneyBadger",
-    description="CodeCraft - Create custom programming languages without writing a compiler",
+    description="ParserCraft - Create custom programming languages without writing a compiler",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/James-HoneyBadger/CodeCraft",
@@ -51,8 +51,8 @@ setup(
     },
     entry_points={
         "console_scripts": [
-            "codecraft=hb_lcs.cli:main",
-            "codecraft-ide=hb_lcs.launch_ide:main",
+            "parsercraft=hb_lcs.cli:main",
+            "parsercraft-ide=hb_lcs.launch_ide:main",
             "codex=codex.codex:main",
         ],
     },
