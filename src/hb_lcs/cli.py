@@ -55,10 +55,10 @@ import sys
 import traceback
 from math import e, pi
 from pathlib import Path
-from typing import Any, Optional, Sequence
+from typing import Any, Callable, Optional, Sequence
 
 try:
-    import readline  # type: ignore  # noqa: F401
+    import readline  # noqa: F401
 except ImportError:  # pragma: no cover - platform dependent
     readline = None
 
@@ -70,10 +70,10 @@ from hb_lcs.language_config import (
 from hb_lcs.language_runtime import LanguageRuntime
 
 try:
-    from yaml import YAMLError, safe_load  # type: ignore
+    from yaml import YAMLError, safe_load  # type: ignore[no-redef]
 except ImportError:  # pragma: no cover - optional dependency
     YAMLError = None  # type: ignore[assignment]
-    safe_load = None  # type: ignore[assignment]
+    safe_load: Optional[Callable[[str], Any]] = None  # type: ignore[no-redef]
 
 if YAMLError is not None:
     CONFIG_LOAD_ERRORS: tuple[type[Exception], ...] = (

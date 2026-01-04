@@ -4,11 +4,6 @@ Turing-Complete Language Configuration Examples
 Demonstrates six different programming paradigms using LCS
 """
 
-import sys
-from pathlib import Path
-
-sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
-
 from hb_lcs.language_config import LanguageConfig
 
 
@@ -58,7 +53,7 @@ def create_basic_like():
     print("  50 NEXT i")
 
     config.save("examples/demo_basic.json")
-    print(f"\n✓ Saved to examples/demo_basic.json")
+    print("\n✓ Saved to examples/demo_basic.json")
     return config
 
 
@@ -104,7 +99,7 @@ def create_functional():
     print("          (* n (factorial (- n 1))))))")
 
     config.save("examples/demo_functional.json")
-    print(f"\n✓ Saved to examples/demo_functional.json")
+    print("\n✓ Saved to examples/demo_functional.json")
     return config
 
 
@@ -153,7 +148,7 @@ def create_stack_based():
     print("    THEN ;")
 
     config.save("examples/demo_stack.json")
-    print(f"\n✓ Saved to examples/demo_stack.json")
+    print("\n✓ Saved to examples/demo_stack.json")
     return config
 
 
@@ -201,7 +196,7 @@ def create_object_oriented():
     print("  end")
 
     config.save("examples/demo_oop.json")
-    print(f"\n✓ Saved to examples/demo_oop.json")
+    print("\n✓ Saved to examples/demo_ml.json")
     return config
 
 
@@ -247,7 +242,7 @@ def create_logic_based():
     print("  ?- grandparent(tom, Who).")
 
     config.save("examples/demo_logic.json")
-    print(f"\n✓ Saved to examples/demo_logic.json")
+    print("\n✓ Saved to examples/demo_logic.json")
     return config
 
 
@@ -298,7 +293,7 @@ def create_assembly_like():
     print("    RET R2")
 
     config.save("examples/demo_assembly.json")
-    print(f"\n✓ Saved to examples/demo_assembly.json")
+    print("\n✓ Saved to examples/demo_assembly.json")
     return config
 
 

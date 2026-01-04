@@ -11,9 +11,8 @@ Demonstrates new features added to ParserCraft:
 """
 
 import sys
+import traceback
 from pathlib import Path
-
-sys.path.insert(0, str(Path(__file__).parent / ".."))
 
 from hb_lcs.language_config import LanguageConfig
 from hb_lcs.identifier_validator import IdentifierValidator, ConflictDetector
@@ -203,7 +202,7 @@ def demo_enhanced_validation():
     config = LanguageConfig()
 
     print("\nValidating custom keyword names:")
-    
+
     test_names = [
         ("valid_keyword", True),
         ("if", False),  # Reserved
@@ -211,7 +210,7 @@ def demo_enhanced_validation():
         ("short_kw", True),
     ]
 
-    for name, should_work in test_names:
+    for name, _expected in test_names:
         try:
             if name not in config.keyword_mappings:
                 config.add_keyword(name, category="test")
@@ -239,10 +238,8 @@ def main():
     for demo in demos:
         try:
             demo()
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught
             print(f"\n✗ Error in {demo.__name__}: {e}")
-            import traceback
-
             traceback.print_exc()
 
     print("\n" + "=" * 70)

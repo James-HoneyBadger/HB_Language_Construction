@@ -5,9 +5,7 @@ Enhanced IDE Launcher with TeachScript Integration
 Launches the ParserCraft IDE with full TeachScript support integrated.
 """
 
-import sys
 import tkinter as tk
-from pathlib import Path
 
 # Relative imports from current package
 from hb_lcs.ide import (  # noqa: E402 pylint: disable=wrong-import-position

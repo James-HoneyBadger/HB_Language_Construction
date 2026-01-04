@@ -6,12 +6,6 @@ This demo shows how to use the Honey Badger Language Construction Set
 to create custom language configurations.
 """
 
-import sys
-from pathlib import Path
-
-# Add src directory to path for imports
-sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
-
 from hb_lcs.language_config import LanguageConfig
 from hb_lcs.language_runtime import LanguageRuntime, print_language_info
 
