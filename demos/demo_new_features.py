@@ -2,7 +2,7 @@
 """
 Feature Enhancement Demo
 
-Demonstrates new features added to CodeCraft:
+Demonstrates new features added to ParserCraft:
 1. Type validation for identifiers
 2. Additional language presets
 3. Enhanced error messages
@@ -165,7 +165,7 @@ def demo_documentation_generation():
     config.name = "Educational Language"
     config.version = "2.0.0"
     config.description = "A language for teaching programming concepts"
-    config.author = "CodeCraft Team"
+    config.author = "ParserCraft Team"
 
     # Customize some keywords
     config.rename_keyword("if", "cuando")
@@ -225,7 +225,7 @@ def demo_enhanced_validation():
 def main():
     """Run all demos."""
     print("=" * 70)
-    print("CODECRAFT - FEATURE ENHANCEMENTS DEMONSTRATION")
+    print("PARSERCRAFT - FEATURE ENHANCEMENTS DEMONSTRATION")
     print("=" * 70)
 
     demos = [

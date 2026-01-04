@@ -2,7 +2,7 @@
 """
 IDE TeachScript Integration
 
-Integrates TeachScript support directly into the CodeCraft IDE, providing:
+Integrates TeachScript support directly into the ParserCraft IDE, providing:
 - TeachScript file detection and handling
 - Integrated transpiler preview
 - Educational project templates
@@ -19,7 +19,7 @@ from .teachscript_runtime import get_runtime
 
 
 class TeachScriptIDEIntegration:
-    """Integrates TeachScript into the CodeCraft IDE."""
+    """Integrates TeachScript into the ParserCraft IDE."""
 
     # TeachScript file extension
     EXTENSION = ".teach"

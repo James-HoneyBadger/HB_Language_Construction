@@ -1,6 +1,6 @@
-# CodeCraft Python API Reference
+# ParserCraft Python API Reference
 
-Complete API documentation for using CodeCraft programmatically in Python.
+Complete API documentation for using ParserCraft programmatically in Python.
 
 ## Core Classes
 

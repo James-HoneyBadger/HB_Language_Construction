@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-CodeEx - CodeCraft Execution Environment
+CodeEx - ParserCraft Execution Environment
 
-A specialized IDE for developing and running applications created with CodeCraft.
-Provides professional development environment for CodeCraft-based languages.
+A specialized IDE for developing and running applications created with ParserCraft.
+Provides professional development environment for ParserCraft-based languages.
 
 Features:
-- Multi-interpreter support (load any CodeCraft language)
+- Multi-interpreter support (load any ParserCraft language)
 - Project management (organize code files and resources)
 - Professional editor with syntax highlighting
 - Real-time code execution
@@ -32,7 +32,7 @@ from codex.codex_gui import (  # noqa: E402 pylint: disable=wrong-import-positio
 def main():
     """Launch CodeEx IDE."""
     root = tk.Tk()
-    root.title("CodeEx - CodeCraft Execution Environment")
+    root.title("CodeEx - ParserCraft Execution Environment")
     root.geometry("1600x900")
 
     CodeExIDE(root)

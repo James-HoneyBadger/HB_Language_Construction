@@ -1,4 +1,4 @@
-# CodeCraft Implementation Details - All Features
+# ParserCraft Implementation Details - All Features
 
 **Comprehensive Documentation of All Implemented Features**
 

@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-CodeEx GUI - Professional IDE for CodeCraft Applications
+CodeEx GUI - Professional IDE for ParserCraft Applications
 
 Multi-panel integrated development environment for writing applications
-in CodeCraft-generated custom programming languages.
+in ParserCraft-generated custom programming languages.
 
 Features:
 - Multi-file project management
@@ -16,7 +16,7 @@ Features:
 - Language configuration management
 
 See Also:
-    - CodeCraft IDE: For creating custom language configurations
+    - ParserCraft IDE: For creating custom language configurations
     - Documentation: docs/guides/CODEX_USER_GUIDE.md
 """
 
@@ -256,10 +256,10 @@ class CodeExIDE(ttk.Frame):
                         self.interpreter_var.set(interpreter_name)
 
     def load_interpreter(self):
-        """Load interpreter from CodeCraft config."""
+        """Load interpreter from ParserCraft config."""
         config_file = filedialog.askopenfilename(
             filetypes=[("JSON", "*.json"), ("YAML", "*.yaml"), ("All", "*.*")],
-            title="Select CodeCraft language configuration",
+            title="Select ParserCraft language configuration",
         )
         if config_file:
             try:
@@ -284,7 +284,7 @@ class CodeExIDE(ttk.Frame):
         if not self.current_file:
             self.current_file = filedialog.asksaveasfilename(
                 initialdir=str(self.projects_dir / self.current_project or "."),
-                filetypes=[("CodeCraft", "*.cc"), ("All", "*.*")],
+                filetypes=[("ParserCraft", "*.cc"), ("All", "*.*")],
             )
 
         if self.current_file:
@@ -343,11 +343,11 @@ class CodeExIDE(ttk.Frame):
     def show_help(self):
         """Show help dialog."""
         help_text = """
-        CodeEx - CodeCraft Execution Environment
+        CodeEx - ParserCraft Execution Environment
 
         Getting Started:
         1. Create a new project (File → New Project)
-        2. Load a CodeCraft interpreter (Load Interpreter button)
+        2. Load a ParserCraft interpreter (Load Interpreter button)
         3. Write code in the editor
         4. Click Run to execute
 
@@ -578,7 +578,7 @@ class CodeExIDE(ttk.Frame):
         - Text selection and editing
 
         EXECUTION
-        - Load CodeCraft interpreters
+        - Load ParserCraft interpreters
         - Execute code (Ctrl+R)
         - View output in console
         - See error messages
@@ -627,10 +627,10 @@ class CodeExIDE(ttk.Frame):
         """
         messagebox.showinfo("API Reference", api_ref)
 
-    def show_about_codecraft(self):
-        """Show about CodeCraft dialog."""
+    def show_about_parsercraft(self):
+        """Show about ParserCraft dialog."""
         about = """
-        CodeCraft - Language Construction System
+        ParserCraft - Language Construction System
         Version 4.0
 
         A comprehensive system for creating custom
@@ -647,7 +647,7 @@ class CodeExIDE(ttk.Frame):
         documentation or run:
         python -c "import hb_lcs; help(hb_lcs)"
         """
-        messagebox.showinfo("About CodeCraft", about)
+        messagebox.showinfo("About ParserCraft", about)
 
 
 class NewProjectDialog(tk.Toplevel):

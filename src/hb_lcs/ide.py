@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 """
-CodeCraft IDE - Language Construction Interface
+ParserCraft IDE - Language Construction Interface
 
 A comprehensive graphical IDE for designing and testing custom programming languages
 through configuration-driven development.
@@ -26,7 +26,7 @@ Usage:
 
 See Also:
     - CodeEx IDE: For developing applications in custom languages
-    - CLI Tools: codecraft create, codecraft edit, codecraft validate
+    - CLI Tools: parsercraft create, parsercraft edit, parsercraft validate
     - Documentation: docs/guides/CODEX_DEVELOPER_GUIDE.md
 """
 

@@ -37,7 +37,7 @@ setup(
     license="MIT",
     python_requires=">=3.7",
     install_requires=[
-        # No external dependencies - uses only Python standard library
+        "PyYAML>=6.0",
     ],
     extras_require={
         "dev": [

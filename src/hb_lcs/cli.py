@@ -1,24 +1,24 @@
 #!/usr/bin/env python3
 """
-CodeCraft Configuration CLI Tool
+ParserCraft Configuration CLI Tool
 
 Command-line utility for creating, editing, and managing custom programming
 language configurations without a GUI.
 
 Usage:
-    codecraft create [--preset PRESET] [--output FILE]
-    codecraft edit FILE
-    codecraft validate FILE
-    codecraft info [FILE]
-    codecraft export FILE [--format markdown|json|yaml]
-    codecraft import FILE [--scope runtime|project|user]
-    codecraft list-presets
-    codecraft convert FILE --to FORMAT
-    codecraft diff FILE1 FILE2
-    codecraft update FILE [--set KEY VALUE] [--merge FILE]
-    codecraft delete FILE [--keyword KW] [--function FN]
-    codecraft repl [FILE] [--debug]
-    codecraft batch FILE [--script SCRIPT]
+    parsercraft create [--preset PRESET] [--output FILE]
+    parsercraft edit FILE
+    parsercraft validate FILE
+    parsercraft info [FILE]
+    parsercraft export FILE [--format markdown|json|yaml]
+    parsercraft import FILE [--scope runtime|project|user]
+    parsercraft list-presets
+    parsercraft convert FILE --to FORMAT
+    parsercraft diff FILE1 FILE2
+    parsercraft update FILE [--set KEY VALUE] [--merge FILE]
+    parsercraft delete FILE [--keyword KW] [--function FN]
+    parsercraft repl [FILE] [--debug]
+    parsercraft batch FILE [--script SCRIPT]
 
 Presets:
     - python_like    : Python-style syntax
@@ -29,27 +29,29 @@ Presets:
 
 Examples:
     # Create a new Python-like language
-    codecraft create --preset python_like --output my_lang.yaml
+    parsercraft create --preset python_like --output my_lang.yaml
 
     # Validate a configuration file
-    codecraft validate my_lang.yaml
+    parsercraft validate my_lang.yaml
 
     # Export to markdown documentation
-    codecraft export my_lang.yaml --format markdown
+    parsercraft export my_lang.yaml --format markdown
 
 See Also:
-    - CodeCraft IDE: Interactive GUI for language design
+    - ParserCraft IDE: Interactive GUI for language design
     - CodeEx IDE: Develop applications in your languages
     - Documentation: docs/guides/CODEX_QUICKSTART.md
 """
 
 import argparse
+import ast
 import json
 import os
 import re
 import subprocess
 import sys
 import traceback
+from math import e, pi
 from pathlib import Path
 from typing import Any, Optional, Sequence
 
@@ -79,6 +81,34 @@ if YAMLError is not None:
     )
 else:
     CONFIG_LOAD_ERRORS = (OSError, ValueError, json.JSONDecodeError)
+
+
+SAFE_BUILTINS: dict[str, Any] = {
+    "abs": abs,
+    "all": all,
+    "any": any,
+    "bool": bool,
+    "enumerate": enumerate,
+    "filter": filter,
+    "float": float,
+    "int": int,
+    "len": len,
+    "list": list,
+    "map": map,
+    "max": max,
+    "min": min,
+    "print": print,
+    "range": range,
+    "round": round,
+    "sorted": sorted,
+    "str": str,
+    "sum": sum,
+    "tuple": tuple,
+    "zip": zip,
+    # Common math constants for convenience
+    "pi": pi,
+    "e": e,
+}
 
 
 def _load_config_from_path(
@@ -195,9 +225,11 @@ def _execute_repl_line(
         translated = _translate_with_keywords(line, custom_keywords)
         if debug:
             print(f"[DEBUG] Translated: {translated}")
+        safe_globals = {"__builtins__": SAFE_BUILTINS.copy()}
+
         exec(  # pylint: disable=exec-used
             translated,
-            {"__builtins__": __builtins__},
+            safe_globals,
             variables,
         )
 
@@ -207,15 +239,15 @@ def _execute_repl_line(
 
         if not has_assignment and not starts_with_keyword:
             try:
+                result = ast.literal_eval(translated)
+            except (ValueError, SyntaxError):
                 result = eval(  # pylint: disable=eval-used
                     translated,
-                    {"__builtins__": __builtins__},
+                    safe_globals,
                     variables,
                 )
-                if result is not None:
-                    print(result)
-            except (SyntaxError, TypeError, NameError):
-                pass
+            if result is not None:
+                print(result)
     except Exception as error:  # pylint: disable=broad-exception-caught
         print(f"Error: {error}")
         if debug:
@@ -358,20 +390,13 @@ def _process_batch_directory(
         return 1
 
     target_dir = Path(output_dir) if output_dir else input_dir
-    try:
-        target_dir.mkdir(exist_ok=True, parents=True)
-    except OSError as error:
-        print(f"Error creating output directory {target_dir}: {error}")
-        return 1
+    target_dir.mkdir(parents=True, exist_ok=True)
 
     glob_pattern = pattern or "*.txt"
     files = list(input_dir.glob(glob_pattern))
     if not files:
         print(f"No files found matching pattern: {glob_pattern}")
         return 1
-
-    print(f"Processing {len(files)} file(s)...")
-    print("=" * 70)
 
     success_count = 0
     error_count = 0
@@ -917,6 +942,48 @@ def cmd_batch(args):
     return 1
 
 
+def cmd_translate(args):
+    """Translate a source file using a language configuration."""
+    config_path = Path(args.config)
+    if not config_path.exists():
+        print(f"Error: Configuration file not found: {config_path}")
+        return 1
+
+    config = _load_config_from_path(config_path, "Error loading config: ")
+    if config is None:
+        return 1
+
+    LanguageRuntime.load_config(config=config)
+    custom_keywords = tuple(LanguageRuntime.get_custom_keywords())
+
+    input_path = Path(args.input)
+    if not input_path.exists():
+        print(f"Error: Input file not found: {input_path}")
+        return 1
+
+    try:
+        source = input_path.read_text(encoding="utf-8")
+    except OSError as error:
+        print(f"Error reading input file: {error}")
+        return 1
+
+    translated = _translate_with_keywords(source, custom_keywords)
+
+    if args.output:
+        output_path = Path(args.output)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        try:
+            output_path.write_text(translated, encoding="utf-8")
+        except OSError as error:
+            print(f"Error writing output file: {error}")
+            return 1
+        print(f"✓ Translated source saved to: {output_path}")
+    else:
+        print(translated)
+
+    return 0
+
+
 def cmd_delete(args):
     """Delete elements from configuration."""
     filepath = Path(args.file)
@@ -1199,6 +1266,21 @@ Examples:
         "--debug", "-d", action="store_true", help="Enable debug mode"
     )
 
+    # Translate command
+    translate_parser = subparsers.add_parser(
+        "translate",
+        help="Translate source code using a configuration",
+    )
+    translate_parser.add_argument(
+        "--config", "-c", required=True, help="Configuration file"
+    )
+    translate_parser.add_argument(
+        "--input", "-i", required=True, help="Source file to translate"
+    )
+    translate_parser.add_argument(
+        "--output", "-o", help="Output file (default: stdout)"
+    )
+
     args = parser.parse_args()
 
     if not args.command:
@@ -1220,6 +1302,7 @@ Examples:
         "import": cmd_import,
         "repl": cmd_repl,
         "batch": cmd_batch,
+        "translate": cmd_translate,
     }
 
     handler = commands.get(args.command)

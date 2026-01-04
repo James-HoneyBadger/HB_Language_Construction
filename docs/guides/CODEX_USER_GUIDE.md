@@ -1,17 +1,17 @@
-# CodeEx - CodeCraft Execution Environment
+# CodeEx - ParserCraft Execution Environment
 
 **Version 2.0**
 
-CodeEx is a professional IDE designed specifically for developing and running applications created with CodeCraft. It provides a complete development environment for creating custom programming languages and executing code written in those languages.
+CodeEx is a professional IDE designed specifically for developing and running applications created with ParserCraft. It provides a complete development environment for creating custom programming languages and executing code written in those languages.
 
 ## Overview
 
-CodeEx bridges CodeCraft (language creation framework) and application development by providing:
+CodeEx bridges ParserCraft (language creation framework) and application development by providing:
 
-1. **Interpreter Management**: Load any CodeCraft-generated language/interpreter
+1. **Interpreter Management**: Load any ParserCraft-generated language/interpreter
 2. **Professional Editor**: Syntax-highlighted code editor with project structure
 3. **Real-time Execution**: Execute code instantly with the loaded interpreter
-4. **Project Management**: Organize CodeCraft applications into projects
+4. **Project Management**: Organize ParserCraft applications into projects
 5. **Developer Tools**: Console, debugging, and output tracking
 
 ## Architecture
@@ -49,7 +49,7 @@ CodeEx bridges CodeCraft (language creation framework) and application developme
 ### Data Flow
 
 ```
-CodeCraft Language Config
+ParserCraft Language Config
         ↓
     (JSON/YAML)
         ↓
@@ -97,7 +97,7 @@ my_project/
 ### Interpreter Management
 
 **Load Interpreter**
-- From CodeCraft language configuration (JSON/YAML)
+- From ParserCraft language configuration (JSON/YAML)
 - Automatic syntax highlighting update
 - Metadata display (keywords, functions, operators)
 - Multiple interpreters supported
@@ -176,7 +176,7 @@ main()
 
 2. **Load Interpreter**
    - Click "Load Interpreter" button
-   - Select CodeCraft language configuration file (JSON/YAML)
+   - Select ParserCraft language configuration file (JSON/YAML)
    - Interpreter loaded and ready
 
 3. **Write Code**
@@ -188,9 +188,9 @@ main()
    - Output appears in console
    - Variables available in inspector
 
-### Integration with CodeCraft
+### Integration with ParserCraft
 
-#### Export Interpreter from CodeCraft
+#### Export Interpreter from ParserCraft
 
 ```python
 from src.hb_lcs.language_config import LanguageConfig
@@ -207,13 +207,13 @@ interpreter = gen.generate(config)
 
 # Export for CodeEx
 gen.export_interpreter(config, format="json")
-# Saved to: ~/.codecraft/interpreters/
+# Saved to: ~/.parsercraft/interpreters/
 ```
 
 #### Use in CodeEx
 
 1. Click "Load Interpreter"
-2. Navigate to `~/.codecraft/interpreters/`
+2. Navigate to `~/.parsercraft/interpreters/`
 3. Select exported JSON file
 4. CodeEx loads the interpreter
 
@@ -239,14 +239,14 @@ Location: `~/.codex/projects/`
 All created projects stored here with metadata.
 
 ### Interpreters Directory
-Location: `~/.codecraft/interpreters/`
+Location: `~/.parsercraft/interpreters/`
 
-Exported interpreters from CodeCraft stored here.
+Exported interpreters from ParserCraft stored here.
 
 ## Menu Reference
 
 ### File Menu
-- **New Project**: Create new CodeCraft project
+- **New Project**: Create new ParserCraft project
 - **Open Project**: Open existing project
 - **Save**: Save current file (Ctrl+S)
 - **Exit**: Close application
@@ -275,7 +275,7 @@ Exported interpreters from CodeCraft stored here.
 ### Help Menu
 - **Getting Started**: Quick start guide
 - **User Guide**: Full documentation
-- **API Reference**: CodeCraft API docs
+- **API Reference**: ParserCraft API docs
 - **About CodeEx**: Version information
 
 ## Error Handling
@@ -374,16 +374,16 @@ python codex.py
 - See [LANGUAGE_DEVELOPMENT_GUIDE.md](../docs/guides/LANGUAGE_DEVELOPMENT_GUIDE.md)
 - See [TEACHSCRIPT_MANUAL.md](../docs/teachscript/TEACHSCRIPT_MANUAL.md)
 
-### CodeCraft Integration
+### ParserCraft Integration
 - See [interpreter_generator.py](./src/hb_lcs/interpreter_generator.py) for API
 - See [language_config.py](./src/hb_lcs/language_config.py) for configuration format
 
 ### Troubleshooting
 Check workspace for:
-- `/home/james/CodeCraft/docs/guides/` for guides
-- `/home/james/CodeCraft/configs/examples/` for example configurations
-- `/home/james/CodeCraft/tests/` for test examples
+- `/home/james/ParserCraft/docs/guides/` for guides
+- `/home/james/ParserCraft/configs/examples/` for example configurations
+- `/home/james/ParserCraft/tests/` for test examples
 
 ## License
 
-CodeEx is part of the CodeCraft project. See LICENSE file for details.
+CodeEx is part of the ParserCraft project. See LICENSE file for details.

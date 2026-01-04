@@ -1,4 +1,4 @@
-# CodeCraft - Complete Analysis & Implementation Index
+# ParserCraft - Complete Analysis & Implementation Index
 
 **Comprehensive Summary of All Work Performed**  
 **December 30, 2025**
@@ -412,7 +412,7 @@ self._recent_files: List[str] = []
 ## Documentation Files Created
 
 ### File 1: PLACEHOLDER_AND_BUG_ANALYSIS.md
-**Location**: `/home/james/CodeCraft/PLACEHOLDER_AND_BUG_ANALYSIS.md`  
+**Location**: `/home/james/ParserCraft/PLACEHOLDER_AND_BUG_ANALYSIS.md`  
 **Lines**: 400+  
 **Content**:
 - Executive summary
@@ -425,7 +425,7 @@ self._recent_files: List[str] = []
 - Conclusion
 
 ### File 2: IMPLEMENTATION_DETAILS.md
-**Location**: `/home/james/CodeCraft/IMPLEMENTATION_DETAILS.md`  
+**Location**: `/home/james/ParserCraft/IMPLEMENTATION_DETAILS.md`  
 **Lines**: 600+  
 **Content**:
 - Feature implementation details
@@ -530,7 +530,7 @@ self._recent_files: List[str] = []
 ## Conclusion
 
 ### Summary
-CodeCraft IDE v2.0 now has:
+ParserCraft IDE v2.0 now has:
 - ✅ 7 fully implemented features (735+ lines)
 - ✅ 2 bugs fixed
 - ✅ 7/7 test suites passing (100%)

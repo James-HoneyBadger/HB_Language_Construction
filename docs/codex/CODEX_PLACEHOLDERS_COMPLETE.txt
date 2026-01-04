@@ -43,7 +43,7 @@ HELP MENU (3 items + 1 existing)
   ✅ Getting Started         - 5-step tutorial in dialog
   ✅ User Guide              - Feature overview and usage
   ✅ API Reference           - IDE/Interpreter methods reference
-  ✅ About CodeCraft         - Project information and features
+  ✅ About ParserCraft         - Project information and features
 
 📋 IMPLEMENTATION DETAILS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -65,7 +65,7 @@ New Methods in CodeExIDE (codex_gui.py):
 13. show_getting_started()          - Getting started guide dialog
 14. show_user_guide()               - Feature overview dialog
 15. show_api_reference()            - API reference dialog
-16. show_about_codecraft()          - About CodeCraft dialog
+16. show_about_parsercraft()          - About ParserCraft dialog
 
 Menu Updates (codex_components.py):
 
@@ -121,7 +121,7 @@ HELP SYSTEM
   ✅ Getting started guide (5-step)
   ✅ Feature overview
   ✅ API reference
-  ✅ CodeCraft information
+  ✅ ParserCraft information
   ✅ Clear dialog formatting
 
 🧪 TESTING & VALIDATION

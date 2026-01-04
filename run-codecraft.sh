@@ -1,6 +1,6 @@
 #!/bin/bash
-# Run CodeCraft IDE - Language Construction Set
-# This script initializes the virtual environment and launches the CodeCraft IDE
+# Run ParserCraft IDE - Language Construction Set
+# This script initializes the virtual environment and launches the ParserCraft IDE
 
 set -e
 
@@ -8,7 +8,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 VENV_DIR="$SCRIPT_DIR/.venv"
 PYTHON_VERSION="3.9"
 
-echo "🚀 CodeCraft - Custom Language Construction Framework"
+echo "🚀 ParserCraft - Custom Language Construction Framework"
 echo "=================================================="
 echo ""
 
@@ -46,10 +46,10 @@ echo "✓ pip updated"
 echo ""
 
 # Install the package in development mode
-echo "📚 Installing CodeCraft package..."
+echo "📚 Installing ParserCraft package..."
 cd "$SCRIPT_DIR"
 pip install --quiet -e ".[ide]"
-echo "✓ CodeCraft package installed"
+echo "✓ ParserCraft package installed"
 echo ""
 
 # Verify tkinter is available
@@ -62,7 +62,7 @@ python3 -c "import tkinter; print('✓ tkinter available')" || {
 echo ""
 
 # Launch the IDE
-echo "🎨 Launching CodeCraft IDE..."
+echo "🎨 Launching ParserCraft IDE..."
 echo "=================================================="
 echo ""
 
@@ -70,4 +70,4 @@ python3 -m hb_lcs.ide
 
 echo ""
 echo "=================================================="
-echo "✓ CodeCraft IDE closed"
+echo "✓ ParserCraft IDE closed"

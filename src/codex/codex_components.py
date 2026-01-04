@@ -304,7 +304,7 @@ class CodeExMenu(tk.Menu):
         help_menu.add_command(label="API Reference", command=ide.show_api_reference)
         help_menu.add_separator()
         help_menu.add_command(label="About CodeEx", command=self._show_about)
-        help_menu.add_command(label="About CodeCraft", command=ide.show_about_codecraft)
+        help_menu.add_command(label="About ParserCraft", command=ide.show_about_parsercraft)
         help_menu.add_command(
             label="Help Contents", command=ide.show_help, accelerator="F1"
         )
@@ -316,8 +316,8 @@ class CodeExMenu(tk.Menu):
         messagebox.showinfo(
             "About CodeEx",
             "CodeEx v1.0\n\n"
-            "CodeCraft Execution Environment\n\n"
+            "ParserCraft Execution Environment\n\n"
             "Professional IDE for developing and running\n"
-            "applications created with CodeCraft.\n\n"
-            "© 2024 CodeCraft Project",
+            "applications created with ParserCraft.\n\n"
+            "© 2024 ParserCraft Project",
         )

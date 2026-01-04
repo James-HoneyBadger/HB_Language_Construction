@@ -1,6 +1,6 @@
 # Documentation Index & Guide Selection
 
-**CodeCraft - Custom Language Construction Framework v1.0**  
+**ParserCraft - Custom Language Construction Framework v1.0**  
 Quick Reference for Finding the Right Documentation  
 December 30, 2025
 
@@ -11,9 +11,9 @@ December 30, 2025
 - **[Run Scripts](../run-codecraft.sh)** - Automated setup and launch
 
 ### Application Guides
-- **[CodeCraft IDE Guide](guides/CODEX_DEVELOPER_GUIDE.md)** - Language design environment
+- **[ParserCraft IDE Guide](guides/CODEX_DEVELOPER_GUIDE.md)** - Language design environment
 - **[CodeEx IDE Guide](guides/CODEX_USER_GUIDE.md)** - Application development environment
-- **[Integration Guide](guides/CODEX_INTEGRATION_GUIDE.md)** - Integrating CodeCraft into projects
+- **[Integration Guide](guides/CODEX_INTEGRATION_GUIDE.md)** - Integrating ParserCraft into projects
 
 ### Technical Reference
 - **[API Reference](reference/API_REFERENCE.md)** - Python API documentation
@@ -21,7 +21,7 @@ December 30, 2025
 - **[Configuration Reference](reference/CONFIG_REFERENCE.md)** - Language configuration schema
 
 ### TeachScript Documentation
-TeachScript is a complete example language built with CodeCraft:
+TeachScript is a complete example language built with ParserCraft:
 - **[TeachScript User Guide](teachscript/README_TEACHSCRIPT.md)** - Learn TeachScript syntax
 - **[TeachScript Advanced Guide](teachscript/TEACHSCRIPT_ADVANCED_GUIDE.md)** - Advanced features
 - **[TeachScript IDE Integration](teachscript/TEACHSCRIPT_IDE_INTEGRATION.md)** - Using TeachScript in IDEs
@@ -42,9 +42,9 @@ TeachScript is a complete example language built with CodeCraft:
 | Create a custom language | [CODEX_DEVELOPER_GUIDE.md](guides/CODEX_DEVELOPER_GUIDE.md) |
 | Develop in my custom language | [CODEX_USER_GUIDE.md](guides/CODEX_USER_GUIDE.md) |
 | Learn programming basics | [TeachScript Guide](teachscript/README_TEACHSCRIPT.md) |
-| Use CodeCraft in Python code | [API_REFERENCE.md](reference/API_REFERENCE.md) |
+| Use ParserCraft in Python code | [API_REFERENCE.md](reference/API_REFERENCE.md) |
 | Use the CLI tool | [CLI_REFERENCE.md](reference/CLI_REFERENCE.md) |
-| Integrate CodeCraft in projects | [CODEX_INTEGRATION_GUIDE.md](guides/CODEX_INTEGRATION_GUIDE.md) |
+| Integrate ParserCraft in projects | [CODEX_INTEGRATION_GUIDE.md](guides/CODEX_INTEGRATION_GUIDE.md) |
 
 ### 3️⃣ **[TECHNICAL_REFERENCE.md](TECHNICAL_REFERENCE.md)** - Complete API Documentation
 **For**: Developers and advanced users  
@@ -573,12 +573,12 @@ version: "1.0"
 
 ---
 
-## 8️⃣ **[CODEX_INTEGRATION_GUIDE.md](guides/CODEX_INTEGRATION_GUIDE.md)** - CodeCraft ↔ CodeEx
-**For**: Users integrating CodeCraft and CodeEx  
+## 8️⃣ **[CODEX_INTEGRATION_GUIDE.md](guides/CODEX_INTEGRATION_GUIDE.md)** - ParserCraft ↔ CodeEx
+**For**: Users integrating ParserCraft and CodeEx  
 **Length**: ~3,000 words | 20-30 minutes to read  
 **Topics**:
 - System integration overview
-- Creating languages in CodeCraft
+- Creating languages in ParserCraft
 - Exporting to CodeEx
 - Loading in CodeEx
 - Advanced workflows
@@ -588,7 +588,7 @@ version: "1.0"
 
 **Start here if you**:
 - Want to create languages AND applications
-- Need to export from CodeCraft to CodeEx
+- Need to export from ParserCraft to CodeEx
 - Building educational projects
 - Developing multi-language apps
 
@@ -609,7 +609,7 @@ version: "1.0"
 
 ### "I want to create a language AND use it in CodeEx"
 1. Read: [LANGUAGE_DEVELOPMENT_GUIDE.md](LANGUAGE_DEVELOPMENT_GUIDE.md) → Design section
-2. Design and create language in CodeCraft
+2. Design and create language in ParserCraft
 3. Read: [CODEX_INTEGRATION_GUIDE.md](guides/CODEX_INTEGRATION_GUIDE.md)
 4. Export language to CodeEx
 5. Create CodeEx project and load interpreter
@@ -622,7 +622,7 @@ version: "1.0"
 ### "I want to use CodeEx for teaching"
 1. Read: [CODEX_USER_GUIDE.md](guides/CODEX_USER_GUIDE.md) → Project Management
 2. Read: [LANGUAGE_DEVELOPMENT_GUIDE.md](LANGUAGE_DEVELOPMENT_GUIDE.md) → Design Principles
-3. Create custom languages in CodeCraft
+3. Create custom languages in ParserCraft
 4. Export to CodeEx
 5. Create student projects with templates
 6. Students load interpreters and code
@@ -631,7 +631,7 @@ version: "1.0"
 
 ---
 
-### "I want to understand full CodeCraft+CodeEx system"
+### "I want to understand full ParserCraft+CodeEx system"
 1. Read: [INSTALL_GUIDE.md](INSTALL_GUIDE.md) - Setup
 2. Read: [LANGUAGE_DEVELOPMENT_GUIDE.md](LANGUAGE_DEVELOPMENT_GUIDE.md) - Language creation
 3. Read: [CODEX_INTEGRATION_GUIDE.md](guides/CODEX_INTEGRATION_GUIDE.md) - Integration

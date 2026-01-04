@@ -1,25 +1,25 @@
-# CodeEx - CodeCraft Execution Environment
+# CodeEx - ParserCraft Execution Environment
 
 **Version 1.0.0**
 
-Professional IDE for developing and running applications created with CodeCraft.
+Professional IDE for developing and running applications created with ParserCraft.
 
 ## What is CodeEx?
 
-CodeEx is a specialized IDE that integrates with CodeCraft to provide:
+CodeEx is a specialized IDE that integrates with ParserCraft to provide:
 
-- **Multi-language support**: Load any CodeCraft-designed language
+- **Multi-language support**: Load any ParserCraft-designed language
 - **Professional editor**: Syntax highlighting, line numbers, code completion
-- **Project management**: Organize CodeCraft applications
+- **Project management**: Organize ParserCraft applications
 - **Real-time execution**: Run code instantly with loaded interpreters
 - **Integrated console**: See output, errors, and variables
-- **Full integration**: Export languages from CodeCraft → Load in CodeEx
+- **Full integration**: Export languages from ParserCraft → Load in CodeEx
 
 ## Quick Start
 
 ### Installation
 
-CodeEx comes as part of CodeCraft. No additional installation needed.
+CodeEx comes as part of ParserCraft. No additional installation needed.
 
 ### Launch CodeEx
 
@@ -50,7 +50,7 @@ python codex.py
 - Version control ready
 
 ### 🔧 Interpreter Management
-- Load any CodeCraft language configuration
+- Load any ParserCraft language configuration
 - Multiple interpreters in one session
 - Interpreter metadata display
 - Configuration inspection
@@ -87,12 +87,12 @@ CodeEx/
 ├── codex_gui.py                  # Main IDE interface
 ├── codex_components.py           # UI components
 ├── src/hb_lcs/
-│   └── interpreter_generator.py  # CodeCraft integration
+│   └── interpreter_generator.py  # ParserCraft integration
 └── docs/guides/
     ├── CODEX_QUICKSTART.md       # 5-minute start
     ├── CODEX_USER_GUIDE.md       # Full manual
     ├── CODEX_DEVELOPER_GUIDE.md  # Development docs
-    └── CODEX_INTEGRATION_GUIDE.md # CodeCraft integration
+    └── CODEX_INTEGRATION_GUIDE.md # ParserCraft integration
 ```
 
 ## Documentation
@@ -103,7 +103,7 @@ CodeEx/
 |-------|---------|------|
 | [CODEX_QUICKSTART.md](docs/guides/CODEX_QUICKSTART.md) | Get running in 5 minutes | 5 min |
 | [CODEX_USER_GUIDE.md](docs/guides/CODEX_USER_GUIDE.md) | Complete user manual | 30 min |
-| [CODEX_INTEGRATION_GUIDE.md](docs/guides/CODEX_INTEGRATION_GUIDE.md) | Use with CodeCraft | 20 min |
+| [CODEX_INTEGRATION_GUIDE.md](docs/guides/CODEX_INTEGRATION_GUIDE.md) | Use with ParserCraft | 20 min |
 
 ### For Developers
 
@@ -152,9 +152,9 @@ Click "Load Interpreter" → Select different language → Syntax updates
 | Ctrl+Shift+Z | Redo |
 | Ctrl+Q | Quit |
 
-## Integration with CodeCraft
+## Integration with ParserCraft
 
-### Export Language from CodeCraft
+### Export Language from ParserCraft
 
 ```python
 from src.hb_lcs.language_config import LanguageConfig
@@ -166,13 +166,13 @@ config = LanguageConfig.load("my_language.json")
 # Export for CodeEx
 gen = InterpreterGenerator()
 gen.export_interpreter(config, format="json")
-# Saved to: ~/.codecraft/interpreters/
+# Saved to: ~/.parsercraft/interpreters/
 ```
 
 ### Load in CodeEx
 
 1. Click "Load Interpreter"
-2. Navigate to `~/.codecraft/interpreters/`
+2. Navigate to `~/.parsercraft/interpreters/`
 3. Select exported JSON file
 4. Language loaded and ready to use
 
@@ -263,11 +263,11 @@ See [CODEX_DEVELOPER_GUIDE.md](docs/guides/CODEX_DEVELOPER_GUIDE.md) for pattern
 
 ## Contributing
 
-CodeEx is part of CodeCraft. See main project for contribution guidelines.
+CodeEx is part of ParserCraft. See main project for contribution guidelines.
 
 ## License
 
-CodeEx is part of the CodeCraft project. See LICENSE file.
+CodeEx is part of the ParserCraft project. See LICENSE file.
 
 ## Support
 
@@ -275,7 +275,7 @@ CodeEx is part of the CodeCraft project. See LICENSE file.
 - [CODEX_USER_GUIDE.md](docs/guides/CODEX_USER_GUIDE.md) - Complete manual
 - [CODEX_QUICKSTART.md](docs/guides/CODEX_QUICKSTART.md) - Quick start
 - [CODEX_DEVELOPER_GUIDE.md](docs/guides/CODEX_DEVELOPER_GUIDE.md) - Developer docs
-- [CODEX_INTEGRATION_GUIDE.md](docs/guides/CODEX_INTEGRATION_GUIDE.md) - CodeCraft integration
+- [CODEX_INTEGRATION_GUIDE.md](docs/guides/CODEX_INTEGRATION_GUIDE.md) - ParserCraft integration
 
 ### Examples
 - `configs/examples/` - Language configurations
@@ -314,7 +314,7 @@ CodeEx is part of the CodeCraft project. See LICENSE file.
 
 ## Contact & Community
 
-For questions, issues, or contributions, see the main CodeCraft project.
+For questions, issues, or contributions, see the main ParserCraft project.
 
 ---
 

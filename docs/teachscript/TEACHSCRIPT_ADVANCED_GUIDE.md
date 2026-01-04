@@ -1,8 +1,8 @@
 # Advanced TeachScript Tutorial & Integration Guide
 
-## 🚀 Complete TeachScript Integration into CodeCraft IDE
+## 🚀 Complete TeachScript Integration into ParserCraft IDE
 
-This document describes the full integration of TeachScript into the CodeCraft IDE, making it a powerful educational programming language rivaling professional tools.
+This document describes the full integration of TeachScript into the ParserCraft IDE, making it a powerful educational programming language rivaling professional tools.
 
 ---
 

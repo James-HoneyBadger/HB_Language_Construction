@@ -3,7 +3,7 @@
 TeachScript Runtime
 
 An advanced runtime environment for TeachScript - an educational programming
-language integrated with the CodeCraft IDE. This module provides:
+language integrated with the ParserCraft IDE. This module provides:
 
 - Transpilation from TeachScript to Python
 - Enhanced educational libraries (graphics, math, games)

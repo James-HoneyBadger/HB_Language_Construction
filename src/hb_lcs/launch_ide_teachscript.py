@@ -2,7 +2,7 @@
 """
 Enhanced IDE Launcher with TeachScript Integration
 
-Launches the CodeCraft IDE with full TeachScript support integrated.
+Launches the ParserCraft IDE with full TeachScript support integrated.
 """
 
 import sys
@@ -46,7 +46,7 @@ def launch_ide_with_teachscript():
         _ = TeachScriptCodeCompletion(ide.editor)
 
     # Customize title
-    root.title("CodeCraft IDE with TeachScript - v3.0")
+    root.title("ParserCraft IDE with TeachScript - v3.0")
 
     # Start the IDE
     root.mainloop()

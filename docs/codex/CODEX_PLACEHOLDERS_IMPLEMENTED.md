@@ -245,9 +245,9 @@ def toggle_console(self):
   - Result format documentation
   - Parameter descriptions
 
-#### 16. ✅ About CodeCraft
-- **Location**: Help → About CodeCraft
-- **Implementation**: `CodeExIDE.show_about_codecraft()`
+#### 16. ✅ About ParserCraft
+- **Location**: Help → About ParserCraft
+- **Implementation**: `CodeExIDE.show_about_parsercraft()`
 - **Features**:
   - Project information
   - Version number
@@ -322,7 +322,7 @@ def toggle_console(self):
 ✅ Getting started tutorial  
 ✅ User guide display  
 ✅ API reference  
-✅ About CodeCraft dialog  
+✅ About ParserCraft dialog  
 
 ## Integration Points
 

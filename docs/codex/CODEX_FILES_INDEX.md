@@ -1,6 +1,6 @@
 # CodeEx Files Index
 
-Complete list of all CodeEx-related files in the CodeCraft project.
+Complete list of all CodeEx-related files in the ParserCraft project.
 
 ## Application Code Files
 
@@ -42,9 +42,9 @@ Complete list of all CodeEx-related files in the CodeCraft project.
 ### Integration Module
 
 4. **[src/hb_lcs/interpreter_generator.py](src/hb_lcs/interpreter_generator.py)**
-   - **Type**: CodeCraft Integration
+   - **Type**: ParserCraft Integration
    - **Size**: 312 lines
-   - **Purpose**: Bridge CodeCraft and CodeEx
+   - **Purpose**: Bridge ParserCraft and CodeEx
    - **Classes**:
      - InterpreterPackage (encapsulates interpreter instance)
      - InterpreterGenerator (factory for interpreters)
@@ -118,10 +118,10 @@ Complete list of all CodeEx-related files in the CodeCraft project.
 9. **[CODEX_INTEGRATION_GUIDE.md](docs/guides/CODEX_INTEGRATION_GUIDE.md)**
    - **Type**: Integration Guide
    - **Size**: 300 lines
-   - **Purpose**: Using CodeCraft with CodeEx
+   - **Purpose**: Using ParserCraft with CodeEx
    - **Sections**:
      - Architecture overview
-     - Creating languages in CodeCraft
+     - Creating languages in ParserCraft
      - Exporting to CodeEx
      - Using in CodeEx
      - Advanced workflows
@@ -129,7 +129,7 @@ Complete list of all CodeEx-related files in the CodeCraft project.
      - Troubleshooting
      - Best practices
      - API reference
-   - **Audience**: CodeCraft + CodeEx users
+   - **Audience**: ParserCraft + CodeEx users
    - **Read Time**: 20-30 minutes
 
 ### Developer Documentation
@@ -241,7 +241,7 @@ TOTAL:                             3,772 lines (new content)
 
 ### Root Level Files
 ```
-/home/james/CodeCraft/
+/home/james/ParserCraft/
 ├── codex.py                        # Entry point
 ├── codex_gui.py                    # Main IDE
 ├── codex_components.py             # Components
@@ -253,19 +253,19 @@ TOTAL:                             3,772 lines (new content)
 
 ### Source Level Files
 ```
-/home/james/CodeCraft/src/hb_lcs/
+/home/james/ParserCraft/src/hb_lcs/
 └── interpreter_generator.py        # Integration
 ```
 
 ### Documentation Files
 ```
-/home/james/CodeCraft/docs/guides/
+/home/james/ParserCraft/docs/guides/
 ├── CODEX_QUICKSTART.md             # Quick start
 ├── CODEX_USER_GUIDE.md             # User manual
 ├── CODEX_DEVELOPER_GUIDE.md        # Dev guide
 └── CODEX_INTEGRATION_GUIDE.md      # Integration
 
-/home/james/CodeCraft/docs/
+/home/james/ParserCraft/docs/
 └── DOCUMENTATION_INDEX.md          # Updated
 ```
 
@@ -285,7 +285,7 @@ TOTAL:                             3,772 lines (new content)
 **I want to extend CodeEx**
 → Read: [CODEX_DEVELOPER_GUIDE.md](docs/guides/CODEX_DEVELOPER_GUIDE.md) (30 min)
 
-**I want CodeCraft + CodeEx**
+**I want ParserCraft + CodeEx**
 → Read: [CODEX_INTEGRATION_GUIDE.md](docs/guides/CODEX_INTEGRATION_GUIDE.md) (20 min)
 
 **I want project overview**
@@ -303,7 +303,7 @@ Application Code:
   
   codex_gui.py
     ├─ depends on: codex_components
-    ├─ depends on: LanguageConfig (CodeCraft)
+    ├─ depends on: LanguageConfig (ParserCraft)
     └─ depends on: InterpreterGenerator
   
   codex_components.py
@@ -364,7 +364,7 @@ To find specific information:
 | Menu reference | CODEX_USER_GUIDE.md | Menu Reference |
 | Architecture | CODEX_IMPLEMENTATION_SUMMARY.md | Architecture |
 | Development | CODEX_DEVELOPER_GUIDE.md | - |
-| CodeCraft use | CODEX_INTEGRATION_GUIDE.md | - |
+| ParserCraft use | CODEX_INTEGRATION_GUIDE.md | - |
 
 ## Version Information
 
@@ -384,6 +384,6 @@ To find specific information:
 
 ---
 
-**CodeEx - Professional IDE for CodeCraft Languages**
+**CodeEx - Professional IDE for ParserCraft Languages**
 
 *Version 1.0.0 - Complete and Production Ready*

@@ -1,6 +1,6 @@
 # User Guide
 
-**CodeCraft - Custom Language Construction Framework v1.0**  
+**ParserCraft - Custom Language Construction Framework v1.0**  
 Complete User Manual & How-To Guide  
 December 30, 2025
 
@@ -23,7 +23,7 @@ December 30, 2025
 
 ### What is HB Language Construction Set?
 
-The **CodeCraft** language construction framework is a toolkit for creating custom programming language variants. It lets you:
+The **ParserCraft** language construction framework is a toolkit for creating custom programming language variants. It lets you:
 
 - **Rename keywords** (`if` → `cuando`, `function` → `def`)
 - **Customize syntax** (comment style, operators, indexing)
@@ -92,7 +92,7 @@ hblcs update spanish.yaml \
 hblcs validate spanish.yaml
 
 # View it
-codecraft info spanish.yaml
+parsercraft info spanish.yaml
 ```
 
 ### Your First IDE Session (10 minutes)

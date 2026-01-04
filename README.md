@@ -1,14 +1,14 @@
-# CodeCraft
+# ParserCraft
 
 **Create Custom Programming Languages Without Writing a Compiler**
 
-CodeCraft is a comprehensive framework for designing and deploying custom programming language variants through simple configuration files. No compiler engineering required—just define your language syntax and semantics through intuitive JSON/YAML configurations.
+ParserCraft is a comprehensive framework for designing and deploying custom programming language variants through simple configuration files. No compiler engineering required—just define your language syntax and semantics through intuitive JSON/YAML configurations.
 
 ## 🎯 **Proof of Concept: TeachScript**
 
-**See a complete, working custom language built with CodeCraft!**
+**See a complete, working custom language built with ParserCraft!**
 
-**TeachScript** is a beginner-friendly educational programming language demonstrating CodeCraft's power:
+**TeachScript** is a beginner-friendly educational programming language demonstrating ParserCraft's power:
 - `when` instead of `if` for conditionals
 - `teach` instead of `def` for function definitions
 - `say()` instead of `print()` for output
@@ -34,14 +34,14 @@ python -m pytest tests/
 
 ## Overview
 
-CodeCraft empowers you to:
+ParserCraft empowers you to:
 - **Create custom languages** - Design any language variant without compiler knowledge
 - **Rename keywords** - Change language keywords (e.g., `if` → `cuando`) for any locale or style
 - **Customize functions** - Define and modify built-in function libraries
 - **Configure syntax** - Adjust array indexing, comments, operators, and more
 - **Use templates** - Start from Python-like, JavaScript-like, Lisp-like, or minimal presets
 - **Manage with CLI** - Powerful command-line tools for configuration creation and validation
-- **Visual IDE** - CodeCraft IDE for interactive language design and testing
+- **Visual IDE** - ParserCraft IDE for interactive language design and testing
 - **Professional IDE** - CodeEx for developing applications in your custom language
 
 ## Quick Start
@@ -51,13 +51,13 @@ CodeCraft empowers you to:
 The fastest way to get started—scripts handle all setup:
 
 ```bash
-# Linux/macOS - Launch CodeCraft IDE
+# Linux/macOS - Launch ParserCraft IDE
 ./run-codecraft.sh
 
 # Linux/macOS - Launch CodeEx IDE
 ./run-codex.sh
 
-# Windows - Launch CodeCraft IDE
+# Windows - Launch ParserCraft IDE
 run-codecraft.bat
 
 # Windows - Launch CodeEx IDE
@@ -75,7 +75,7 @@ These scripts automatically:
 ```bash
 # Clone the repository
 git clone https://github.com/James-HoneyBadger/CodeCraft.git
-cd CodeCraft
+cd ParserCraft
 
 # Install the package in development mode
 pip install -e .
@@ -87,13 +87,13 @@ pip install -e .[dev]
 ### Project Structure
 
 ```
-CodeCraft/
+ParserCraft/
 ├── src/
 │   ├── hb_lcs/              # Core language construction framework
 │   │   ├── language_config.py       # Configuration system
 │   │   ├── language_runtime.py      # Runtime integration
 │   │   ├── parser_generator.py      # Parser generation
-│   │   ├── ide.py                   # CodeCraft IDE
+│   │   ├── ide.py                   # ParserCraft IDE
 │   │   ├── cli.py                   # CLI tools
 │   │   ├── teachscript_*.py         # TeachScript integration
 │   │   └── launch_ide.py            # IDE launcher
@@ -116,16 +116,16 @@ CodeCraft/
 ├── tests/                   # Comprehensive test suite
 │   ├── integration/         # Integration tests
 │   └── test_*.py            # Unit tests
-├── run-codecraft.sh         # CodeCraft launcher (Linux/macOS)
+├── run-codecraft.sh         # ParserCraft launcher (Linux/macOS)
 ├── run-codex.sh             # CodeEx launcher (Linux/macOS)
-├── run-codecraft.bat        # CodeCraft launcher (Windows)
+├── run-codecraft.bat        # ParserCraft launcher (Windows)
 ├── run-codex.bat            # CodeEx launcher (Windows)
 └── README.md                # This file
 ```
 
-## Using CodeCraft IDE
+## Using ParserCraft IDE
 
-Launch the CodeCraft IDE for interactive language design:
+Launch the ParserCraft IDE for interactive language design:
 
 ```bash
 # Using the launch script
@@ -136,7 +136,7 @@ run-codecraft.bat               # Windows
 python -m hb_lcs.ide
 ```
 
-**CodeCraft IDE Features:**
+**ParserCraft IDE Features:**
 - Visual configuration editor for language design
 - Syntax highlighting and code editor
 - Real-time language testing and validation
@@ -161,7 +161,7 @@ python src/codex/codex.py
 ```
 
 **CodeEx Features:**
-- Load any CodeCraft-created language
+- Load any ParserCraft-created language
 - Professional multi-panel editor
 - Real-time code execution
 - Project organization and management
@@ -172,30 +172,30 @@ Learn more: [docs/guides/CODEX_USER_GUIDE.md](docs/guides/CODEX_USER_GUIDE.md)
 
 ## Command-Line Tools
 
-CodeCraft includes powerful CLI tools for language configuration:
+ParserCraft includes powerful CLI tools for language configuration:
 
 ```bash
 # Create a new language configuration
-codecraft create --preset python_like --output my_lang.yaml
+parsercraft create --preset python_like --output my_lang.yaml
 
 # Validate a configuration
-codecraft validate my_lang.yaml
+parsercraft validate my_lang.yaml
 
 # Edit a configuration
-codecraft edit my_lang.yaml
+parsercraft edit my_lang.yaml
 
 # View configuration info
-codecraft info my_lang.yaml
+parsercraft info my_lang.yaml
 
 # Export configuration to different formats
-codecraft export my_lang.yaml --format markdown
+parsercraft export my_lang.yaml --format markdown
 ```
 
 Learn more: [docs/reference/CLI_REFERENCE.md](docs/reference/CLI_REFERENCE.md)
 
 ## Python API
 
-Use CodeCraft's Python API to programmatically create language configurations:
+Use ParserCraft's Python API to programmatically create language configurations:
 
 ```python
 from hb_lcs.language_config import LanguageConfig
@@ -233,7 +233,7 @@ Learn more: [docs/reference/API_REFERENCE.md](docs/reference/API_REFERENCE.md)
 # 1. Create configuration
 ./run-codecraft.sh
 
-# 2. In CodeCraft IDE:
+# 2. In ParserCraft IDE:
 #    - Load preset: "python_like"
 #    - Rename "if" → "si"
 #    - Rename "else" → "sino"

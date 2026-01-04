@@ -1,5 +1,5 @@
 @echo off
-REM Run CodeEx - CodeCraft Execution Environment (Windows)
+REM Run CodeEx - ParserCraft Execution Environment (Windows)
 REM This script initializes the virtual environment and launches the CodeEx IDE
 
 setlocal enabledelayedexpansion
@@ -8,7 +8,7 @@ set "SCRIPT_DIR=%~dp0"
 set "VENV_DIR=%SCRIPT_DIR%.venv"
 
 echo.
-echo 🚀 CodeEx - CodeCraft Execution Environment
+echo 🚀 CodeEx - ParserCraft Execution Environment
 echo ==================================================
 echo.
 
@@ -48,10 +48,10 @@ echo ✓ pip updated
 echo.
 
 REM Install the package in development mode
-echo 📚 Installing CodeCraft package...
+echo 📚 Installing ParserCraft package...
 cd /d "%SCRIPT_DIR%"
 python -m pip install --quiet -e ".[ide]"
-echo ✓ CodeCraft package installed
+echo ✓ ParserCraft package installed
 echo.
 
 REM Verify tkinter is available

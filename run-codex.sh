@@ -1,5 +1,5 @@
 #!/bin/bash
-# Run CodeEx - CodeCraft Execution Environment
+# Run CodeEx - ParserCraft Execution Environment
 # This script initializes the virtual environment and launches the CodeEx IDE
 
 set -e
@@ -8,7 +8,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 VENV_DIR="$SCRIPT_DIR/.venv"
 PYTHON_VERSION="3.9"
 
-echo "🚀 CodeEx - CodeCraft Execution Environment"
+echo "🚀 CodeEx - ParserCraft Execution Environment"
 echo "=================================================="
 echo ""
 
@@ -46,10 +46,10 @@ echo "✓ pip updated"
 echo ""
 
 # Install the package in development mode
-echo "📚 Installing CodeCraft package..."
+echo "📚 Installing ParserCraft package..."
 cd "$SCRIPT_DIR"
 pip install --quiet -e ".[ide]"
-echo "✓ CodeCraft package installed"
+echo "✓ ParserCraft package installed"
 echo ""
 
 # Verify tkinter is available

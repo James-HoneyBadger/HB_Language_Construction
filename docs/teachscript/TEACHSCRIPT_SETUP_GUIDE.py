@@ -2,12 +2,12 @@
 """
 TeachScript IDE Installation and Setup Guide
 
-Complete setup instructions for the TeachScript + CodeCraft IDE integration.
+Complete setup instructions for the TeachScript + ParserCraft IDE integration.
 """
 
 SETUP_GUIDE = """
 ================================================================================
-  TEACHSCRIPT + CODECRAFT IDE - INSTALLATION & SETUP GUIDE
+  TEACHSCRIPT + PARSERCRAFT IDE - INSTALLATION & SETUP GUIDE
 ================================================================================
 
 ================================================================================
@@ -33,11 +33,11 @@ Recommended:
 STEP 1: Clone or Extract the Repository
   
   $ git clone https://github.com/James-HoneyBadger/CodeCraft.git
-  $ cd CodeCraft
+  $ cd ParserCraft
   
   OR if you have it extracted:
   
-  $ cd /home/james/CodeCraft
+  $ cd /home/james/ParserCraft
 
 STEP 2: Install the Package
 
@@ -70,7 +70,7 @@ STEP 4: Test the Runtime (Optional)
 
 OPTION 1: Using the Enhanced TeachScript IDE Launcher
   
-  $ cd /home/james/CodeCraft
+  $ cd /home/james/ParserCraft
   $ python -m src.hb_lcs.launch_ide_teachscript
   
   This launches the IDE with full TeachScript integration.
@@ -228,7 +228,7 @@ IDE Settings:
 
 ISSUE: "ModuleNotFoundError: No module named 'src.hb_lcs'"
   SOLUTION: Run from the project root directory
-            cd /home/james/CodeCraft
+            cd /home/james/ParserCraft
             python -m src.hb_lcs.launch_ide_teachscript
 
 ISSUE: "No module named 'tkinter'"
@@ -262,7 +262,7 @@ ISSUE: Code completion not working
 
 RUN THE TEST SUITE:
   
-  $ cd /home/james/CodeCraft
+  $ cd /home/james/ParserCraft
   $ python -m pytest tests/
   
   Or test specific TeachScript features:

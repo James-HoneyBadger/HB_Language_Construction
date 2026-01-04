@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-CodeEx - CodeCraft Execution Environment
+CodeEx - ParserCraft Execution Environment
 
 Professional IDE for developing applications in custom programming languages
-created with CodeCraft.
+created with ParserCraft.
 """
 
 __version__ = "1.0.0"

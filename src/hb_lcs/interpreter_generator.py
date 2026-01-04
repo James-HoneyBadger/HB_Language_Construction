@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """
-CodeCraft Interpreter Generator Module
+ParserCraft Interpreter Generator Module
 
-Generates standalone interpreter instances for CodeEx (CodeCraft execution platform).
-Allows CodeCraft-defined languages to be executed within CodeEx IDE.
+Generates standalone interpreter instances for CodeEx (ParserCraft execution platform).
+Allows ParserCraft-defined languages to be executed within CodeEx IDE.
 
-This module extends CodeCraft to support interpreter export for use by external
+This module extends ParserCraft to support interpreter export for use by external
 applications like CodeEx.
 """
 
@@ -35,9 +35,9 @@ class InterpreterPackage:
             "name": config.name,
             "version": self.version,
             "created": self.created_at,
-            "keywords": len(config.keywords) if hasattr(config, "keywords") else 0,
-            "functions": len(config.keywords) if hasattr(config, "functions") else 0,
-            "operators": len(config.keywords) if hasattr(config, "operators") else 0,
+            "keywords": len(getattr(config, "keyword_mappings", {})),
+            "functions": len(getattr(config, "builtin_functions", {})),
+            "operators": len(getattr(config, "operators", {})),
         }
 
     def execute(
@@ -115,7 +115,7 @@ class InterpreterGenerator:
     def __init__(self):
         """Initialize interpreter generator."""
         self.interpreters: Dict[str, InterpreterPackage] = {}
-        self.export_dir = Path.home() / ".codecraft" / "interpreters"
+        self.export_dir = Path.home() / ".parsercraft" / "interpreters"
         self.export_dir.mkdir(parents=True, exist_ok=True)
 
     def generate(self, config: LanguageConfig) -> InterpreterPackage:

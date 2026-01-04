@@ -1,10 +1,10 @@
-# CodeCraft IDE Developer Guide
+# ParserCraft IDE Developer Guide
 
-Technical documentation for the CodeCraft IDE - the language design interface.
+Technical documentation for the ParserCraft IDE - the language design interface.
 
 ## Overview
 
-The CodeCraft IDE (`src/hb_lcs/ide.py`) is a comprehensive graphical interface
+The ParserCraft IDE (`src/hb_lcs/ide.py`) is a comprehensive graphical interface
 for creating and testing custom programming languages. It provides visual editors
 for language configuration with real-time validation and testing capabilities.
 
@@ -12,7 +12,7 @@ for language configuration with real-time validation and testing capabilities.
 
 ### System Design
 
-CodeCraft IDE implements a multi-panel architecture:
+ParserCraft IDE implements a multi-panel architecture:
 
 ```
 ┌─────────────────────────────────────┐
@@ -113,7 +113,7 @@ File/folder navigation component.
   "name": "my_language",
   "created": "2024-01-15T10:30:45.123456",
   "interpreter": "my_language_config",
-  "description": "My CodeCraft-based language"
+  "description": "My ParserCraft-based language"
 }
 ```
 
@@ -353,7 +353,7 @@ result = interpreter.execute(code, context={})
 ### File Access
 
 - Projects limited to `~/.codex/projects/`
-- Interpreters limited to `~/.codecraft/interpreters/`
+- Interpreters limited to `~/.parsercraft/interpreters/`
 - No direct file system access from code
 
 ### Configuration Validation
@@ -466,7 +466,7 @@ Types: feat, fix, docs, style, refactor, test, chore
 import sys
 print(sys.path)
 # Add project root if needed
-sys.path.insert(0, '/path/to/CodeCraft')
+sys.path.insert(0, '/path/to/ParserCraft')
 ```
 
 ### Tkinter Not Available
@@ -495,5 +495,5 @@ print(config.keywords)
 ## Related Documentation
 
 - [CODEX_USER_GUIDE.md](./CODEX_USER_GUIDE.md) - User documentation
-- [LANGUAGE_DEVELOPMENT_GUIDE.md](./LANGUAGE_DEVELOPMENT_GUIDE.md) - CodeCraft language creation
-- [TECHNICAL_REFERENCE.md](../reference/TECHNICAL_REFERENCE.md) - CodeCraft API reference
+- [LANGUAGE_DEVELOPMENT_GUIDE.md](./LANGUAGE_DEVELOPMENT_GUIDE.md) - ParserCraft language creation
+- [TECHNICAL_REFERENCE.md](../reference/TECHNICAL_REFERENCE.md) - ParserCraft API reference

@@ -5,7 +5,7 @@ Complete documentation of CodeEx IDE development and features.
 **Status**: ✅ **Complete and Production Ready**  
 **Version**: 1.0.0  
 **Date**: December 2024  
-**Integration**: CodeCraft ↔ CodeEx
+**Integration**: ParserCraft ↔ CodeEx
 
 ---
 
@@ -13,7 +13,7 @@ Complete documentation of CodeEx IDE development and features.
 
 CodeEx is a complete IDE system that enables:
 
-1. **Language Creation** (CodeCraft) → Create custom programming languages
+1. **Language Creation** (ParserCraft) → Create custom programming languages
 2. **Language Export** (InterpreterGenerator) → Serialize for distribution
 3. **Language Usage** (CodeEx) → Develop and run applications
 
@@ -22,7 +22,7 @@ This document outlines the entire implementation, architecture, and usage.
 ## Project Structure
 
 ```
-/home/james/CodeCraft/
+/home/james/ParserCraft/
 ├── codex.py                          # Entry point
 ├── codex_gui.py                      # Main IDE (550+ lines)
 ├── codex_components.py               # UI components (380+ lines)
@@ -33,7 +33,7 @@ This document outlines the entire implementation, architecture, and usage.
     ├── CODEX_QUICKSTART.md           # 5-minute start
     ├── CODEX_USER_GUIDE.md           # Complete manual
     ├── CODEX_DEVELOPER_GUIDE.md      # Development docs
-    └── CODEX_INTEGRATION_GUIDE.md    # CodeCraft integration
+    └── CODEX_INTEGRATION_GUIDE.md    # ParserCraft integration
 ```
 
 ## Core Components
@@ -52,7 +52,7 @@ This document outlines the entire implementation, architecture, and usage.
 ```python
 def main():
     root = tk.Tk()
-    root.title("CodeEx - CodeCraft Execution Environment")
+    root.title("CodeEx - ParserCraft Execution Environment")
     root.geometry("1600x900")
     root.minsize(1200, 700)
     ide = CodeExIDE(root)
@@ -177,7 +177,7 @@ Menus:
 
 ### 4. Integration Layer: interpreter_generator.py
 
-**Purpose**: Bridge CodeCraft and CodeEx  
+**Purpose**: Bridge ParserCraft and CodeEx  
 **Size**: 312 lines  
 **Location**: `src/hb_lcs/interpreter_generator.py`
 
@@ -228,7 +228,7 @@ get_interpreter(name) → InterpreterPackage|None  # Get by name
 **Export Formats**:
 - `"json"`: Human-readable JSON (for distribution)
 - `"pickle"`: Binary format (for efficiency)
-- `"file"`: Write to disk (~/.codecraft/interpreters/)
+- `"file"`: Write to disk (~/.parsercraft/interpreters/)
 
 **Global Functions**:
 ```python
@@ -282,7 +282,7 @@ get_all_interpreters() → Dict            # List all
         └─────────────┬──────────────┘
                       │
         ┌─────────────▼──────────────┐
-        │ CodeCraft Core             │
+        │ ParserCraft Core             │
         │ - LanguageConfig           │
         │ - LanguageRuntime          │
         │ - Code Execution           │
@@ -315,7 +315,7 @@ get_all_interpreters() → Dict            # List all
 - ✅ Interpreter metadata display
 - ✅ Interpreter dropdown selection
 - ✅ Configuration validation
-- ✅ Export from CodeCraft
+- ✅ Export from ParserCraft
 - ✅ Import into CodeEx
 
 ### 4. Execution Engine
@@ -380,7 +380,7 @@ get_all_interpreters() → Dict            # List all
 
 ## Integration Points
 
-### With CodeCraft
+### With ParserCraft
 
 1. **Load Language Config**
    ```python
@@ -485,7 +485,7 @@ User sees result
 - [ ] Settings persistence
 
 ### Integration Testing
-- [ ] CodeCraft language export
+- [ ] ParserCraft language export
 - [ ] Interpreter import in CodeEx
 - [ ] Code execution with loaded interpreter
 - [ ] Project management
@@ -495,7 +495,7 @@ User sees result
 
 ### Example 1: Create and Use Language
 
-**Step 1**: Create in CodeCraft
+**Step 1**: Create in ParserCraft
 ```json
 {
   "name": "SimpleLang",
@@ -565,12 +565,12 @@ export_interpreter(config, "json")
 ## Deployment
 
 ### Installation
-CodeEx comes with CodeCraft - no separate installation needed.
+CodeEx comes with ParserCraft - no separate installation needed.
 
 ### Requirements
 - Python 3.8+
 - tkinter
-- CodeCraft package
+- ParserCraft package
 
 ### Running
 ```bash
@@ -596,16 +596,16 @@ Settings stored in: `~/.codex/settings.json`
 
 ## Conclusion
 
-CodeEx represents a complete, professional IDE for CodeCraft-based language development. It provides:
+CodeEx represents a complete, professional IDE for ParserCraft-based language development. It provides:
 
 - **Complete IDE Features**: Editor, console, project management
-- **Full Integration**: With CodeCraft language definitions
+- **Full Integration**: With ParserCraft language definitions
 - **Production Ready**: 2800+ lines of tested code
 - **Well Documented**: 1500+ lines of documentation
 - **Extensible**: Clean architecture for future enhancements
 
 CodeEx enables the complete workflow:
-1. **Design** custom languages in CodeCraft
+1. **Design** custom languages in ParserCraft
 2. **Export** interpreters for distribution
 3. **Use** interpreters in CodeEx IDE
 4. **Develop** applications in custom languages
@@ -614,4 +614,4 @@ CodeEx enables the complete workflow:
 
 **CodeEx v1.0.0 - Ready for Production Use**
 
-*Part of the CodeCraft Language Construction System*
+*Part of the ParserCraft Language Construction System*

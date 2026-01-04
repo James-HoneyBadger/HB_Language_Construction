@@ -1,16 +1,16 @@
-# CodeCraft Quick Start Guide
+# ParserCraft Quick Start Guide
 
-Get CodeCraft and CodeEx running in 5 minutes!
+Get ParserCraft and CodeEx running in 5 minutes!
 
 ## Quick Launch (Easiest)
 
 ```bash
 # Linux/macOS
-./run-codecraft.sh    # Launch CodeCraft IDE (language design)
+./run-codecraft.sh    # Launch ParserCraft IDE (language design)
 ./run-codex.sh        # Launch CodeEx IDE (application development)
 
 # Windows
-run-codecraft.bat     # Launch CodeCraft IDE
+run-codecraft.bat     # Launch ParserCraft IDE
 run-codex.bat         # Launch CodeEx IDE
 ```
 
@@ -23,7 +23,7 @@ These scripts automatically set up the Python environment and install dependenci
 
 ## What You'll Get
 
-### CodeCraft IDE
+### ParserCraft IDE
 - Visual language configuration editor
 - Language presets (Python-like, JavaScript-like, Lisp-like, etc.)
 - Real-time configuration validation
@@ -32,14 +32,14 @@ These scripts automatically set up the Python environment and install dependenci
 
 ### CodeEx IDE
 - Professional application development environment
-- Load any CodeCraft-created language
+- Load any ParserCraft-created language
 - Multi-file project support
 - Syntax highlighting
 - Real-time code execution
 
 ## First Steps
 
-### 1. Launch CodeCraft IDE
+### 1. Launch ParserCraft IDE
 
 ```bash
 ./run-codecraft.sh    # (Linux/macOS)
@@ -48,7 +48,7 @@ run-codecraft.bat     # (Windows)
 
 ### 2. Design Your Language
 
-In CodeCraft IDE:
+In ParserCraft IDE:
 - Click "New Configuration"
 - Select preset: "python_like"
 - Rename keywords:
@@ -96,10 +96,10 @@ python3 -c "import tkinter; print('tkinter OK')"
 
 ## Launching Manually
 
-### CodeCraft IDE from Command Line
+### ParserCraft IDE from Command Line
 
 ```bash
-cd /path/to/CodeCraft
+cd /path/to/ParserCraft
 python codex.py
 ```
 
@@ -135,7 +135,7 @@ You should see:
 ### Step 2: Load a Language (2 minutes)
 
 1. Click **"Load Interpreter"** button
-2. Navigate to `/home/james/CodeCraft/configs/examples/`
+2. Navigate to `/home/james/ParserCraft/configs/examples/`
 3. Select a configuration, e.g., `python_like.yaml`
 4. CodeEx loads the interpreter
 
@@ -366,7 +366,7 @@ File → Exit or Ctrl+Q
 | "No interpreter loaded" | Click "Load Interpreter" button |
 | "File not found" | Use full path to file |
 | "Execution failed" | Check code syntax against language rules |
-| "ImportError: codex_gui" | Run from CodeCraft root directory |
+| "ImportError: codex_gui" | Run from ParserCraft root directory |
 
 ---
 

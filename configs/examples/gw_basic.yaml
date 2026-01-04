@@ -1,0 +1,274 @@
+metadata:
+  name: "GW-BASIC"
+  version: "0.1"
+  description: "A GW-BASIC style configuration for ParserCraft"
+  author: "ParserCraft Team"
+  target_interpreter: "python"
+
+keywords:
+  if:
+    original: "if"
+    custom: "IF"
+    category: "control"
+    description: "Conditional branch"
+  then:
+    original: "then"
+    custom: "THEN"
+    category: "control"
+    description: "Begin consequent"
+  else:
+    original: "else"
+    custom: "ELSE"
+    category: "control"
+    description: "Else branch"
+  elif:
+    original: "elif"
+    custom: "ELSEIF"
+    category: "control"
+    description: "Else-if branch"
+  for:
+    original: "for"
+    custom: "FOR"
+    category: "loop"
+    description: "FOR loop"
+  to:
+    original: "to"
+    custom: "TO"
+    category: "loop"
+    description: "Loop upper bound"
+  step:
+    original: "step"
+    custom: "STEP"
+    category: "loop"
+    description: "Loop increment"
+  while:
+    original: "while"
+    custom: "WHILE"
+    category: "loop"
+    description: "WHILE loop"
+  wend:
+    original: "endwhile"
+    custom: "WEND"
+    category: "loop"
+    description: "End WHILE loop"
+  goto:
+    original: "goto"
+    custom: "GOTO"
+    category: "control"
+    description: "Unconditional jump"
+  gosub:
+    original: "call"
+    custom: "GOSUB"
+    category: "control"
+    description: "Subroutine call"
+  return:
+    original: "return"
+    custom: "RETURN"
+    category: "control"
+    description: "Return from subroutine"
+  dim:
+    original: "var"
+    custom: "DIM"
+    category: "declaration"
+    description: "Array declaration"
+  let:
+    original: "assign"
+    custom: "LET"
+    category: "declaration"
+    description: "Explicit assignment"
+  rem:
+    original: "comment"
+    custom: "REM"
+    category: "comment"
+    description: "Remark/comment"
+
+functions:
+  print:
+    name: "PRINT"
+    arity: -1
+    enabled: true
+    description: "Print to console"
+  input:
+    name: "INPUT"
+    arity: 1
+    enabled: true
+    description: "Prompt and read input"
+  len:
+    name: "LEN"
+    arity: 1
+    enabled: true
+    description: "Length of string or array"
+  int:
+    name: "INT"
+    arity: 1
+    enabled: true
+    description: "Integer part"
+  str_dollar:
+    name: "STR$"
+    arity: 1
+    enabled: true
+    description: "Convert to string"
+  val:
+    name: "VAL"
+    arity: 1
+    enabled: true
+    description: "Parse numeric value"
+  abs:
+    name: "ABS"
+    arity: 1
+    enabled: true
+    description: "Absolute value"
+  sqr:
+    name: "SQR"
+    arity: 1
+    enabled: true
+    description: "Square root"
+  rnd:
+    name: "RND"
+    arity: 1
+    enabled: true
+    description: "Random number"
+  mid_dollar:
+    name: "MID$"
+    arity: -1
+    enabled: true
+    description: "Substring"
+  left_dollar:
+    name: "LEFT$"
+    arity: 2
+    enabled: true
+    description: "Left substring"
+  right_dollar:
+    name: "RIGHT$"
+    arity: 2
+    enabled: true
+    description: "Right substring"
+  chr_dollar:
+    name: "CHR$"
+    arity: 1
+    enabled: true
+    description: "Character from code"
+  asc:
+    name: "ASC"
+    arity: 1
+    enabled: true
+    description: "Code from character"
+
+operators:
+  "+":
+    symbol: "+"
+    precedence: 4
+    associativity: "left"
+    enabled: true
+  "-":
+    symbol: "-"
+    precedence: 4
+    associativity: "left"
+    enabled: true
+  "*":
+    symbol: "*"
+    precedence: 5
+    associativity: "left"
+    enabled: true
+  "/":
+    symbol: "/"
+    precedence: 5
+    associativity: "left"
+    enabled: true
+  "^":
+    symbol: "^"
+    precedence: 6
+    associativity: "right"
+    enabled: true
+  "=":
+    symbol: "="
+    precedence: 2
+    associativity: "right"
+    enabled: true
+  "<>":
+    symbol: "<>"
+    precedence: 3
+    associativity: "left"
+    enabled: true
+  "<":
+    symbol: "<"
+    precedence: 3
+    associativity: "left"
+    enabled: true
+  ">":
+    symbol: ">"
+    precedence: 3
+    associativity: "left"
+    enabled: true
+  "<=":
+    symbol: "<="
+    precedence: 3
+    associativity: "left"
+    enabled: true
+  ">=":
+    symbol: ">="
+    precedence: 3
+    associativity: "left"
+    enabled: true
+
+syntax_options:
+  array_start_index: 0
+  allow_fractional_indexing: false
+  flexible_quoting: false
+  string_interpolation: false
+  interpolation_symbol: "$"
+  single_line_comment: "REM"
+  multi_line_comment_start: null
+  multi_line_comment_end: null
+  require_semicolons: false
+  statement_terminator: ":"
+  three_valued_logic: false
+  probabilistic_variables: false
+  temporal_variables: false
+  enable_satirical_keywords: false
+  enable_quantum_features: false
+  enable_time_travel: false
+  enable_gaslighting: false
+
+parsing_config:
+  block_start: ""
+  block_end: ""
+  list_start: "["
+  list_end: "]"
+  tuple_start: "("
+  tuple_end: ")"
+  dict_start: "{"
+  dict_end: "}"
+  statement_separator: ":"
+  parameter_separator: ","
+  key_value_separator: "="
+  string_delimiters:
+    - '"'
+  escape_character: "\\"
+  allow_raw_strings: false
+  raw_string_prefix: "R"
+  member_access: "."
+  index_access_start: "("
+  index_access_end: ")"
+  function_call_start: "("
+  function_call_end: ")"
+  if_then_separator: "THEN"
+  else_keyword: "ELSE"
+  elif_keyword: "ELSEIF"
+  function_param_start: "("
+  function_param_end: ")"
+  function_arrow: null
+  return_type_separator: null
+  class_inheritance_separator: ":"
+  class_body_start: ""
+  class_body_end: ""
+  import_separator: "."
+  from_keyword: "FROM"
+  as_keyword: "AS"
+  allow_custom_operators: true
+  allow_operator_overloading: false
+
+runtime:
+  debug_mode: false
+  strict_mode: true
+  compatibility_mode: "standard"

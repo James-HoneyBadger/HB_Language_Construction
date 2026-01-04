@@ -1,12 +1,12 @@
-# CodeCraft ↔ CodeEx Integration Guide
+# ParserCraft ↔ CodeEx Integration Guide
 
-Complete guide for integrating CodeCraft language definitions with CodeEx IDE.
+Complete guide for integrating ParserCraft language definitions with CodeEx IDE.
 
 ## Overview
 
-CodeEx and CodeCraft work together to enable:
+CodeEx and ParserCraft work together to enable:
 
-1. **CodeCraft**: Define custom programming languages
+1. **ParserCraft**: Define custom programming languages
 2. **CodeEx**: Develop and run applications in those languages
 
 The integration uses the `InterpreterGenerator` system to bridge both tools.
@@ -17,7 +17,7 @@ The integration uses the `InterpreterGenerator` system to bridge both tools.
 
 ```
 ┌─────────────────────┐
-│   CodeCraft IDE     │
+│   ParserCraft IDE     │
 │  (language config)  │
 └──────────┬──────────┘
            │
@@ -47,7 +47,7 @@ The integration uses the `InterpreterGenerator` system to bridge both tools.
 └─────────────────────────────────┘
 ```
 
-## Creating a Language in CodeCraft
+## Creating a Language in ParserCraft
 
 ### Step 1: Define Language Configuration
 
@@ -84,9 +84,9 @@ Create `my_language.json`:
 }
 ```
 
-### Step 2: Test in CodeCraft IDE
+### Step 2: Test in ParserCraft IDE
 
-1. Open CodeCraft IDE
+1. Open ParserCraft IDE
 2. Load your configuration file
 3. Test the language features
 4. Verify syntax highlighting works
@@ -116,7 +116,7 @@ print(f"Exported to: {exported_path}")
 ### Method 2: Command Line
 
 ```bash
-cd /path/to/CodeCraft
+cd /path/to/ParserCraft
 
 # Generate and export
 python -c "
@@ -148,7 +148,7 @@ python codex.py
 
 1. Click **Load Interpreter**
 2. Navigate to one of:
-   - `~/.codecraft/interpreters/` (exported by CodeCraft)
+   - `~/.parsercraft/interpreters/` (exported by ParserCraft)
    - `configs/examples/` (pre-built examples)
    - Your custom JSON file
 3. Select your language file
@@ -193,7 +193,7 @@ Each project can have different language interpreter.
 Create a collection of language configurations:
 
 ```
-~/codecraft_languages/
+~/parsercraft_languages/
 ├── python_like.json
 ├── logo_like.json
 ├── scheme_like.json
@@ -270,7 +270,7 @@ operators = interpreter.config.operators
 
 ### Workflow 1: Create Simple Calculator Language
 
-**In CodeCraft**:
+**In ParserCraft**:
 ```json
 {
   "name": "Calculator",
@@ -294,7 +294,7 @@ print y
 
 ### Workflow 2: Multiple Language Classroom
 
-**In CodeCraft**: Create 5 language variants
+**In ParserCraft**: Create 5 language variants
 **Export**: Each to JSON
 **In CodeEx**: 
 - Student 1 loads Python variant
@@ -304,7 +304,7 @@ print y
 
 ### Workflow 3: Language Testing
 
-**In CodeCraft**: Design language
+**In ParserCraft**: Design language
 **Export**: With test suite
 **In CodeEx**:
 1. Create "TestProject"
@@ -375,7 +375,7 @@ print(config.keywords)
 ### Configuration Management
 
 1. **Version your languages**: Use semantic versioning
-2. **Test before export**: Verify in CodeCraft first
+2. **Test before export**: Verify in ParserCraft first
 3. **Organize exports**: Keep interpreters in standard location
 4. **Document purpose**: Add description field
 5. **Include examples**: Put example code in projects
@@ -447,21 +447,21 @@ operators = config.operators
 
 ## Related Documentation
 
-- [LANGUAGE_DEVELOPMENT_GUIDE.md](./LANGUAGE_DEVELOPMENT_GUIDE.md) - CodeCraft language creation
+- [LANGUAGE_DEVELOPMENT_GUIDE.md](./LANGUAGE_DEVELOPMENT_GUIDE.md) - ParserCraft language creation
 - [CODEX_USER_GUIDE.md](./CODEX_USER_GUIDE.md) - CodeEx IDE usage
 - [CODEX_QUICKSTART.md](./CODEX_QUICKSTART.md) - Quick start for CodeEx
 - [interpreter_generator.py](../../src/hb_lcs/interpreter_generator.py) - Integration API
 
 ## Summary
 
-1. **Design language** in CodeCraft
+1. **Design language** in ParserCraft
 2. **Export interpreter** using InterpreterGenerator
 3. **Load in CodeEx** using "Load Interpreter"
 4. **Write and execute code** in CodeEx editor
 5. **Iterate and improve** language design
 6. **Share interpreters** with other users
 
-Together, CodeCraft and CodeEx provide complete environment for:
+Together, ParserCraft and CodeEx provide complete environment for:
 - Creating custom languages
 - Developing applications
 - Teaching programming

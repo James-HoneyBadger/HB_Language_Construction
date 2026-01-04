@@ -1,6 +1,6 @@
 # CodeEx Quick Reference Card
 
-**CodeEx v1.0.0** - CodeCraft Execution Environment
+**CodeEx v1.0.0** - ParserCraft Execution Environment
 
 ## Launch
 
@@ -167,9 +167,9 @@ All created projects stored here.
 
 ## Interpreters Location
 
-**Directory**: `~/.codecraft/interpreters/`
+**Directory**: `~/.parsercraft/interpreters/`
 
-Exported interpreters from CodeCraft stored here.
+Exported interpreters from ParserCraft stored here.
 
 ## Error Messages
 
@@ -195,7 +195,7 @@ Exported interpreters from CodeCraft stored here.
 | [CODEX_QUICKSTART.md](docs/guides/CODEX_QUICKSTART.md) | 5-minute start |
 | [CODEX_USER_GUIDE.md](docs/guides/CODEX_USER_GUIDE.md) | Complete manual |
 | [CODEX_DEVELOPER_GUIDE.md](docs/guides/CODEX_DEVELOPER_GUIDE.md) | Development |
-| [CODEX_INTEGRATION_GUIDE.md](docs/guides/CODEX_INTEGRATION_GUIDE.md) | CodeCraft integration |
+| [CODEX_INTEGRATION_GUIDE.md](docs/guides/CODEX_INTEGRATION_GUIDE.md) | ParserCraft integration |
 
 ## Keyboard Shortcut Categories
 
@@ -221,7 +221,7 @@ Exported interpreters from CodeCraft stored here.
 
 | Type | Extension | Example |
 |------|-----------|---------|
-| CodeCraft Language | .json, .yaml | python_like.yaml |
+| ParserCraft Language | .json, .yaml | python_like.yaml |
 | Code Files | .cc, .py | hello.cc |
 | Project Metadata | .json | project.json |
 | Settings | .json | settings.json |
@@ -325,7 +325,7 @@ python -c "import tkinter; print('OK')"
 **Current**: 1.0.0  
 **Release Date**: December 2024  
 **Status**: Production Ready  
-**Part of**: CodeCraft Project
+**Part of**: ParserCraft Project
 
 ---
 

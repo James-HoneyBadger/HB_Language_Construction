@@ -1,6 +1,6 @@
 @echo off
-REM Run CodeCraft IDE - Language Construction Set (Windows)
-REM This script initializes the virtual environment and launches the CodeCraft IDE
+REM Run ParserCraft IDE - Language Construction Set (Windows)
+REM This script initializes the virtual environment and launches the ParserCraft IDE
 
 setlocal enabledelayedexpansion
 
@@ -8,7 +8,7 @@ set "SCRIPT_DIR=%~dp0"
 set "VENV_DIR=%SCRIPT_DIR%.venv"
 
 echo.
-echo 🚀 CodeCraft - Honey Badger Language Construction Set
+echo 🚀 ParserCraft - Honey Badger Language Construction Set
 echo ==================================================
 echo.
 
@@ -48,10 +48,10 @@ echo ✓ pip updated
 echo.
 
 REM Install the package in development mode
-echo 📚 Installing CodeCraft package...
+echo 📚 Installing ParserCraft package...
 cd /d "%SCRIPT_DIR%"
 python -m pip install --quiet -e ".[ide]"
-echo ✓ CodeCraft package installed
+echo ✓ ParserCraft package installed
 echo.
 
 REM Verify tkinter is available
@@ -65,7 +65,7 @@ python -c "import tkinter; print('✓ tkinter available')" || (
 echo.
 
 REM Launch the IDE
-echo 🎨 Launching CodeCraft IDE...
+echo 🎨 Launching ParserCraft IDE...
 echo ==================================================
 echo.
 
@@ -73,5 +73,5 @@ python -m hb_lcs.ide
 
 echo.
 echo ==================================================
-echo ✓ CodeCraft IDE closed
+echo ✓ ParserCraft IDE closed
 pause

@@ -11,9 +11,9 @@
 
 ## Project Overview
 
-CodeEx is a professional IDE that integrates seamlessly with CodeCraft to enable:
+CodeEx is a professional IDE that integrates seamlessly with ParserCraft to enable:
 
-1. **Language Creation** → Design custom programming languages in CodeCraft
+1. **Language Creation** → Design custom programming languages in ParserCraft
 2. **Language Export** → Serialize languages for distribution
 3. **IDE Development** → CodeEx provides comprehensive IDE for using exported languages
 
@@ -126,7 +126,7 @@ Reusable UI components:
    - Security considerations
 
 6. **CODEX_INTEGRATION_GUIDE.md** (300 lines)
-   - CodeCraft integration
+   - ParserCraft integration
    - Language creation workflow
    - Export procedures
    - Import in CodeEx
@@ -189,9 +189,9 @@ Reusable UI components:
 
 ### ✅ Integration (4/4)
 - [x] InterpreterGenerator system
-- [x] CodeCraft config loading
+- [x] ParserCraft config loading
 - [x] Export/import serialization
-- [x] Seamless CodeCraft integration
+- [x] Seamless ParserCraft integration
 
 ### ✅ Documentation (8/8)
 - [x] User quick start
@@ -225,7 +225,7 @@ Data Tier (Integration)
 └── InterpreterGenerator
     ├── Interpreter creation
     ├── Serialization
-    ├── CodeCraft integration
+    ├── ParserCraft integration
     └── Code execution
 ```
 
@@ -295,7 +295,7 @@ User Action (UI) → CodeExIDE (Logic) → InterpreterGenerator (Data)
 ## File Structure
 
 ```
-/home/james/CodeCraft/
+/home/james/ParserCraft/
 ├── codex.py                           # Entry point (54 lines)
 ├── codex_gui.py                       # Main IDE (555 lines)
 ├── codex_components.py                # UI components (381 lines)
@@ -311,11 +311,11 @@ User Action (UI) → CodeExIDE (Logic) → InterpreterGenerator (Data)
     └── CODEX_INTEGRATION_GUIDE.md     # Integration (300 lines)
 ```
 
-## Integration with CodeCraft
+## Integration with ParserCraft
 
 ### Complete Workflow
 
-1. **Create Language** (CodeCraft)
+1. **Create Language** (ParserCraft)
    ```json
    {
      "name": "MyLanguage",
@@ -369,7 +369,7 @@ User Action (UI) → CodeExIDE (Logic) → InterpreterGenerator (Data)
 [ ] Theme toggle
 [ ] Error handling
 [ ] Multi-project support
-[ ] CodeCraft integration
+[ ] ParserCraft integration
 ```
 
 ## Deployment
@@ -385,7 +385,7 @@ User Action (UI) → CodeExIDE (Logic) → InterpreterGenerator (Data)
 - [x] Developer guide available
 
 ### Installation
-Comes with CodeCraft - no separate installation needed.
+Comes with ParserCraft - no separate installation needed.
 
 ### Usage
 ```bash
@@ -446,7 +446,7 @@ Settings auto-saved to `~/.codex/settings.json`
 - [x] Inline code documentation
 
 **Integration**
-- [x] Seamless CodeCraft integration
+- [x] Seamless ParserCraft integration
 - [x] InterpreterGenerator system
 - [x] Export/import capability
 - [x] Execution isolation
@@ -464,8 +464,8 @@ Settings auto-saved to `~/.codex/settings.json`
 
 CodeEx is a **complete, production-ready IDE** that:
 
-1. **Provides** professional development environment for CodeCraft languages
-2. **Integrates** seamlessly with CodeCraft for language creation
+1. **Provides** professional development environment for ParserCraft languages
+2. **Integrates** seamlessly with ParserCraft for language creation
 3. **Enables** rapid application development using custom languages
 4. **Includes** comprehensive documentation and guides
 5. **Supports** teaching, research, and commercial language design
@@ -516,7 +516,7 @@ CodeEx is a **complete, production-ready IDE** that:
 
 All 10 tasks from original todo list completed:
 
-1. ✅ Update CodeCraft for interpreter generation
+1. ✅ Update ParserCraft for interpreter generation
 2. ✅ CodeEx main application structure
 3. ✅ CodeEx IDE interface
 4. ✅ CodeEx interpreter loader
@@ -536,4 +536,4 @@ All 10 tasks from original todo list completed:
 
 **CodeEx v1.0.0 is Ready for Use**
 
-*Professional IDE for CodeCraft-Based Language Development*
+*Professional IDE for ParserCraft-Based Language Development*

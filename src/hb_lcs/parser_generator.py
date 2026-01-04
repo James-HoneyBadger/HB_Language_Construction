@@ -231,7 +231,7 @@ class Parser:
 
         # Find original keyword for semantic understanding
         original = None
-        for mapping in self.config.keywords.values():
+        for mapping in self.config.keyword_mappings.values():
             if mapping.custom == keyword:
                 original = mapping.original
                 break

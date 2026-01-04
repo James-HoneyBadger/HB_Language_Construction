@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document provides a complete reference for all TeachScript modules integrated into the CodeCraft IDE.
+This document provides a complete reference for all TeachScript modules integrated into the ParserCraft IDE.
 
 ---
 
@@ -508,7 +508,7 @@ TEMPLATES = {
 Run tests:
 
 ```bash
-cd /home/james/CodeCraft
+cd /home/james/ParserCraft
 python -m pytest tests/test_teachscript.py -v
 ```
 
@@ -591,7 +591,7 @@ python -m src.hb_lcs.launch_ide_teachscript
 
 ## License
 
-Same as CodeCraft - See LICENSE file
+Same as ParserCraft - See LICENSE file
 
 ---
 

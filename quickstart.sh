@@ -1,8 +1,8 @@
 #!/bin/bash
-# TeachScript + CodeCraft IDE Quick Start Script
+# TeachScript + ParserCraft IDE Quick Start Script
 
 echo "================================================"
-echo "TeachScript + CodeCraft IDE Quick Start"
+echo "TeachScript + ParserCraft IDE Quick Start"
 echo "================================================"
 echo ""
 
@@ -19,8 +19,8 @@ echo ""
 
 # Check current directory
 if [ ! -f "setup.py" ]; then
-    echo "ERROR: Please run this from the CodeCraft project root directory"
-    echo "Expected: /home/james/CodeCraft"
+    echo "ERROR: Please run this from the ParserCraft project root directory"
+    echo "Expected: /home/james/ParserCraft"
     exit 1
 fi
 
@@ -31,7 +31,7 @@ echo ""
 echo "Checking installation..."
 python3 -c "from src.hb_lcs.teachscript_runtime import get_runtime" 2>/dev/null
 if [ $? -ne 0 ]; then
-    echo "Installing CodeCraft..."
+    echo "Installing ParserCraft..."
     pip install -e . > /dev/null 2>&1
     if [ $? -eq 0 ]; then
         echo "✓ Installation successful"
@@ -72,7 +72,7 @@ echo "  python -m src.hb_lcs.launch_ide_teachscript"
 echo ""
 echo "Or:"
 echo ""
-echo "  cd /home/james/CodeCraft"
+echo "  cd /home/james/ParserCraft"
 echo "  python -m src.hb_lcs.launch_ide_teachscript"
 echo ""
 echo "To run a TeachScript file directly:"

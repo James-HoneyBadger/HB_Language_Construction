@@ -1,27 +1,27 @@
-# CodeCraft Documentation Summary
+# ParserCraft Documentation Summary
 
 **Updated December 30, 2025**
 
-This document summarizes the comprehensive documentation refresh and rebranding of the CodeCraft project.
+This document summarizes the comprehensive documentation refresh and rebranding of the ParserCraft project.
 
 ## Overview
 
-CodeCraft is a framework for creating custom programming languages without writing a compiler. The project has been rebranded from "Honey Badger Language Construction Set" to **CodeCraft** with comprehensive documentation updates.
+ParserCraft is a framework for creating custom programming languages without writing a compiler. The project has been rebranded from "Honey Badger Language Construction Set" to **ParserCraft** with comprehensive documentation updates.
 
 ## Documentation Structure
 
 ### Quick Start & Getting Started
-- **[run-codecraft.sh](../run-codecraft.sh)** - Automated CodeCraft IDE launcher (Linux/macOS)
+- **[run-codecraft.sh](../run-codecraft.sh)** - Automated ParserCraft IDE launcher (Linux/macOS)
 - **[run-codex.sh](../run-codex.sh)** - Automated CodeEx IDE launcher (Linux/macOS)
-- **[run-codecraft.bat](../run-codecraft.bat)** - Automated CodeCraft IDE launcher (Windows)
+- **[run-codecraft.bat](../run-codecraft.bat)** - Automated ParserCraft IDE launcher (Windows)
 - **[run-codex.bat](../run-codex.bat)** - Automated CodeEx IDE launcher (Windows)
 - **[docs/DOCUMENTATION_INDEX.md](DOCUMENTATION_INDEX.md)** - Navigation guide for all documentation
 - **[docs/guides/CODEX_QUICKSTART.md](guides/CODEX_QUICKSTART.md)** - 5-minute quick start guide
 
 ### User Guides
 - **[docs/guides/CODEX_USER_GUIDE.md](guides/CODEX_USER_GUIDE.md)** - CodeEx IDE user guide for application development
-- **[docs/guides/CODEX_DEVELOPER_GUIDE.md](guides/CODEX_DEVELOPER_GUIDE.md)** - CodeCraft IDE technical guide for language design
-- **[docs/guides/CODEX_INTEGRATION_GUIDE.md](guides/CODEX_INTEGRATION_GUIDE.md)** - Integration guide for embedding CodeCraft in projects
+- **[docs/guides/CODEX_DEVELOPER_GUIDE.md](guides/CODEX_DEVELOPER_GUIDE.md)** - ParserCraft IDE technical guide for language design
+- **[docs/guides/CODEX_INTEGRATION_GUIDE.md](guides/CODEX_INTEGRATION_GUIDE.md)** - Integration guide for embedding ParserCraft in projects
 
 ### Technical Reference
 - **[docs/reference/API_REFERENCE.md](reference/API_REFERENCE.md)** - Complete Python API documentation
@@ -29,7 +29,7 @@ CodeCraft is a framework for creating custom programming languages without writi
 - **[docs/reference/TECHNICAL_REFERENCE.md](reference/TECHNICAL_REFERENCE.md)** - Technical implementation details
 
 ### TeachScript Documentation
-TeachScript is a complete example custom language built with CodeCraft:
+TeachScript is a complete example custom language built with ParserCraft:
 - **[docs/teachscript/README_TEACHSCRIPT.md](teachscript/README_TEACHSCRIPT.md)** - TeachScript user guide
 - **[docs/teachscript/TEACHSCRIPT_ADVANCED_GUIDE.md](teachscript/TEACHSCRIPT_ADVANCED_GUIDE.md)** - Advanced TeachScript features
 - **[docs/teachscript/TEACHSCRIPT_IDE_INTEGRATION.md](teachscript/TEACHSCRIPT_IDE_INTEGRATION.md)** - TeachScript in IDEs
@@ -44,14 +44,14 @@ TeachScript is a complete example custom language built with CodeCraft:
 ## Key Updates
 
 ### 1. Rebranding
-- Changed from "Honey Badger Language Construction Set (HB_LCS)" to **CodeCraft**
+- Changed from "Honey Badger Language Construction Set (HB_LCS)" to **ParserCraft**
 - Updated all titles, docstrings, and comments throughout the codebase
 - Updated GitHub repository references
 
 ### 2. Clarified Component Names
-- **CodeCraft IDE** - The visual language design environment (`src/hb_lcs/ide.py`)
+- **ParserCraft IDE** - The visual language design environment (`src/hb_lcs/ide.py`)
 - **CodeEx IDE** - The professional application development environment (`src/codex/codex.py`)
-- **CodeCraft CLI** - Command-line tools for language configuration management
+- **ParserCraft CLI** - Command-line tools for language configuration management
 
 ### 3. New Reference Documentation
 - **API_REFERENCE.md** - Complete Python API with classes, methods, and examples
@@ -64,7 +64,7 @@ TeachScript is a complete example custom language built with CodeCraft:
 
 ### 5. Source Code Updates
 Updated docstrings in:
-- `src/hb_lcs/ide.py` - CodeCraft IDE documentation
+- `src/hb_lcs/ide.py` - ParserCraft IDE documentation
 - `src/hb_lcs/cli.py` - CLI tool documentation
 - `src/codex/codex.py` - CodeEx main application
 - `src/codex/codex_gui.py` - CodeEx GUI components
@@ -78,13 +78,13 @@ Updated docstrings in:
 ## Project Structure
 
 ```
-CodeCraft/
+ParserCraft/
 ├── src/
 │   ├── hb_lcs/              # Core language construction framework
 │   │   ├── language_config.py       # Configuration system
 │   │   ├── language_runtime.py      # Runtime integration
 │   │   ├── parser_generator.py      # Parser generation
-│   │   ├── ide.py                   # CodeCraft IDE
+│   │   ├── ide.py                   # ParserCraft IDE
 │   │   ├── cli.py                   # CLI tools
 │   │   ├── teachscript_*.py         # TeachScript integration
 │   │   └── ...
@@ -163,8 +163,8 @@ All documentation now follows consistent formatting:
 ## Commit History
 
 Recent commits related to this update:
-- `730f98c` - Rebrand to CodeCraft: update all documentation, titles, and comments
-- `5af5110` - Add launch scripts for CodeCraft and CodeEx with venv setup
+- `730f98c` - Rebrand to ParserCraft: update all documentation, titles, and comments
+- `5af5110` - Add launch scripts for ParserCraft and CodeEx with venv setup
 - `e88ffcb` - Clean up file structure: organize docs, configs, and source files
 
 ## Next Steps
@@ -173,7 +173,7 @@ The project is now fully rebranded and documented. Recommended next steps:
 1. Review [README.md](../README.md) for overall project direction
 2. Try the quick start: `./run-codecraft.sh` or `./run-codex.sh`
 3. Explore TeachScript examples in [demos/teachscript/](../demos/teachscript/)
-4. Create your first custom language using CodeCraft IDE
+4. Create your first custom language using ParserCraft IDE
 
 ## Support
 

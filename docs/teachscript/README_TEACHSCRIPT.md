@@ -1,4 +1,4 @@
-# 🎉 TeachScript + CodeCraft IDE - COMPLETE INTEGRATION
+# 🎉 TeachScript + ParserCraft IDE - COMPLETE INTEGRATION
 
 **Status**: ✅ **PRODUCTION READY**  
 **Date**: December 30, 2025  
@@ -9,7 +9,7 @@
 ## 🚀 Quick Start
 
 ```bash
-cd /home/james/CodeCraft
+cd /home/james/ParserCraft
 python -m src.hb_lcs.launch_ide_teachscript
 ```
 
@@ -337,7 +337,7 @@ python TEACHSCRIPT_SETUP_GUIDE.py
 ## 📊 File Structure
 
 ```
-/home/james/CodeCraft/
+/home/james/ParserCraft/
 ├── src/hb_lcs/
 │   ├── teachscript_runtime.py ..................... Main engine
 │   ├── ide_teachscript_integration.py ............ IDE integration
@@ -374,7 +374,7 @@ python TEACHSCRIPT_SETUP_GUIDE.py
 
 ## 🎉 Conclusion
 
-TeachScript + CodeCraft IDE Integration is **COMPLETE** and **PRODUCTION-READY**.
+TeachScript + ParserCraft IDE Integration is **COMPLETE** and **PRODUCTION-READY**.
 
 This system successfully demonstrates that educational programming languages can be:
 - ✅ **Accessible** - as easy as Scratch
@@ -389,7 +389,7 @@ This system successfully demonstrates that educational programming languages can
 ## 🚀 Get Started Now!
 
 ```bash
-cd /home/james/CodeCraft
+cd /home/james/ParserCraft
 python -m src.hb_lcs.launch_ide_teachscript
 ```
 

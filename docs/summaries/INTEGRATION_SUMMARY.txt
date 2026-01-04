@@ -1,10 +1,10 @@
 ================================================================================
-                TEACHSCRIPT + CODECRAFT IDE INTEGRATION
+                TEACHSCRIPT + PARSERCRAFT IDE INTEGRATION
                             COMPLETE & READY
 ================================================================================
 
 PROJECT GOAL: 
-  Integrate TeachScript into CodeCraft IDE and enhance it to rival any
+  Integrate TeachScript into ParserCraft IDE and enhance it to rival any
   professional educational programming system.
 
 STATUS: ✅ COMPLETE
@@ -158,7 +158,7 @@ DOCUMENTATION:
 ================================================================================
 
 1. INSTALL (if not already installed)
-   $ cd /home/james/CodeCraft
+   $ cd /home/james/ParserCraft
    $ pip install -e .
 
 2. LAUNCH THE IDE
@@ -364,10 +364,10 @@ TeachScript IS:
                         ACHIEVEMENT SUMMARY
 ================================================================================
 
-GOAL 1: Integrate TeachScript into CodeCraft IDE
+GOAL 1: Integrate TeachScript into ParserCraft IDE
   ✅ ACHIEVED - Full IDE integration with menus, shortcuts, workflows
 
-GOAL 2: Enhance TeachScript based on CodeCraft capabilities
+GOAL 2: Enhance TeachScript based on ParserCraft capabilities
   ✅ ACHIEVED - 5 new modules, 5 libraries, interactive console
 
 GOAL 3: Make TeachScript powerful and useful
@@ -405,11 +405,11 @@ GOAL 4: Rival any educational programming system
                           READY TO USE!
 ================================================================================
 
-The TeachScript + CodeCraft IDE integration is complete and ready to use.
+The TeachScript + ParserCraft IDE integration is complete and ready to use.
 
 To get started:
 
-  cd /home/james/CodeCraft
+  cd /home/james/ParserCraft
   python -m src.hb_lcs.launch_ide_teachscript
 
 Or run the quickstart:

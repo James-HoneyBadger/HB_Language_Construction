@@ -1,8 +1,8 @@
-# TeachScript + CodeCraft IDE Integration
+# TeachScript + ParserCraft IDE Integration
 
 **Version 3.0** - December 30, 2025
 
-A complete, production-ready integration of TeachScript (educational programming language) into the CodeCraft IDE, creating a powerful system for teaching and learning programming.
+A complete, production-ready integration of TeachScript (educational programming language) into the ParserCraft IDE, creating a powerful system for teaching and learning programming.
 
 ---
 
@@ -41,7 +41,7 @@ teach greet(name):
 
 ### 1. Run the Enhanced IDE
 ```bash
-cd /home/james/CodeCraft
+cd /home/james/ParserCraft
 python -m src.hb_lcs.launch_ide_teachscript
 ```
 
@@ -230,7 +230,7 @@ remember value = anim.get_value()
 ## 📁 Project Structure
 
 ```
-/home/james/CodeCraft/
+/home/james/ParserCraft/
 ├── src/hb_lcs/
 │   ├── teachscript_runtime.py          # Main transpiler & runtime
 │   ├── teachscript_highlighting.py     # Syntax highlighting
@@ -344,7 +344,7 @@ TeachScript can handle:
 
 ## 🎯 Goals Achieved
 
-✅ **Integrated into CodeCraft IDE**: Full IDE support with menus, shortcuts, and workflows
+✅ **Integrated into ParserCraft IDE**: Full IDE support with menus, shortcuts, and workflows
 ✅ **Enhanced with advanced features**: Libraries, console, syntax highlighting, completion
 ✅ **Powerful & useful**: Can build real applications, access Python ecosystem
 ✅ **Educational focused**: Templates, tutorials, reference, examples
@@ -370,16 +370,16 @@ TeachScript can handle:
 
 ## 💬 Support & Community
 
-- **Documentation**: See `/home/james/CodeCraft/docs/teachscript/`
-- **Examples**: Check `/home/james/CodeCraft/demos/teachscript/examples/`
-- **Source Code**: `/home/james/CodeCraft/src/hb_lcs/`
+- **Documentation**: See `/home/james/ParserCraft/docs/teachscript/`
+- **Examples**: Check `/home/james/ParserCraft/demos/teachscript/examples/`
+- **Source Code**: `/home/james/ParserCraft/src/hb_lcs/`
 - **Issues**: Create on GitHub
 
 ---
 
 ## 📄 License
 
-Same as CodeCraft - See LICENSE file
+Same as ParserCraft - See LICENSE file
 
 ---
 

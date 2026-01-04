@@ -1,18 +1,18 @@
-# CodeCraft CLI Reference
+# ParserCraft CLI Reference
 
-Complete guide to CodeCraft command-line tools for language configuration management.
+Complete guide to ParserCraft command-line tools for language configuration management.
 
 ## Installation
 
-CLI tools are included when you install CodeCraft:
+CLI tools are included when you install ParserCraft:
 
 ```bash
 pip install -e .
 ```
 
 Available commands:
-- `codecraft` - Main language configuration tool
-- `codecraft-ide` - Launch CodeCraft IDE
+- `parsercraft` - Main language configuration tool
+- `parsercraft-ide` - Launch ParserCraft IDE
 
 ## Commands
 
@@ -21,7 +21,7 @@ Available commands:
 Create a new language configuration.
 
 ```bash
-codecraft create [OPTIONS]
+parsercraft create [OPTIONS]
 ```
 
 **Options:**
@@ -42,13 +42,13 @@ codecraft create [OPTIONS]
 **Examples:**
 ```bash
 # Create Python-like language
-codecraft create --preset python_like --output spanish.yaml
+parsercraft create --preset python_like --output spanish.yaml
 
 # Create interactive
-codecraft create --interactive
+parsercraft create --interactive
 
 # Create as JSON
-codecraft create --preset minimal --output config.json --format json
+parsercraft create --preset minimal --output config.json --format json
 ```
 
 ### edit
@@ -56,7 +56,7 @@ codecraft create --preset minimal --output config.json --format json
 Edit an existing configuration file.
 
 ```bash
-codecraft edit FILE [OPTIONS]
+parsercraft edit FILE [OPTIONS]
 ```
 
 **Options:**
@@ -70,13 +70,13 @@ codecraft edit FILE [OPTIONS]
 **Examples:**
 ```bash
 # Interactive edit
-codecraft edit my_lang.yaml
+parsercraft edit my_lang.yaml
 
 # Rename keyword
-codecraft edit my_lang.yaml --keyword if cuando
+parsercraft edit my_lang.yaml --keyword if cuando
 
 # Add function
-codecraft edit my_lang.yaml --function say "print output"
+parsercraft edit my_lang.yaml --function say "print output"
 ```
 
 ### validate
@@ -84,7 +84,7 @@ codecraft edit my_lang.yaml --function say "print output"
 Check if a configuration is valid.
 
 ```bash
-codecraft validate FILE [OPTIONS]
+parsercraft validate FILE [OPTIONS]
 ```
 
 **Options:**
@@ -95,13 +95,13 @@ codecraft validate FILE [OPTIONS]
 **Examples:**
 ```bash
 # Simple validation
-codecraft validate spanish.yaml
+parsercraft validate spanish.yaml
 
 # Verbose output
-codecraft validate spanish.yaml --verbose
+parsercraft validate spanish.yaml --verbose
 
 # Auto-fix issues
-codecraft validate spanish.yaml --fix
+parsercraft validate spanish.yaml --fix
 ```
 
 ### info
@@ -109,7 +109,7 @@ codecraft validate spanish.yaml --fix
 Display configuration information.
 
 ```bash
-codecraft info [FILE]
+parsercraft info [FILE]
 ```
 
 **Options:**
@@ -121,13 +121,13 @@ codecraft info [FILE]
 **Examples:**
 ```bash
 # Show all info
-codecraft info spanish.yaml
+parsercraft info spanish.yaml
 
 # Show only keywords
-codecraft info spanish.yaml --keywords
+parsercraft info spanish.yaml --keywords
 
 # Show functions
-codecraft info spanish.yaml --functions
+parsercraft info spanish.yaml --functions
 ```
 
 ### export
@@ -135,7 +135,7 @@ codecraft info spanish.yaml --functions
 Export configuration to different formats.
 
 ```bash
-codecraft export FILE [OPTIONS]
+parsercraft export FILE [OPTIONS]
 ```
 
 **Options:**
@@ -146,13 +146,13 @@ codecraft export FILE [OPTIONS]
 **Examples:**
 ```bash
 # Export as markdown documentation
-codecraft export spanish.yaml --format markdown --output docs.md
+parsercraft export spanish.yaml --format markdown --output docs.md
 
 # Export as HTML
-codecraft export spanish.yaml --format html --output reference.html
+parsercraft export spanish.yaml --format html --output reference.html
 
 # Export as JSON
-codecraft export spanish.yaml --format json --output config.json
+parsercraft export spanish.yaml --format json --output config.json
 ```
 
 ### import
@@ -160,7 +160,7 @@ codecraft export spanish.yaml --format json --output config.json
 Load a configuration from file.
 
 ```bash
-codecraft import FILE [OPTIONS]
+parsercraft import FILE [OPTIONS]
 ```
 
 **Options:**
@@ -171,10 +171,10 @@ codecraft import FILE [OPTIONS]
 **Examples:**
 ```bash
 # Import to user scope
-codecraft import spanish.yaml --scope user
+parsercraft import spanish.yaml --scope user
 
 # Import to project
-codecraft import spanish.yaml --scope project --as my_spanish
+parsercraft import spanish.yaml --scope project --as my_spanish
 ```
 
 ### list-presets
@@ -182,7 +182,7 @@ codecraft import spanish.yaml --scope project --as my_spanish
 List all available language presets.
 
 ```bash
-codecraft list-presets [OPTIONS]
+parsercraft list-presets [OPTIONS]
 ```
 
 **Options:**
@@ -193,13 +193,13 @@ codecraft list-presets [OPTIONS]
 **Examples:**
 ```bash
 # List all presets
-codecraft list-presets
+parsercraft list-presets
 
 # Show detailed info
-codecraft list-presets --details
+parsercraft list-presets --details
 
 # Search for python
-codecraft list-presets --search python
+parsercraft list-presets --search python
 ```
 
 ### convert
@@ -207,7 +207,7 @@ codecraft list-presets --search python
 Convert configuration between formats.
 
 ```bash
-codecraft convert FILE --to FORMAT [OPTIONS]
+parsercraft convert FILE --to FORMAT [OPTIONS]
 ```
 
 **Supported formats:** yaml, json, toml
@@ -220,10 +220,10 @@ codecraft convert FILE --to FORMAT [OPTIONS]
 **Examples:**
 ```bash
 # Convert YAML to JSON
-codecraft convert spanish.yaml --to json --output spanish.json
+parsercraft convert spanish.yaml --to json --output spanish.json
 
 # Convert JSON to YAML
-codecraft convert config.json --to yaml
+parsercraft convert config.json --to yaml
 ```
 
 ### diff
@@ -231,7 +231,7 @@ codecraft convert config.json --to yaml
 Compare two configurations.
 
 ```bash
-codecraft diff FILE1 FILE2 [OPTIONS]
+parsercraft diff FILE1 FILE2 [OPTIONS]
 ```
 
 **Options:**
@@ -243,13 +243,13 @@ codecraft diff FILE1 FILE2 [OPTIONS]
 **Examples:**
 ```bash
 # Compare two language configs
-codecraft diff spanish.yaml french.yaml
+parsercraft diff spanish.yaml french.yaml
 
 # Show only keyword differences
-codecraft diff spanish.yaml french.yaml --keywords-only
+parsercraft diff spanish.yaml french.yaml --keywords-only
 
 # Show functions that differ
-codecraft diff spanish.yaml french.yaml --functions-only
+parsercraft diff spanish.yaml french.yaml --functions-only
 ```
 
 ### update
@@ -257,7 +257,7 @@ codecraft diff spanish.yaml french.yaml --functions-only
 Modify specific aspects of a configuration.
 
 ```bash
-codecraft update FILE [OPTIONS]
+parsercraft update FILE [OPTIONS]
 ```
 
 **Options:**
@@ -270,13 +270,13 @@ codecraft update FILE [OPTIONS]
 **Examples:**
 ```bash
 # Set array indexing
-codecraft update spanish.yaml --set array_indexing 0
+parsercraft update spanish.yaml --set array_indexing 0
 
 # Merge configurations
-codecraft update spanish.yaml --merge base.yaml
+parsercraft update spanish.yaml --merge base.yaml
 
 # Rename keyword
-codecraft update spanish.yaml --rename si when --output spanish_updated.yaml
+parsercraft update spanish.yaml --rename si when --output spanish_updated.yaml
 ```
 
 ### repl
@@ -284,7 +284,7 @@ codecraft update spanish.yaml --rename si when --output spanish_updated.yaml
 Launch interactive configuration REPL.
 
 ```bash
-codecraft repl [FILE] [OPTIONS]
+parsercraft repl [FILE] [OPTIONS]
 ```
 
 **Options:**
@@ -295,13 +295,13 @@ codecraft repl [FILE] [OPTIONS]
 **Examples:**
 ```bash
 # Interactive REPL (start from scratch)
-codecraft repl
+parsercraft repl
 
 # REPL with existing config
-codecraft repl spanish.yaml --debug
+parsercraft repl spanish.yaml --debug
 
 # REPL with history
-codecraft repl spanish.yaml --history
+parsercraft repl spanish.yaml --history
 ```
 
 **REPL Commands:**
@@ -320,7 +320,7 @@ codecraft repl spanish.yaml --history
 Execute batch operations from script.
 
 ```bash
-codecraft batch SCRIPT [OPTIONS]
+parsercraft batch SCRIPT [OPTIONS]
 ```
 
 **Options:**
@@ -340,7 +340,7 @@ export spanish.yaml --format markdown docs.md
 
 **Example:**
 ```bash
-codecraft batch build_languages.batch --output generated/
+parsercraft batch build_languages.batch --output generated/
 ```
 
 ## Global Options
@@ -361,24 +361,24 @@ All commands support these options:
 
 ```bash
 # Create a new language
-codecraft create --preset python_like --output mydata.yaml
+parsercraft create --preset python_like --output mydata.yaml
 
 # Edit keywords
-codecraft edit mydata.yaml --keyword if cuando
-codecraft edit mydata.yaml --keyword def funcion
-codecraft edit mydata.yaml --keyword return devolver
+parsercraft edit mydata.yaml --keyword if cuando
+parsercraft edit mydata.yaml --keyword def funcion
+parsercraft edit mydata.yaml --keyword return devolver
 
 # Validate
-codecraft validate mydata.yaml --verbose
+parsercraft validate mydata.yaml --verbose
 
 # Export documentation
-codecraft export mydata.yaml --format markdown --output mydata_docs.md
+parsercraft export mydata.yaml --format markdown --output mydata_docs.md
 
 # Show info
-codecraft info mydata.yaml --all
+parsercraft info mydata.yaml --all
 
 # Launch IDE to test
-codecraft-ide
+parsercraft-ide
 ```
 
 ### Automation with Batch
@@ -405,14 +405,14 @@ export italian.yaml --format markdown docs/italian.md
 
 Then run:
 ```bash
-codecraft batch build.batch --output languages/
+parsercraft batch build.batch --output languages/
 ```
 
 ## Troubleshooting
 
 ### Command not found
 
-Make sure CodeCraft is installed:
+Make sure ParserCraft is installed:
 ```bash
 pip install -e .
 ```
@@ -428,16 +428,16 @@ chmod +x run-codecraft.sh
 
 Check syntax:
 ```bash
-codecraft validate myfile.yaml --verbose
+parsercraft validate myfile.yaml --verbose
 ```
 
 Auto-fix:
 ```bash
-codecraft validate myfile.yaml --fix
+parsercraft validate myfile.yaml --fix
 ```
 
 ## See Also
 
 - [API Reference](API_REFERENCE.md) - Python API
 - [Configuration Reference](CONFIG_REFERENCE.md) - YAML schema
-- [CodeCraft IDE](../guides/CODEX_DEVELOPER_GUIDE.md) - GUI alternative
+- [ParserCraft IDE](../guides/CODEX_DEVELOPER_GUIDE.md) - GUI alternative

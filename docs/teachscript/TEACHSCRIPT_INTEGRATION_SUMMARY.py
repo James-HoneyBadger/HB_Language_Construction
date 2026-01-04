@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
 """
-TeachScript + CodeCraft IDE Integration Summary
+TeachScript + ParserCraft IDE Integration Summary
 
 This module documents the complete integration of TeachScript into the
-CodeCraft IDE, creating a professional educational programming system.
+ParserCraft IDE, creating a professional educational programming system.
 """
 
 INTEGRATION_SUMMARY = """
 ================================================================================
-  TEACHSCRIPT + CODECRAFT IDE INTEGRATION - COMPLETE
+  TEACHSCRIPT + PARSERCRAFT IDE INTEGRATION - COMPLETE
 ================================================================================
 
 PROJECT GOAL:
-  Integrate TeachScript into CodeCraft IDE and enhance it to rival any
+  Integrate TeachScript into ParserCraft IDE and enhance it to rival any
   professional educational programming system.
 
 ================================================================================
@@ -205,7 +205,7 @@ POWER & EXTENSIBILITY:
 ================================================================================
 
 LAUNCH THE IDE:
-  cd /home/james/CodeCraft
+  cd /home/james/ParserCraft
   python -m src.hb_lcs.launch_ide_teachscript
 
 CREATE A PROJECT:
@@ -342,7 +342,7 @@ These can be implemented by extending the existing modules.
   CONCLUSION
 ================================================================================
 
-The TeachScript + CodeCraft IDE integration creates a world-class educational
+The TeachScript + ParserCraft IDE integration creates a world-class educational
 programming system that:
 
 ✓ Rivals Scratch in accessibility
