@@ -437,7 +437,7 @@ class AdvancedIDE(ttk.Frame):
         for preset in list_presets():
             presets_menu.add_command(
                 label=preset.replace("_", " ").title(),
-                command=lambda p=preset: self._load_preset(p),
+                command=lambda p=preset: self._load_preset(p),  # type: ignore[misc]
             )
 
         lang_menu.add_separator()
@@ -931,7 +931,7 @@ class AdvancedIDE(ttk.Frame):
         ]
 
         for shortcut, command in shortcuts:
-            self.root.bind(shortcut, lambda e, cmd=command: cmd())
+            self.root.bind(shortcut, lambda e, cmd=command: cmd())  # type: ignore[misc]
 
     # Implementation methods would continue here...
     # This is a comprehensive framework - full implementation would  # noqa
@@ -986,12 +986,12 @@ For more information, visit the Help menu.
         ttk.Button(
             button_frame,
             text="Start Tutorial",
-            command=lambda: [self._start_tutorial(), welcome_win.destroy()],
+            command=lambda: (self._start_tutorial(), welcome_win.destroy()),  # type: ignore[func-returns-value]
         ).pack(side="left", padx=5)
         ttk.Button(
             button_frame,
             text="Quick Start Guide",
-            command=lambda: [self._quick_start_guide(), welcome_win.destroy()],
+            command=lambda: (self._quick_start_guide(), welcome_win.destroy()),  # type: ignore[func-returns-value]
         ).pack(side="left", padx=5)
         ttk.Button(button_frame, text="Close", command=welcome_win.destroy).pack(
             side="right", padx=5
@@ -2137,7 +2137,7 @@ All rights reserved."""
         for filepath in recent_files[-5:]:  # Last 5 files
             popup.add_command(
                 label=Path(filepath).name,
-                command=lambda f=filepath: self._open_file_direct(f),
+                command=lambda f=filepath: self._open_file_direct(f),  # type: ignore[misc]
             )
 
         popup.add_separator()
