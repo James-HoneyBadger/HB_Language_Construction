@@ -3643,101 +3643,273 @@ All rights reserved."""
 
         return suggestions
 
-    def init_web_ide(self, port: int = 8080, host: str = "127.0.0.1") -> dict:
-        """Prepare configuration for the lightweight web IDE."""
+    def init_web_ide(self, port: int = 5000, host: str = "127.0.0.1") -> dict:
+        """Prepare full configuration for the production-ready web IDE."""
 
         base_url = f"http://{host}:{port}"
+        api_endpoints = [
+            "/api/config",
+            "/api/code/execute",
+            "/api/code/validate",
+            "/api/keywords",
+            "/api/template",
+            "/api/export",
+            "/api/community/languages",
+        ]
+
         features = {
             "live_reload": True,
             "syntax_highlighting": True,
             "collaboration": True,
-            "api_endpoints": [
-                "/api/config",
-                "/api/code/execute",
-                "/api/keywords",
-            ],
+            "dark_theme": True,
+            "console_output": True,
+            "file_browser": True,
+            "api_endpoints": api_endpoints,
         }
+
         self.web_app_config = {
             "host": host,
             "port": port,
             "base_url": base_url,
             "features": features,
         }
+
         self.web_routes = {
             "/": {"method": "GET", "handler": "serve_ui"},
             "/api/config": {"method": "GET", "handler": "get_config"},
             "/api/code/execute": {"method": "POST", "handler": "execute_code"},
+            "/api/code/validate": {"method": "POST", "handler": "validate_code"},
             "/api/keywords": {"method": "GET", "handler": "list_keywords"},
+            "/api/template": {"method": "GET", "handler": "get_template"},
+            "/api/export": {"method": "POST", "handler": "export_config"},
+            "/api/community/languages": {"method": "GET", "handler": "list_community_languages"},
         }
+
         return self.web_app_config
 
     def generate_web_ui_template(self) -> str:
-        """Return a static HTML template representing the web IDE."""
+        """Return a comprehensive HTML template for the web IDE UI."""
 
-        colors = self.syntax_theme
+        colors = self.syntax_theme or self._default_theme
+        kw_color = colors.get('Keywords', '#d4d4d4')
+        str_color = colors.get('Strings', '#c8e1ff')
         html = textwrap.dedent(
             f"""
             <!DOCTYPE html>
             <html lang="en">
             <head>
                 <meta charset="utf-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <title>Honey Badger Web IDE</title>
                 <style>
+                    :root {{
+                        --bg: #0f111a;
+                        --panel: #1c1f2b;
+                        --border: #2b2f3a;
+                        --accent: #4f8cff;
+                        --accent-2: #6ae3ff;
+                        --text: #e6e8ed;
+                        --muted: #9aa0b5;
+                        --success: #31c48d;
+                        --danger: #f05252;
+                        --warning: #f59e0b;
+                        --font: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+                    }}
+                    * {{ box-sizing: border-box; }}
                     body {{
-                        font-family: Arial, sans-serif;
                         margin: 0;
-                        padding: 0;
-                        background: #1e1e1e;
-                        color: #f0f0f0;
+                        font-family: var(--font);
+                        background: linear-gradient(120deg, #0f111a 0%, #15192c 100%);
+                        color: var(--text);
                     }}
-                    header {{ padding: 1rem; background: #0f4c81; }}
-                    textarea {{
-                        width: 100%;
-                        height: 300px;
+                    header {{
+                        padding: 1rem 1.5rem;
+                        background: rgba(25, 28, 43, 0.9);
+                        border-bottom: 1px solid var(--border);
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        gap: 1rem;
+                        position: sticky;
+                        top: 0;
+                        z-index: 10;
+                        backdrop-filter: blur(8px);
+                    }}
+                    .title {{
+                        font-size: 1.1rem;
+                        letter-spacing: 0.5px;
+                        color: var(--accent-2);
+                    }}
+                    .subtitle {{ color: var(--muted); margin-top: 0.25rem; }}
+                    main {{
+                        display: grid;
+                        grid-template-columns: 2fr 1fr;
+                        gap: 1rem;
+                        padding: 1rem 1.5rem 2rem;
+                    }}
+                    .panel {{
+                        background: var(--panel);
+                        border: 1px solid var(--border);
+                        border-radius: 12px;
+                        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
                         padding: 1rem;
-                        background: #252526;
-                        color: {colors.get('Keywords', '#ffffff')};
-                        border: none;
                     }}
-                    button {{ margin-right: 0.5rem; padding: 0.6rem 1rem; }}  # noqa: E501 pylint: disable=line-too-long
-                    #console {{ background: #111; padding: 1rem; min-height: 150px; white-space: pre-wrap; }}  # noqa: E501 pylint: disable=line-too-long
+                    textarea, pre {{
+                        width: 100%;
+                        border: 1px solid var(--border);
+                        background: #0d0f1a;
+                        color: {kw_color};
+                        border-radius: 10px;
+                        padding: 1rem;
+                        font-family: "Fira Code", "Consolas", monospace;
+                        font-size: 14px;
+                        line-height: 1.5;
+                        resize: vertical;
+                    }}
+                    textarea {{ min-height: 320px; }}
+                    pre {{ min-height: 160px; color: {str_color}; }}
+                    .toolbar {{ display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.75rem; }}
+                    button {{
+                        background: var(--accent);
+                        color: #fff;
+                        border: none;
+                        border-radius: 8px;
+                        padding: 0.65rem 1rem;
+                        cursor: pointer;
+                        font-weight: 600;
+                        letter-spacing: 0.2px;
+                        transition: transform 0.1s ease, box-shadow 0.2s ease;
+                    }}
+                    button.secondary {{ background: #2d3348; color: var(--text); }}
+                    button.danger {{ background: var(--danger); }}
+                    button.success {{ background: var(--success); }}
+                    button:active {{ transform: translateY(1px); }}
+                    .grid-2 {{ display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }}
+                    .stat {{
+                        background: #131625;
+                        padding: 0.75rem;
+                        border-radius: 10px;
+                        border: 1px solid var(--border);
+                        font-size: 0.95rem;
+                    }}
+                    ul {{ list-style: none; padding: 0; margin: 0; }}
+                    li {{ padding: 0.35rem 0; border-bottom: 1px dashed var(--border); }}
+                    code {{ background: #0a0c14; padding: 0.2rem 0.4rem; border-radius: 4px; }}
+                    footer {{ text-align: center; color: var(--muted); padding: 1rem; }}
+                    .tag {{ display: inline-block; padding: 0.2rem 0.5rem; background: #21263a; border-radius: 6px; margin: 0.1rem; color: var(--accent-2); }}
                 </style>
             </head>
             <body>
                 <header>
-                    <h1>Honey Badger Language Construction Set</h1>
-                    <p>Web IDE Preview</p>
-                </header>
-                <main style="padding: 1rem;">
-                    <textarea id="editor" placeholder="Write code here..."></textarea>
-                    <div style="margin-top: 1rem;">
-                        <button onclick="runCode()">Run</button>
-                        <button onclick="highlight()">Highlight</button>
-                        <button onclick="downloadConfig()">Download Config</button>
+                    <div>
+                        <div class="title">Honey Badger Web IDE</div>
+                        <div class="subtitle">Build, execute, debug, and share languages from your browser.</div>
                     </div>
-                    <section id="console"></section>
+                    <div class="toolbar">
+                        <button onclick="runCode()">Execute</button>
+                        <button class="secondary" onclick="validateCode()">Validate</button>
+                        <button class="secondary" onclick="fetchKeywords()">Keywords</button>
+                        <button onclick="loadTemplate()">Template</button>
+                        <button class="success" onclick="exportConfig()">Export</button>
+                        <button class="secondary" onclick="loadCommunity()">Community</button>
+                    </div>
+                </header>
+
+                <main>
+                    <section class="panel">
+                        <h3>Editor</h3>
+                        <textarea id="editor" placeholder="Write code here..."></textarea>
+                        <div class="grid-2" style="margin-top: 0.75rem;">
+                            <div class="stat" id="status">Ready</div>
+                            <div class="stat" id="perf">Execution time: -</div>
+                        </div>
+                    </section>
+
+                    <section class="panel">
+                        <h3>Configuration</h3>
+                        <pre id="configPanel">{{"theme": "dark", "syntax": "hb-lcs"}}</pre>
+                        <div style="margin-top: 0.5rem;">
+                            <strong>Available Endpoints</strong>
+                            <ul id="endpoints">
+                                <li>/api/config</li>
+                                <li>/api/code/execute</li>
+                                <li>/api/code/validate</li>
+                                <li>/api/keywords</li>
+                                <li>/api/template</li>
+                                <li>/api/export</li>
+                                <li>/api/community/languages</li>
+                            </ul>
+                        </div>
+                    </section>
+
+                    <section class="panel">
+                        <h3>Console Output</h3>
+                        <pre id="console">Ready.</pre>
+                    </section>
+
+                    <section class="panel">
+                        <h3>Community Languages</h3>
+                        <div id="community" class="stat">No data loaded.</div>
+                    </section>
                 </main>
+
+                <footer>
+                    Honey Badger LCS Web IDE · API-driven · Dark theme · Real-time execution
+                </footer>
+
                 <script>
                     async function runCode() {{
-                        const response = await fetch('/api/code/execute', {{  # noqa: E501 pylint: disable=line-too-long
+                        const payload = {{ code: document.getElementById('editor').value }};
+                        const res = await fetch('/api/code/execute', {{
                             method: 'POST',
-                            headers: {{ 'Content-Type': 'application/json' }},  # pylint: disable=line-too-long
-                            body: JSON.stringify({{ code: document.getElementById('editor').value }})  # noqa: E501 pylint: disable=line-too-long
+                            headers: {{ 'Content-Type': 'application/json' }},
+                            body: JSON.stringify(payload),
                         }});
-                        const data = await response.json();
-                        document.getElementById('console').textContent = data.output || data.error || '';  # noqa: E501 pylint: disable=line-too-long
+                        const data = await res.json();
+                        document.getElementById('console').textContent = data.output || data.error || 'No output';
+                        document.getElementById('status').textContent = `Status: ${{data.status}}`;
+                        document.getElementById('perf').textContent = `Execution time: ${{(data.execution_time || 0).toFixed(4)}}s`;
                     }}
-                    async function downloadConfig() {{
-                        const response = await fetch('/api/config');
-                        const data = await response.json();
-                        const blob = new Blob([JSON.stringify(data, null, 2)], {{ type: 'application/json' }});  # pylint: disable=line-too-long  # noqa: E501
+
+                    async function validateCode() {{
+                        const payload = {{ code: document.getElementById('editor').value }};
+                        const res = await fetch('/api/code/validate', {{
+                            method: 'POST',
+                            headers: {{ 'Content-Type': 'application/json' }},
+                            body: JSON.stringify(payload),
+                        }});
+                        const data = await res.json();
+                        document.getElementById('console').textContent = data.valid ? 'Code is valid' : data.error || 'Validation failed';
+                    }}
+
+                    async function fetchKeywords() {{
+                        const res = await fetch('/api/keywords');
+                        const data = await res.json();
+                        const list = (data.keywords || []).map(k => `<span class="tag">${{k}}</span>`).join(' ');
+                        document.getElementById('console').innerHTML = list || 'No keywords available.';
+                    }}
+
+                    async function loadTemplate() {{
+                        const res = await fetch('/api/template');
+                        const data = await res.json();
+                        document.getElementById('editor').value = data.template || '';
+                    }}
+
+                    async function exportConfig() {{
+                        const res = await fetch('/api/export', {{ method: 'POST' }});
+                        const data = await res.json();
+                        const blob = new Blob([JSON.stringify(data, null, 2)], {{ type: 'application/json' }});
                         const link = document.createElement('a');
                         link.href = URL.createObjectURL(blob);
                         link.download = 'language-config.json';
                         link.click();
                     }}
-                    function highlight() {{
-                        document.getElementById('console').textContent = 'Syntax highlighting simulated.';  # noqa: E501 pylint: disable=line-too-long
+
+                    async function loadCommunity() {{
+                        const res = await fetch('/api/community/languages');
+                        const data = await res.json();
+                        const items = (data.languages || []).map(l => `<div><strong>${{l.name}}</strong> · ${{l.category}} · ⭐ ${{l.rating}}</div>`).join('');
+                        document.getElementById('community').innerHTML = items || 'No community data available';
                     }}
                 </script>
             </body>
@@ -3760,25 +3932,30 @@ All rights reserved."""
                 config = self.current_config.to_dict() if self.current_config else {}
                 return {"status": "ok", "config": config}
 
-        self.web_routes[route] = {"method": method, "handler": handler}
+        normalized_method = (method or "GET").upper()
+        self.web_routes[route] = {"method": normalized_method, "handler": handler}
+
         try:
             response = handler()
         except Exception as exc:  # noqa: BLE001  # pylint: disable=broad-except
             response = {"status": "error", "reason": str(exc)}
 
-        return {"route": route, "method": method, "response": response}
+        return {"route": route, "method": normalized_method, "response": response}
 
-    def init_remote_execution(self, sandbox_type: str = "local") -> bool:
-        """Initialise remote execution configuration."""
+    def init_remote_execution(self, sandbox_type: str = "local") -> dict:
+        """Initialise remote execution configuration with resource limits."""
 
         self.execution_config = {
             "sandbox_type": sandbox_type,
-            "timeout": 10,
+            "timeout": 5,
             "max_memory_mb": 256,
+            "process_limit": 10,
+            "safe_imports": ["math", "random", "statistics", "time"],
             "sandboxes": {},
             "last_run": None,
+            "logs": [],
         }
-        return True
+        return self.execution_config
 
     def execute_code_safely(self, code: str, timeout: int = 5) -> dict:
         """Execute code within a restricted namespace and capture output."""
@@ -3835,16 +4012,17 @@ All rights reserved."""
         return result
 
     def create_execution_sandbox(self, profile: str = "light") -> dict:
-        """Simulate provisioning an execution sandbox."""
+        """Simulate provisioning an execution sandbox with resource profiles."""
 
         if not self.execution_config:
             self.init_remote_execution()
 
         sandbox_id = f"sandbox-{uuid.uuid4().hex[:6]}"
         limits = {
-            "light": {"memory_mb": 128, "cpu_shares": 1},
-            "medium": {"memory_mb": 256, "cpu_shares": 2},
-            "heavy": {"memory_mb": 512, "cpu_shares": 4},
+            "light": {"memory_mb": 256, "cpu_limit": 1.0, "timeout": 5},
+            "medium": {"memory_mb": 128, "cpu_limit": 0.5, "timeout": 2},
+            "strict": {"memory_mb": 64, "cpu_limit": 0.25, "timeout": 1},
+            "distributed": {"memory_mb": 128, "cpu_limit": 0.5, "timeout": 2},
         }
         resources = limits.get(profile, limits["light"])
         sandbox = {
@@ -3936,11 +4114,11 @@ All rights reserved."""
             {
                 "id": f"lang_{uuid.uuid4().hex[:6]}",
                 "name": "Pythonic DSL",
-                "category": "General",
+                "category": "Scripting",
                 "rating": 4.6,
                 "downloads": 1520,
-                "tags": ["general", "educational"],
-                "ratings": [],
+                "tags": ["scripting", "educational"],
+                "reviews": [],
             },
             {
                 "id": f"lang_{uuid.uuid4().hex[:6]}",
@@ -3949,13 +4127,22 @@ All rights reserved."""
                 "rating": 4.2,
                 "downloads": 980,
                 "tags": ["dsl", "data"],
-                "ratings": [],
+                "reviews": [],
+            },
+            {
+                "id": f"lang_{uuid.uuid4().hex[:6]}",
+                "name": "Functional ML",
+                "category": "Functional",
+                "rating": 4.8,
+                "downloads": 2340,
+                "tags": ["functional", "machine-learning"],
+                "reviews": [],
             },
         ]
 
         self.community_registry = {
             "languages": languages,
-            "categories": ["General", "DSL", "Education", "Experimental"],
+            "categories": ["Educational", "Functional", "Imperative", "Scripting", "DSL", "Esoteric"],
             "users": [],
             "reviews": [],
         }
@@ -3995,8 +4182,8 @@ All rights reserved."""
             "description": description,
             "category": category,
             "tags": tags,
-            "rating": 5.0,
-            "ratings": [],
+            "rating": 0.0,
+            "reviews": [],
             "downloads": 0,
         }
         self.community_registry["languages"].append(language)
@@ -4019,11 +4206,13 @@ All rights reserved."""
         if language is None:
             raise ValueError("Language not found")
 
-        language.setdefault("ratings", []).append(float(rating))
-        language["rating"] = round(
-            sum(language["ratings"]) / len(language["ratings"]),
-            2,
-        )
+        language.setdefault("reviews", []).append({"rating": float(rating), "text": text})
+        ratings = [r.get("rating") if isinstance(r, dict) else r for r in language.get("reviews", [])]
+        if ratings:
+            language["rating"] = round(
+                sum(ratings) / len(ratings),
+                2,
+            )
 
         review = {
             "id": f"review_{uuid.uuid4().hex[:8]}",

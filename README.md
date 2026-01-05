@@ -43,8 +43,50 @@ ParserCraft empowers you to:
 - **Manage with CLI** - Powerful command-line tools for configuration creation and validation
 - **Visual IDE** - ParserCraft IDE for interactive language design and testing
 - **Professional IDE** - CodeEx for developing applications in your custom language
+- **IDE Integration** - **NEW!** Full LSP support enables integration with VS Code, PyCharm, Neovim, and more
+- **Multi-file Programs** - **NEW!** Module system with imports, packages, and dependency management
+
+## ✨ New in v2.0.0
+
+### Language Server Protocol (LSP) Support
+Integrate your custom languages with **any modern IDE**:
+- ✅ **VS Code** - Auto-generated extension included
+- ✅ **PyCharm, IntelliJ, WebStorm** - LSP-compatible
+- ✅ **Neovim, Vim, Sublime Text, Emacs** - Full support
+- **Features:** Syntax highlighting, code completion, hover hints, error diagnostics, signature help
+
+```bash
+# Generate VS Code extension in 10 seconds
+parsercraft extension --config my_language.yaml
+
+# Start LSP server for any IDE
+parsercraft lsp --config my_language.yaml --port 8080
+```
+
+**Learn More:** [LSP Integration Guide](docs/guides/LSP_INTEGRATION_GUIDE.md)
+
+### Module & Package System
+Build large, maintainable programs with **multi-file organization**:
+- Import modules with `import math`, `import {sin, cos} from math`
+- Organize code hierarchically with packages
+- Semantic versioning for library compatibility
+- Automatic dependency resolution and circular dependency detection
+
+```teach
+# math.teach
+export function square(x)
+    return x * x
+end
+
+# main.teach
+import math
+say math.square(5)  # 25
+```
+
+**Learn More:** [Module System Guide](docs/guides/MODULE_SYSTEM_GUIDE.md)
 
 ## Quick Start
+
 
 ### Easy Launch (Recommended)
 

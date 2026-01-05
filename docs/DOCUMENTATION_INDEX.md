@@ -27,6 +27,7 @@ TeachScript is a complete example language built with ParserCraft:
 - **[TeachScript IDE Integration](teachscript/TEACHSCRIPT_IDE_INTEGRATION.md)** - Using TeachScript in IDEs
 
 ### Project Documentation
+- **[Phase 5 Completion Report](PHASE_5_COMPLETION_REPORT.md)** - Deep integration of AST, Generics, Protocol Types, LSP, Registry
 - **[CODEX Documentation](codex/)** - CodeEx IDE implementation details
 - **[Architecture Summaries](summaries/)** - System design and implementation notes
 
