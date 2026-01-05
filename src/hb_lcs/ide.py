@@ -3302,8 +3302,7 @@ All rights reserved."""
 
     def analyze_code_complexity(self, code: str) -> dict:
         """Return lightweight complexity metrics for the supplied code."""
-
-        if code is None:
+        if not code:
             code = ""
 
         lines = [line for line in textwrap.dedent(code).splitlines() if line.strip()]
@@ -3340,8 +3339,7 @@ All rights reserved."""
 
     def suggest_refactoring(self, code: str) -> List[dict]:
         """Provide heuristic refactoring suggestions."""
-
-        if code is None:
+        if not code:
             code = ""
 
         lines = [
@@ -3390,8 +3388,7 @@ All rights reserved."""
 
     def auto_complete_code(self, source: str, cursor_index: int) -> List[str]:
         """Return completion candidates based on current context."""
-
-        if source is None:
+        if not source:
             source = ""
 
         cursor_index = max(0, min(cursor_index, len(source)))
@@ -3536,8 +3533,7 @@ All rights reserved."""
 
     def profile_language_performance(self, code: str) -> dict:
         """Estimate language translation performance metrics."""
-
-        if code is None:
+        if not code:
             code = ""
 
         lines = [line for line in textwrap.dedent(code).splitlines() if line.strip()]
@@ -3604,8 +3600,7 @@ All rights reserved."""
 
     def suggest_optimizations(self, code: str) -> List[dict]:
         """Generate performance-oriented optimisation suggestions."""
-
-        if code is None:
+        if not code:
             code = ""
 
         lines = textwrap.dedent(code).splitlines()
