@@ -15,7 +15,7 @@ Features:
 
 Usage:
     # Start LSP server for a custom language
-    python -m hb_lcs.lsp_server --config my_language.yaml --port 8080
+    python -m parsercraft.lsp_server --config my_language.yaml --port 8080
 
     # Or use in IDE:
     # VS Code: Install "LSP Client" extension, configure server

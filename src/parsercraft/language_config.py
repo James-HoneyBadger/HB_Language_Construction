@@ -598,6 +598,37 @@ class LanguageConfig:
         print(f"Configuration saved to {filepath}")
 
     @classmethod
+    def load(cls, filepath: Union[str, Path]) -> "LanguageConfig":
+        """Load configuration from file."""
+        filepath = Path(filepath)
+        if not filepath.exists():
+            raise FileNotFoundError(f"Config file not found: {filepath}")
+
+        with open(filepath, "r") as f:
+            if filepath.suffix in [".yaml", ".yml"] and YAML_AVAILABLE:
+                data = yaml.safe_load(f)
+            else:
+                data = json.load(f)
+
+        return cls.from_dict(data)
+    
+    @classmethod
+    def from_json(cls, json_str: str) -> "LanguageConfig":
+        """Create configuration from JSON string."""
+        data = json.loads(json_str)
+        return cls.from_dict(data)
+
+    def to_json(self) -> str:
+        """Export configuration as JSON string."""
+        return json.dumps(self.to_dict(), indent=2)
+
+    def to_yaml(self) -> str:
+        """Export configuration as YAML string."""
+        if YAML_AVAILABLE:
+            return yaml.dump(self.to_dict(), default_flow_style=False, sort_keys=False)
+        raise ImportError("PyYAML is not installed")
+
+    @classmethod
     def load(cls, filepath: Union[str, Path]) -> LanguageConfig:
         """Load configuration from file."""
         filepath = Path(filepath)

@@ -53,8 +53,8 @@ STEP 2: Install the Package
 
 STEP 3: Verify Installation
 
-  $ python -c "from src.hb_lcs.teachscript_runtime import TeachScriptRuntime; print('✓ TeachScript runtime installed')"
-  $ python -c "from src.hb_lcs.ide_teachscript_integration import TeachScriptIDEIntegration; print('✓ IDE integration installed')"
+  $ python -c "from parsercraft.teachscript_runtime import TeachScriptRuntime; print('✓ TeachScript runtime installed')"
+  $ python -c "from parsercraft.ide_teachscript_integration import TeachScriptIDEIntegration; print('✓ IDE integration installed')"
 
 STEP 4: Test the Runtime (Optional)
 
@@ -71,20 +71,20 @@ STEP 4: Test the Runtime (Optional)
 OPTION 1: Using the Enhanced TeachScript IDE Launcher
   
   $ cd /home/james/ParserCraft
-  $ python -m src.hb_lcs.launch_ide_teachscript
+  $ python -m parsercraft.launch_ide_teachscript
   
   This launches the IDE with full TeachScript integration.
 
 OPTION 2: Using the Original IDE Launcher
   
-  $ python -m src.hb_lcs.launch_ide
+  $ python -m parsercraft.launch_ide
   
   This launches the IDE without TeachScript-specific features
   (though TeachScript runtime is still available).
 
 OPTION 3: Direct Python Execution
   
-  $ python -m src.hb_lcs.ide
+  $ python -m parsercraft.ide
   
   Direct IDE execution without launcher.
 
@@ -187,7 +187,7 @@ RUN A TEACHSCRIPT FILE:
 TRANSPILE TO PYTHON:
   
   $ python -c "
-    from src.hb_lcs.teachscript_runtime import get_runtime
+    from parsercraft.teachscript_runtime import get_runtime
     runtime = get_runtime()
     with open('program.teach') as f:
         code = f.read()
@@ -197,7 +197,7 @@ TRANSPILE TO PYTHON:
 INTERACTIVE REPL:
   
   $ python -i -c "
-    from src.hb_lcs.teachscript_runtime import get_runtime
+    from parsercraft.teachscript_runtime import get_runtime
     runtime = get_runtime()
     print('TeachScript REPL - type code and press Enter')
   "
@@ -226,10 +226,10 @@ IDE Settings:
   TROUBLESHOOTING
 ================================================================================
 
-ISSUE: "ModuleNotFoundError: No module named 'src.hb_lcs'"
+ISSUE: "ModuleNotFoundError: No module named 'parsercraft'"
   SOLUTION: Run from the project root directory
             cd /home/james/ParserCraft
-            python -m src.hb_lcs.launch_ide_teachscript
+            python -m parsercraft.launch_ide_teachscript
 
 ISSUE: "No module named 'tkinter'"
   SOLUTION: Install tkinter for your Python version
@@ -249,7 +249,7 @@ ISSUE: Code runs but no output appears
 ISSUE: Syntax highlighting not working
   SOLUTION: Restart IDE
             Check that teachscript_highlighting.py is installed
-            Try: python -c "from src.hb_lcs.teachscript_highlighting import TeachScriptHighlighter; print('✓')"
+            Try: python -c "from parsercraft.teachscript_highlighting import TeachScriptHighlighter; print('✓')"
 
 ISSUE: Code completion not working
   SOLUTION: Check that code completion is enabled
@@ -271,7 +271,7 @@ RUN THE TEST SUITE:
 
 MANUAL TESTING:
   
-  1. Launch IDE: python -m src.hb_lcs.launch_ide_teachscript
+  1. Launch IDE: python -m parsercraft.launch_ide_teachscript
   2. Create Hello World project
   3. Run with Ctrl+Shift+T
   4. Should see output in console
@@ -282,7 +282,7 @@ MANUAL TESTING:
 COMMAND-LINE TESTING:
   
   $ python -c "
-    from src.hb_lcs.teachscript_runtime import get_runtime
+    from parsercraft.teachscript_runtime import get_runtime
     runtime = get_runtime()
     output, error = runtime.run('say(\"Test\")')
     print(output)
@@ -330,18 +330,18 @@ CHANGE THEME:
   (IDE may need restart)
 
 ADD MORE PROJECT TEMPLATES:
-  Edit: src/hb_lcs/ide_teachscript_integration.py
+  Edit: src/parsercraft/ide_teachscript_integration.py
   Find: TEMPLATES dictionary
   Add new template entries
 
 CREATE CUSTOM KEYWORDS:
-  Edit: src/hb_lcs/teachscript_runtime.py
+  Edit: src/parsercraft/teachscript_runtime.py
   Find: KEYWORD_MAP dictionary
   Add mappings
   Restart IDE
 
 EXTEND LIBRARIES:
-  Edit: src/hb_lcs/teachscript_libraries.py
+  Edit: src/parsercraft/teachscript_libraries.py
   Add new classes or functions
   Modify TeachScriptEnvironment._setup_libraries()
 
@@ -382,7 +382,7 @@ EXTEND LIBRARIES:
 
 If you want to remove TeachScript:
 
-  $ pip uninstall hb-lcs
+  $ pip uninstall parsercraft
   
 Or if installed from source:
   
@@ -405,14 +405,14 @@ Online:
   • README.md file
 
 Command Line:
-  $ python -m src.hb_lcs.teachscript_runtime --help
+  $ python -m parsercraft.teachscript_runtime --help
 
 ================================================================================
   QUICK START SUMMARY
 ================================================================================
 
 1. Install:     pip install -e .
-2. Launch:      python -m src.hb_lcs.launch_ide_teachscript
+2. Launch:      python -m parsercraft.launch_ide_teachscript
 3. Create:      File → New → TeachScript Project
 4. Code:        Write TeachScript in editor
 5. Run:         Ctrl+Shift+T

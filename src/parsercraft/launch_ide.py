@@ -2,14 +2,14 @@
 """
 ParserCraft - IDE Launcher
 
-Simple launcher script for the Honey Badger LCS IDE.
+Simple launcher script for the ParserCraft IDE.
 """
 
 import sys
 
 
 def main():
-    """Launch the Honey Badger LCS IDE."""
+    """Launch the ParserCraft IDE."""
     try:
         # Prefer importing the module and constructing the IDE directly
         import tkinter as tk
@@ -21,7 +21,7 @@ def main():
         root.mainloop()
     except ImportError as e:
         print(f"Error: Failed to import IDE: {e}")
-        print("\nMake sure hb_lcs is properly installed:")
+        print("\nMake sure ParserCraft is properly installed:")
         print("  pip install -e .")
         sys.exit(1)
     except Exception as e:  # noqa: BLE001  # pylint: disable=broad-except

@@ -12,19 +12,19 @@ from typing import Any, Optional, Dict, Tuple
 from contextlib import contextmanager
 
 # Import Phase 5 modules
-from src.hb_lcs.ast_integration import (
+from parsercraft.ast_integration import (
     ASTToCGenerator,
     ASTToWasmGenerator,
     TypeInferencePass,
     ControlFlowAnalyzer,
 )
-from src.hb_lcs.protocol_type_integration import ProtocolTypeIntegration
-from src.hb_lcs.lsp_integration import LSPFeaturesIntegration
-from src.hb_lcs.registry_backend import RemotePackageRegistry
-from src.hb_lcs.type_system_generics import TypeNarrowingPass
+from parsercraft.protocol_type_integration import ProtocolTypeIntegration
+from parsercraft.lsp_integration import LSPFeaturesIntegration
+from parsercraft.registry_backend import RemotePackageRegistry
+from parsercraft.type_system_generics import TypeNarrowingPass
 
 # Import error handling
-from src.hb_lcs.production_error_handling import (
+from parsercraft.production_error_handling import (
     ProductionErrorHandler,
     ErrorCategory,
     ErrorSeverity,
@@ -33,7 +33,7 @@ from src.hb_lcs.production_error_handling import (
     CircuitBreakerConfig,
     RateLimitConfig,
 )
-from src.hb_lcs.production_operations import (
+from parsercraft.production_operations import (
     ServiceHealthMonitor,
     HealthCheckProvider,
     HealthCheck,

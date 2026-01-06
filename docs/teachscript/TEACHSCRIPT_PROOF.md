@@ -1,6 +1,6 @@
 # TeachScript: Complete Proof of Concept
 
-**Honey Badger Language Construction Set - Working Implementation**
+**ParserCraft Language Construction Framework - Working Implementation**
 
 Date: November 18, 2025
 
@@ -85,7 +85,7 @@ This document proves that **ParserCraft successfully creates working custom prog
 ```
 ======================================================================
 TeachScript Test Suite
-Honey Badger Language Construction Set
+ParserCraft Language Construction Framework
 ======================================================================
 
 Testing: 01_hello_world.teach

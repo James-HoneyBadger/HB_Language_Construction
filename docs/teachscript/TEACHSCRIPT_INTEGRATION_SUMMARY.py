@@ -206,7 +206,7 @@ POWER & EXTENSIBILITY:
 
 LAUNCH THE IDE:
   cd /home/james/ParserCraft
-  python -m src.hb_lcs.launch_ide_teachscript
+  python -m parsercraft.launch_ide_teachscript
 
 CREATE A PROJECT:
   File → New → TeachScript Project → Select Template
