@@ -218,6 +218,72 @@ class TestAdvancedIDE(unittest.TestCase):
         """Ensure teardown doesn't crash."""
         self.ide.destroy()
 
+    @patch('tkinter.Toplevel')
+    def test_tutorials(self, mock_toplevel):
+        """Test that all tutorial categories launch a window."""
+        # We need to mock the Toplevel because validation creates a window
+        
+        # Test basics (mapped from "first_language" menu concept)
+        self.ide._tutorial("basics")
+        mock_toplevel.assert_called()
+        
+        # Test new extensions tutorial
+        mock_toplevel.reset_mock()
+        self.ide._tutorial("extensions")
+        mock_toplevel.assert_called()
+        
+        # Test invalid
+        with patch('tkinter.messagebox.showwarning') as mock_warn:
+            self.ide._tutorial("non_existent_topic")
+            mock_warn.assert_called()
+
+    def test_split_view(self):
+        """Test Split Editor functionality."""
+        # Ensure we start with no split
+        self.assertFalse(hasattr(self.ide, "split_container") and self.ide.split_container)
+        
+        # Split
+        self.ide._split_editor()
+        self.assertTrue(hasattr(self.ide, "split_container"))
+        self.assertIsNotNone(self.ide.split_container)
+        self.assertTrue(hasattr(self.ide, "split_editor_text"))
+        
+        # Check content sync (initial copy)
+        self.ide.editor.delete("1.0", "end")
+        self.ide.editor.insert("1.0", "Test Content")
+        self.ide._close_split()
+        self.ide._split_editor()
+        self.assertEqual(self.ide.split_editor_text.get("1.0", "end-1c"), "Test Content")
+        
+        # Close
+        self.ide._close_split()
+        self.assertIsNone(self.ide.split_container)
+
+    def test_cursor_word_extraction(self):
+        """Test getting the word under cursor."""
+        # Insert "def myFunc"
+        self.ide.editor.delete("1.0", "end")
+        self.ide.editor.insert("1.0", "def myFunc")
+        
+        # Place cursor at start of "myFunc" (char 4)
+        self.ide.editor.mark_set("insert", "1.4")
+        
+        word = self.ide._get_word_under_cursor()
+        self.assertEqual(word, "myFunc")
+
+    @patch('re.search')
+    def test_goto_definition_searches(self, mock_search):
+        """Test that Goto Definition attempts to find valid pattern."""
+        self.ide.editor.delete("1.0", "end")
+        self.ide.editor.insert("1.0", "call(x)")
+        self.ide.editor.mark_set("insert", "1.5") # on 'x'
+        
+        with patch('tkinter.messagebox.showinfo'):
+             # Try to go to definition of 'x'
+             self.ide._goto_definition()
+             
+        # Mock search should be called at least once
+        mock_search.assert_called()
 
 if __name__ == '__main__':
     unittest.main()

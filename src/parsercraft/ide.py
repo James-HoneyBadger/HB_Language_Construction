@@ -580,11 +580,11 @@ class AdvancedIDE(ttk.Frame):
         help_menu.add_cascade(label="Tutorials", menu=tutorials_menu)
         tutorials_menu.add_command(
             label="Creating Your First Language",
-            command=lambda: self._tutorial("first_language"),
+            command=lambda: self._tutorial("basics"),
         )
         tutorials_menu.add_command(
             label="Advanced Syntax Customization",
-            command=lambda: self._tutorial("advanced_syntax"),
+            command=lambda: self._tutorial("advanced"),
         )
         tutorials_menu.add_command(
             label="Building Language Extensions",
@@ -696,9 +696,16 @@ class AdvancedIDE(ttk.Frame):
         editor_frame = ttk.Frame(self.notebook)
         self.notebook.add(editor_frame, text="Editor")
 
-        # Editor container
-        editor_container = ttk.Frame(editor_frame)
-        editor_container.pack(fill="both", expand=True)
+        # Paned Window for Split View
+        self.editor_paned = ttk.PanedWindow(editor_frame, orient=tk.HORIZONTAL)
+        self.editor_paned.pack(fill="both", expand=True)
+
+        # Editor container (Primary)
+        self.primary_editor_container = ttk.Frame(self.editor_paned)
+        self.editor_paned.add(self.primary_editor_container, weight=1)
+        
+        # Use primary as the container for widgets
+        editor_container = self.primary_editor_container
 
         # Line numbers
         self.line_num_frame = ttk.Frame(editor_container)
@@ -2005,7 +2012,25 @@ For more information, visit the Help menu.
             messagebox.showinfo("Tests", "No test files found (*test*.teach).")
 
     def _debug_code(self) -> None:
-        messagebox.showinfo("Debug", "Debugger backend not currently attached.\nRun in standard mode.")
+        """Run code with debug flag enabled."""
+        messagebox.showinfo(
+            "Debug Mode", 
+            "Running in Debug Mode.\nDetailed tracers will be printed to Console."
+        )
+        
+        # Enforce debug mode in runtime configuration
+        runtime = LanguageRuntime.get_instance()
+        old_mode = False
+        if runtime._config:
+            old_mode = runtime._config.debug_mode
+            runtime._config.debug_mode = True
+            
+        try:
+            self._run_code()
+        finally:
+            # Restore state
+            if runtime._config:
+                runtime._config.debug_mode = old_mode
 
     def _check_syntax(self) -> None:
         """Perform a syntax check on the current code."""
@@ -2036,10 +2061,62 @@ For more information, visit the Help menu.
             messagebox.showerror("Syntax Error", f"Syntax validity check failed:\n{e}")
 
     def _find_references(self) -> None:
-        messagebox.showinfo("Find References", "Indexing service not available.")
+        """Find references to the symbol under cursor."""
+        word = self._get_word_under_cursor()
+        if not word:
+            messagebox.showinfo("Find References", "No symbol selected.")
+            return
+            
+        # Temporarily hijack the find-in-files dialog logic or call it directly
+        # Since _find_in_files asks for input, we need a variant that takes arguments
+        # Let's refactor _find_in_files to split UI and logic, or just implement specific logic here.
+        
+        # We will reuse the core logic similar to _find_in_files
+        if not self.current_project:
+             messagebox.showinfo("Find References", "No project open.")
+             return
+
+        query = word
+        matches = []
+        try:
+            for root, _, files in os.walk(self.current_project):
+                for file in files:
+                    if file.endswith((".teach", ".py", ".md", ".txt", ".yaml", ".json")):
+                        path = os.path.join(root, file)
+                        try:
+                            with open(path, "r", encoding="utf-8") as f:
+                                for i, line in enumerate(f, 1):
+                                    # Use regex for whole word match to be more accurate
+                                    if re.search(r"\b" + re.escape(query) + r"\b", line):
+                                        rel_path = os.path.relpath(path, self.current_project)
+                                        matches.append(f"{rel_path}:{i}: {line.strip()}")
+                        except (OSError, UnicodeDecodeError):
+                            continue
+        except OSError as e:
+            messagebox.showerror("Error", f"Search failed: {e}")
+            return
+
+        self._show_search_results(query, matches, "References")
 
     def _show_call_hierarchy(self) -> None:
-        messagebox.showinfo("Call Hierarchy", "Profiling service not available.")
+        """Show Usage Hierarchy (simulated)."""
+        # For now, this is effectively "Find References" but we conceptualize it as calls
+        self._find_references()
+
+    def _show_search_results(self, query: str, matches: list[str], title: str = "Search Results") -> None:
+        if not matches:
+             messagebox.showinfo(title, f"No matches found for '{query}'")
+             return
+             
+        self._toggle_console_panel()
+        if hasattr(self, "console") and self.console:
+            self.console.config(state="normal")
+            self.console.insert(tk.END, f"\n>>> {title} for '{query}':\n")
+            for m in matches:
+                self.console.insert(tk.END, m + "\n")
+            self.console.insert(tk.END, f"Found {len(matches)} matches.\n")
+            self.console.see(tk.END)
+            self.console.config(state="disabled")
 
     def _open_settings(self) -> None:
         """General IDE settings."""
@@ -2064,10 +2141,43 @@ For more information, visit the Help menu.
         self._on_close()
 
     def _split_editor(self) -> None:
-        messagebox.showinfo("Split Editor", "Split view not currently supported.")
+        """Split the editor view."""
+        if hasattr(self, "split_container") and self.split_container:
+            return  # Already split
+
+        self.split_container = ttk.Frame(self.editor_paned)
+        self.editor_paned.add(self.split_container, weight=1)
+
+        # Scrollbar
+        vscroll = ttk.Scrollbar(self.split_container, orient="vertical")
+        vscroll.pack(side="right", fill="y")
+        
+        # Text widget
+        self.split_editor_text = tk.Text(
+            self.split_container, 
+            wrap="none", 
+            undo=True, 
+            font="TkFixedFont",
+            yscrollcommand=vscroll.set,
+            background=self.editor.cget("background"),
+            foreground=self.editor.cget("foreground"),
+            insertbackground=self.editor.cget("insertbackground")
+        )
+        self.split_editor_text.pack(side="left", fill="both", expand=True)
+        vscroll.config(command=self.split_editor_text.yview)
+        
+        # Copy content
+        content = self.editor.get("1.0", "end-1c")
+        self.split_editor_text.insert("1.0", content)
 
     def _close_split(self) -> None:
-        pass
+        """Close the split view."""
+        if hasattr(self, "split_container") and self.split_container:
+            self.editor_paned.forget(self.split_container)
+            self.split_container.destroy()
+            self.split_container = None
+            if hasattr(self, "split_editor_text"):
+                del self.split_editor_text
 
     def _reset_layout(self) -> None:
         messagebox.showinfo("Layout", "Layout is already at default.")
@@ -2201,6 +2311,8 @@ Functions:
             "functions": self._tutorial_functions,
             "operators": self._tutorial_operators,
             "advanced": self._tutorial_advanced,
+            "extensions": self._tutorial_extensions,
+            "testing": self._tutorial_testing,
         }
 
         if tutorial_type in tutorials:
@@ -2470,6 +2582,80 @@ LAMBDAS/ARROW FUNCTIONS:
 TRY IT: Build a small project using multiple concepts!
 """
         self._show_tutorial_window("Advanced Tutorial", content)
+
+    def _tutorial_extensions(self) -> None:
+        """Extensions tutorial."""
+        content = """TUTORIAL: LANGUAGE EXTENSIONS
+
+Learn how to extend the capabilities of your language.
+
+1. STANDARD LIBRARY
+   The standard library provides essential built-in modules.
+   - Math: advanced mathematical functions
+   - String: text manipulation
+   - IO: file system access (if sandboxing allows)
+
+   Example:
+   import math
+   print(math.pi)
+
+2. IMPORTING MODULES
+   Break your code into multiple files for better organization.
+   
+   File 'utils.teach':
+     function help() { print("Helping...") }
+     
+   File 'main.teach':
+     import utils
+     utils.help()
+
+3. PLUGIN SYSTEM
+   Functionality can be added via Python plugins.
+   (Developer Guide: See docs/guides/PLUGINS.md)
+   
+   Plugins can registers:
+   - New native functions
+   - Custom types
+   - Optimization passes
+
+4. LSP INTEGRATION
+   Your language automatically gets IDE features!
+   - Auto-completion
+   - Go to Definition
+   - Hover info
+
+   Define descriptions in your config to enhance this.
+"""
+        self._show_tutorial_window("Extensions Tutorial", content)
+
+    def _tutorial_testing(self) -> None:
+        """Testing tutorial."""
+        content = """TUTORIAL: TESTING AND VALIDATION
+
+Ensure your language and programs are robust.
+
+1. WRITING TESTS
+   Create files ending in '_test.teach'.
+   
+   function test_addition() {
+     assert(1 + 1 == 2, "Math is broken")
+   }
+
+2. RUNNING TESTS
+   Use the 'Tools -> Run Tests' menu option.
+   The IDE will discover all *_test.teach files and run functions
+   starting with 'test_'.
+
+3. DEBUGGING
+   - Use print() debugging
+   - Check the Console tab for errors
+   - Use strict mode in Language Configuration to catch issues early
+
+4. PERFORMANCE PROFILING
+   (Advanced) Use the generic profiler to see which functions
+   are taking the most time to execute.
+"""
+        self._show_tutorial_window("Testing Tutorial", content)
 
     def _show_tutorial_window(self, title: str, content: str) -> None:
         """Display tutorial in a new window."""
@@ -3042,35 +3228,67 @@ All rights reserved."""
             return
 
         # Show results
-        if not matches:
-             messagebox.showinfo("Find in Files", f"No matches found for '{query}'")
-             return
-             
-        # Use console to show results
-        self._toggle_console_panel()
-        if hasattr(self, "console") and self.console:
-            self.console.config(state="normal")
-            self.console.insert(tk.END, f"\n>>> Search results for '{query}':\n")
-            for m in matches:
-                self.console.insert(tk.END, m + "\n")
-            self.console.insert(tk.END, f"Found {len(matches)} matches.\n")
-            self.console.see(tk.END)
-            self.console.config(state="disabled")
+        self._show_search_results(query, matches, "Find in Files")
+
+    def _get_word_under_cursor(self) -> Optional[str]:
+        """Helper to get the current word."""
+        if not self.editor:
+            return None
+        try:
+            # Word separators include space, punctuation, brackets etc.
+            # Using Tcl's wordstart/wordend logic is easiest
+            start = self.editor.index("insert wordstart")
+            end = self.editor.index("insert wordend")
+            word = self.editor.get(start, end)
+            return word.strip()
+        except:
+            return None
 
     def _goto_definition(self) -> None:
         """Go to definition of symbol under cursor."""
-        try:
-            # Get word under cursor
-            idx = self.editor.index(tk.INSERT)
-            # Simple heuristic
-            line_str = self.editor.get(f"{idx} linestart", f"{idx} lineend")
-            col = int(idx.split('.')[1])
-            
-            # Simple navigation: Just search for "def symbol" or similar
-            # In a real implementation this would use the LSP
-            messagebox.showinfo("Go to Definition", "Symbol index not available without language server.")
-        except Exception:
-             pass
+        word = self._get_word_under_cursor()
+        if not word:
+            messagebox.showinfo("Go to Definition", "No symbol selected.")
+            return
+
+        # Determine definition keywords
+        def_keywords = ["def", "function", "class", "teach", "fn", "var", "let", "const"]
+        if self.current_config:
+            # Add custom keywords that might be definitions
+            # Heuristic: anything mapping to 'def', 'class', 'var' etc if we had reverse mapping logic easily
+            # For now, just add known custom ones if we can, or just search for the word as a second token
+            pass
+
+        # Search in current file first
+        content = self.editor.get("1.0", tk.END).splitlines()
+        found_line = -1
+        
+        # Regex for "KEYWORD space WORD"
+        # We construct a regex of (def|class|...) \s+ word
+        import re
+        pattern = r"(?:\b" + "|".join(def_keywords) + r")\b\s+" + re.escape(word) + r"\b"
+        
+        for i, line in enumerate(content):
+            if re.search(pattern, line):
+                found_line = i + 1
+                break
+        
+        # Fallback: Assignment "word ="
+        if found_line == -1:
+             pattern_assign = r"\b" + re.escape(word) + r"\s*="
+             for i, line in enumerate(content):
+                if re.search(pattern_assign, line):
+                    found_line = i + 1
+                    break
+
+        if found_line != -1:
+            self.editor.mark_set("insert", f"{found_line}.0")
+            self.editor.see(f"{found_line}.0")
+            # Highlight line momentarily?
+            self.editor.tag_add("sel", f"{found_line}.0", f"{found_line}.end")
+        else:
+            messagebox.showinfo("Go to Definition", f"Definition for '{word}' not found in current file.")
+
 
     def _format_document(self) -> None:
         """Format the current document."""
