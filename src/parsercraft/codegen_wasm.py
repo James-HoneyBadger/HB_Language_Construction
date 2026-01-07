@@ -359,8 +359,8 @@ class WasmGenerator:
         self, address: int, wasm_type: WasmType, offset: int = 0
     ) -> str:
         """Generate memory load instruction."""
-        size_map = {WasmType.I32: 32, WasmType.I64: 64, WasmType.F32: 32, WasmType.F64: 64}
-        size = size_map.get(wasm_type, 32)
+        # size_map = {WasmType.I32: 32, WasmType.I64: 64, WasmType.F32: 32, WasmType.F64: 64}
+        # size = size_map.get(wasm_type, 32)
 
         return f"({wasm_type.value}.load offset={offset} (i32.const {address}))"
 

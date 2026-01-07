@@ -611,7 +611,7 @@ class LSPFeaturesIntegration:
         """
         params = request.get("params", {})
         program = params.get("program", "")
-        args = params.get("args", [])
+        # args = params.get("args", [])
 
         if not program:
             return {"error": "Missing program path"}

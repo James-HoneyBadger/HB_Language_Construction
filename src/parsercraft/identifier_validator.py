@@ -98,6 +98,7 @@ class IdentifierValidator:
         allow_reserved: bool = False,
         min_length: int = 1,
         max_length: int = 255,
+        allow_symbols: bool = False,
     ) -> Tuple[bool, List[str]]:
         """
         Comprehensive validation of an identifier.
@@ -108,8 +109,14 @@ class IdentifierValidator:
         warnings = []
 
         # Check basic identifier validity
-        if not IdentifierValidator.is_valid_identifier(name):
-            return False, [f"'{name}' is not a valid identifier"]
+        is_identifier = IdentifierValidator.is_valid_identifier(name)
+        if not is_identifier:
+            if allow_symbols:
+                # If symbols allowed, ensure no whitespace and length check
+                if not name or any(c.isspace() for c in name):
+                    return False, [f"'{name}' contains whitespace or is empty"]
+            else:
+                return False, [f"'{name}' is not a valid identifier"]
 
         # Check length
         if not IdentifierValidator.is_valid_length(name, min_length, max_length):
@@ -118,8 +125,8 @@ class IdentifierValidator:
                 f"[{min_length}, {max_length}]"
             ]
 
-        # Check Python reserved words
-        if IdentifierValidator.is_python_reserved(name):
+        # Check Python reserved words (only if it looks like an identifier)
+        if is_identifier and IdentifierValidator.is_python_reserved(name):
             if not allow_reserved:
                 return False, [f"'{name}' is a Python reserved word"]
             else:

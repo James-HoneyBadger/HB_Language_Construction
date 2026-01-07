@@ -1319,7 +1319,9 @@ def cmd_type_check(args):
     print("=" * 70)
 
     try:
-        errors = checker.check_file(source_path=str(source_path), source=source)
+        errors = checker.check_file(
+            source_path=str(source_path), source=source
+        )
 
         if not errors:
             print("✓ No type errors found")
@@ -1330,8 +1332,9 @@ def cmd_type_check(args):
         for error in errors:
             print(f"[{error.kind.name}] {error.message}")
             if error.location:
+                loc = error.location
                 print(
-                    f"  Location: {error.location.path}:{error.location.line}:{error.location.column}"
+                    f"  Location: {loc.path}:{loc.line}:{loc.column}"
                 )
             if error.suggestion:
                 print(f"  Suggestion: {error.suggestion}")
@@ -1401,8 +1404,9 @@ def cmd_module_deps(args):
             print("No dependencies")
             return 0
 
-        print(f"Direct dependencies ({len(manager.load_module(module_name).imports)}):")
-        for imp in manager.load_module(module_name).imports:
+        module = manager.load_module(module_name)
+        print(f"Direct dependencies ({len(module.imports)}):")
+        for imp in module.imports:
             print(f"  • {imp.module_name}")
 
         all_deps = set(deps) - {module_name}
@@ -1455,13 +1459,13 @@ def cmd_module_cycles(args):
 
 def cmd_generics(args):
     """Check generic type constraints."""
-    from .generics import GenericChecker
+    # from .generics import GenericChecker
 
     try:
         with open(args.file) as f:
             source = f.read()
 
-        checker = GenericChecker()
+        # checker = GenericChecker()
 
         if args.infer:
             print("Type Inference Results:")
@@ -1484,13 +1488,14 @@ def cmd_generics(args):
 
 def cmd_check_protocol(args):
     """Check protocol conformance."""
-    from .protocols import ProtocolChecker
+    # from .protocols import ProtocolChecker
 
     try:
-        with open(args.file) as f:
-            source = f.read()
+        # with open(args.file) as f:
+        #     pass
+        #     # source = f.read()
 
-        checker = ProtocolChecker()
+        # checker = ProtocolChecker()
 
         if args.list_protocols:
             print("Protocols found in file:")
@@ -1516,10 +1521,15 @@ def cmd_codegen_c(args):
 
     try:
         with open(args.file) as f:
-            source = f.read()
+            pass
+            # source = f.read()
 
         generator = CCodeGenerator()
-        c_code = generator.generate_header() + "\n" + generator.generate_implementations()
+        c_code = (
+            generator.generate_header()
+            + "\n"
+            + generator.generate_implementations()
+        )
 
         output_file = args.output or args.file.replace(".lang", ".c")
 
@@ -1542,7 +1552,8 @@ def cmd_codegen_wasm(args):
 
     try:
         with open(args.file) as f:
-            source = f.read()
+            pass
+            # source = f.read()
 
         generator = WasmGenerator()
         module = generator.generate_from_ast(None)
@@ -1566,10 +1577,10 @@ def cmd_codegen_wasm(args):
 
 def cmd_package_search(args):
     """Search for packages."""
-    from .package_registry import PackageRegistry
+    # from .package_registry import PackageRegistry
 
     try:
-        registry = PackageRegistry()
+        # registry = PackageRegistry()
 
         print(f"Searching for: {args.query}")
         print("=" * 70)
@@ -1584,10 +1595,10 @@ def cmd_package_search(args):
 
 def cmd_package_install(args):
     """Install package."""
-    from .package_registry import PackageRegistry, Version
+    # from .package_registry import PackageRegistry, Version
 
     try:
-        registry = PackageRegistry()
+        # registry = PackageRegistry()
 
         # Parse package@version
         parts = args.package.split("@")
@@ -1629,9 +1640,12 @@ def cmd_refactor_rename(args):
 
         # Apply edits
         lines = source.split("\n")
-        for edit in sorted(edits, key=lambda e: (e.line, e.start_col), reverse=True):
+        edits.sort(key=lambda e: (e.line, e.start_col), reverse=True)
+        for edit in edits:
             line = lines[edit.line]
-            lines[edit.line] = line[: edit.start_col] + edit.new_text + line[edit.end_col :]
+            lines[edit.line] = (
+                line[: edit.start_col] + edit.new_text + line[edit.end_col:]
+            )
 
         result = "\n".join(lines)
 
@@ -1696,7 +1710,10 @@ def cmd_test_run(args):
         suite = runner.run(test_classes)
 
         print()
-        print(f"Results: {suite.passed_count} passed, {suite.failed_count} failed")
+        print(
+            f"Results: {suite.passed_count} passed, "
+            f"{suite.failed_count} failed"
+        )
         print(f"Success rate: {suite.success_rate():.1f}%")
         print(f"Total time: {suite.total_time:.3f}s")
 
@@ -1998,7 +2015,11 @@ Examples:
         "--config", "-c", required=True, help="Language configuration file"
     )
     lsp_parser.add_argument(
-        "--port", "-p", type=int, default=8080, help="Server port (default: 8080)"
+        "--port",
+        "-p",
+        type=int,
+        default=8080,
+        help="Server port (default: 8080)",
     )
     lsp_parser.add_argument(
         "--stdio", action="store_true", help="Use stdio instead of socket"
@@ -2013,7 +2034,10 @@ Examples:
         "--config", "-c", required=True, help="Language configuration file"
     )
     extension_parser.add_argument(
-        "--output", "-o", default=".vscode-ext", help="Output directory (default: .vscode-ext)"
+        "--output",
+        "-o",
+        default=".vscode-ext",
+        help="Output directory (default: .vscode-ext)",
     )
     extension_parser.add_argument(
         "--publisher", default="parsercraft", help="Extension publisher name"
@@ -2055,7 +2079,9 @@ Examples:
     )
     module_info_parser.add_argument("module", help="Module name")
     module_info_parser.add_argument(
-        "--module-dir", "-d", help="Module directory (default: current directory)"
+        "--module-dir",
+        "-d",
+        help="Module directory (default: current directory)",
     )
     module_info_parser.add_argument(
         "--debug", action="store_true", help="Enable debug mode"
@@ -2068,7 +2094,9 @@ Examples:
     )
     module_deps_parser.add_argument("module", help="Module name")
     module_deps_parser.add_argument(
-        "--module-dir", "-d", help="Module directory (default: current directory)"
+        "--module-dir",
+        "-d",
+        help="Module directory (default: current directory)",
     )
     module_deps_parser.add_argument(
         "--debug", action="store_true", help="Enable debug mode"
@@ -2080,7 +2108,9 @@ Examples:
         help="Detect circular dependencies",
     )
     module_cycles_parser.add_argument(
-        "--module-dir", "-d", help="Module directory (default: current directory)"
+        "--module-dir",
+        "-d",
+        help="Module directory (default: current directory)",
     )
     module_cycles_parser.add_argument(
         "--debug", action="store_true", help="Enable debug mode"
@@ -2194,7 +2224,9 @@ Examples:
         "test-run",
         help="Run tests",
     )
-    test_run_parser.add_argument("path", nargs="?", help="Test file or directory")
+    test_run_parser.add_argument(
+        "path", nargs="?", help="Test file or directory"
+    )
     test_run_parser.add_argument(
         "--verbose", "-v", action="store_true", help="Verbose output"
     )

@@ -1,7 +1,7 @@
 {
   "metadata": {
     "name": "My Custom Language",
-    "version": "1.0",
+    "version": "2.0",
     "description": "A custom language variant",
     "author": "",
     "target_interpreter": "python"
@@ -150,6 +150,36 @@
       "custom": "class",
       "category": "oop",
       "description": "Class definition"
+    },
+    "and": {
+      "original": "and",
+      "custom": "and",
+      "category": "logic",
+      "description": "Logical AND"
+    },
+    "or": {
+      "original": "or",
+      "custom": "or",
+      "category": "logic",
+      "description": "Logical OR"
+    },
+    "not": {
+      "original": "not",
+      "custom": "not",
+      "category": "logic",
+      "description": "Logical NOT"
+    },
+    "let": {
+      "original": "let",
+      "custom": "let",
+      "category": "variable",
+      "description": "Variable declaration"
+    },
+    "then": {
+      "original": "then",
+      "custom": "then",
+      "category": "control",
+      "description": "Then clause"
     }
   },
   "functions": {
@@ -158,35 +188,50 @@
       "arity": -1,
       "implementation": "builtin.print",
       "description": "Print to stdout",
-      "enabled": true
+      "enabled": true,
+      "min_args": -1,
+      "max_args": -1,
+      "alias": null
     },
     "Number": {
       "name": "Number",
       "arity": 1,
       "implementation": "builtin.to_number",
       "description": "Convert to number",
-      "enabled": true
+      "enabled": true,
+      "min_args": -1,
+      "max_args": -1,
+      "alias": null
     },
     "String": {
       "name": "String",
       "arity": 1,
       "implementation": "builtin.to_string",
       "description": "Convert to string",
-      "enabled": true
+      "enabled": true,
+      "min_args": -1,
+      "max_args": -1,
+      "alias": null
     },
     "Boolean": {
       "name": "Boolean",
       "arity": 1,
       "implementation": "builtin.to_boolean",
       "description": "Convert to boolean",
-      "enabled": true
+      "enabled": true,
+      "min_args": -1,
+      "max_args": -1,
+      "alias": null
     },
     "List": {
       "name": "List",
       "arity": -1,
       "implementation": "builtin.list",
       "description": "Create list",
-      "enabled": true
+      "enabled": true,
+      "min_args": -1,
+      "max_args": -1,
+      "alias": null
     }
   },
   "operators": {

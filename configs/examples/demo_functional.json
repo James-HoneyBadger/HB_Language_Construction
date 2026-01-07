@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "name": "Custom Language",
-    "version": "2.0.0",
+    "name": "Functional Lambda Language",
+    "version": "2.0",
     "description": "A customizable programming language",
     "author": "",
     "target_interpreter": "python"
@@ -9,7 +9,7 @@
   "keywords": {
     "if": {
       "original": "if",
-      "custom": "cuando",
+      "custom": "if",
       "category": "control",
       "description": "Conditional statement"
     },
@@ -69,7 +69,7 @@
     },
     "function": {
       "original": "function",
-      "custom": "function",
+      "custom": "lambda",
       "category": "function",
       "description": "Function definition"
     },
@@ -232,6 +232,66 @@
       "min_args": -1,
       "max_args": -1,
       "alias": null
+    },
+    "map": {
+      "name": "map",
+      "arity": 2,
+      "implementation": "builtin.map",
+      "description": "",
+      "enabled": true,
+      "min_args": 2,
+      "max_args": 2,
+      "alias": null
+    },
+    "filter": {
+      "name": "filter",
+      "arity": 2,
+      "implementation": "builtin.filter",
+      "description": "",
+      "enabled": true,
+      "min_args": 2,
+      "max_args": 2,
+      "alias": null
+    },
+    "fold": {
+      "name": "fold",
+      "arity": 3,
+      "implementation": "builtin.reduce",
+      "description": "",
+      "enabled": true,
+      "min_args": 3,
+      "max_args": 3,
+      "alias": "reduce"
+    },
+    "car": {
+      "name": "car",
+      "arity": 1,
+      "implementation": "builtin.head",
+      "description": "",
+      "enabled": true,
+      "min_args": 1,
+      "max_args": 1,
+      "alias": "head"
+    },
+    "cdr": {
+      "name": "cdr",
+      "arity": 1,
+      "implementation": "builtin.tail",
+      "description": "",
+      "enabled": true,
+      "min_args": 1,
+      "max_args": 1,
+      "alias": "tail"
+    },
+    "cons": {
+      "name": "cons",
+      "arity": 2,
+      "implementation": "builtin.cons",
+      "description": "",
+      "enabled": true,
+      "min_args": 2,
+      "max_args": 2,
+      "alias": null
     }
   },
   "operators": {
@@ -303,12 +363,12 @@
     }
   },
   "syntax_options": {
-    "array_start_index": -1,
-    "allow_fractional_indexing": true,
+    "array_start_index": 0,
+    "allow_fractional_indexing": false,
     "flexible_quoting": true,
     "string_interpolation": true,
     "interpolation_symbol": "$",
-    "single_line_comment": "//",
+    "single_line_comment": ";",
     "multi_line_comment_start": null,
     "multi_line_comment_end": null,
     "require_semicolons": false,

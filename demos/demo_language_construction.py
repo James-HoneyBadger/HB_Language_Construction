@@ -37,8 +37,8 @@ def demo_basic_usage():
     print(f"  Syntax: array starts at " f"{config.syntax_options.array_start_index}")
 
     # Save
-    config.save("demo_basic.json")
-    print("\n✓ Saved to demo_basic.json")
+    config.save("configs/examples/demo_basic.json")
+    print("\n✓ Saved to configs/examples/demo_basic.json")
 
 
 def demo_presets():
@@ -58,8 +58,8 @@ def demo_presets():
     python_like.rename_keyword("class", "blueprint")
 
     # Save customized version
-    python_like.save("demo_python_custom.yaml")
-    print("\n✓ Saved customized preset to demo_python_custom.yaml")
+    python_like.save("configs/examples/demo_python_custom.yaml")
+    print("\n✓ Saved customized preset to configs/examples/demo_python_custom.yaml")
 
 
 def demo_runtime():
@@ -152,15 +152,15 @@ def demo_serialization():
     config.rename_keyword("if", "cuando")
 
     # Save as JSON
-    config.save("demo_config.json", format="json")
-    print("\n✓ Saved as JSON: demo_config.json")
+    config.save("configs/examples/demo_config.json", format="json")
+    print("\n✓ Saved as JSON: configs/examples/demo_config.json")
 
     # Save as YAML
-    config.save("demo_config.yaml", format="yaml")
-    print("✓ Saved as YAML: demo_config.yaml")
+    config.save("configs/examples/demo_config.yaml", format="yaml")
+    print("✓ Saved as YAML: configs/examples/demo_config.yaml")
 
     # Load back
-    loaded = LanguageConfig.load("demo_config.json")
+    loaded = LanguageConfig.load("configs/examples/demo_config.json")
     print(f"\n✓ Loaded from file: {loaded.name}")
 
 
@@ -188,15 +188,15 @@ def main():
     print("\n" + "=" * 70)
     print("DEMO COMPLETE")
     print("=" * 70)
-    print("\nGenerated files:")
+    print("\nGenerated files in configs/examples/:")
     print("  ✓ demo_basic.json")
     print("  ✓ demo_python_custom.yaml")
     print("  ✓ demo_config.json")
     print("  ✓ demo_config.yaml")
     print("\nNext steps:")
-    print("  1. Try: python langconfig.py info demo_basic.json")
-    print("  2. Try: python langconfig.py validate demo_config.json")
-    print("  3. Try: python langconfig.py list-presets")
+    print("  1. Try: parsercraft info configs/examples/demo_basic.json")
+    print("  2. Try: parsercraft validate configs/examples/demo_config.json")
+    print("  3. Try: parsercraft list-presets")
     print("  4. Read the README.md for full documentation")
     print()
 

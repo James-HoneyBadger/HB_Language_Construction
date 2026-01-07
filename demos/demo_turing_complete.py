@@ -52,8 +52,8 @@ def create_basic_like():
     print("  40   PRINT i")
     print("  50 NEXT i")
 
-    config.save("examples/demo_basic.json")
-    print("\n✓ Saved to examples/demo_basic.json")
+    config.save("configs/examples/demo_basic.json")
+    print("\n✓ Saved to configs/examples/demo_basic.json")
     return config
 
 
@@ -98,8 +98,8 @@ def create_functional():
     print("          1")
     print("          (* n (factorial (- n 1))))))")
 
-    config.save("examples/demo_functional.json")
-    print("\n✓ Saved to examples/demo_functional.json")
+    config.save("configs/examples/demo_functional.json")
+    print("\n✓ Saved to configs/examples/demo_functional.json")
     return config
 
 
@@ -147,8 +147,8 @@ def create_stack_based():
     print("      DUP 1 - factorial *")
     print("    THEN ;")
 
-    config.save("examples/demo_stack.json")
-    print("\n✓ Saved to examples/demo_stack.json")
+    config.save("configs/examples/demo_stack.json")
+    print("\n✓ Saved to configs/examples/demo_stack.json")
     return config
 
 
@@ -195,8 +195,8 @@ def create_object_oriented():
     print("    end")
     print("  end")
 
-    config.save("examples/demo_oop.json")
-    print("\n✓ Saved to examples/demo_ml.json")
+    config.save("configs/examples/demo_oop.json")
+    print("\n✓ Saved to configs/examples/demo_oop.json")
     return config
 
 
@@ -241,8 +241,8 @@ def create_logic_based():
     print("  % Query")
     print("  ?- grandparent(tom, Who).")
 
-    config.save("examples/demo_logic.json")
-    print("\n✓ Saved to examples/demo_logic.json")
+    config.save("configs/examples/demo_logic.json")
+    print("\n✓ Saved to configs/examples/demo_logic.json")
     return config
 
 
@@ -292,8 +292,8 @@ def create_assembly_like():
     print("  done:")
     print("    RET R2")
 
-    config.save("examples/demo_assembly.json")
-    print("\n✓ Saved to examples/demo_assembly.json")
+    config.save("configs/examples/demo_assembly.json")
+    print("\n✓ Saved to configs/examples/demo_assembly.json")
     return config
 
 
@@ -353,14 +353,14 @@ def main():
             f"✓ Successfully created {len(configs)} Turing-complete language configurations"
         )
         print("=" * 70)
-        print("\nConfigurations saved to examples/ directory:")
+        print("\nConfigurations saved to configs/examples/ directory:")
         for cfg in configs:
             print(f"  • {cfg.name}")
 
         print("\nTo use these configurations:")
-        print("  1. Load in IDE: python3 ide.py")
-        print("  2. Validate: python langconfig.py validate examples/demo_*.json")
-        print("  3. View info: python langconfig.py info examples/demo_basic.json")
+        print("  1. Load in IDE: parsercraft-ide")
+        print("  2. Validate: parsercraft validate configs/examples/demo_*.json")
+        print("  3. View info: parsercraft info configs/examples/demo_basic.json")
 
         print("\nThese demonstrate six major programming paradigms:")
         print("  • Imperative (BASIC-like)")

@@ -160,7 +160,7 @@ class ASTToCGenerator(ASTVisitor):
     def visit_function(self, node: ASTNode) -> None:
         """Visit function definition."""
         func_name = node.attributes.get("name", "unknown_func")
-        return_type = node.attributes.get("return_type", "int")
+        # return_type = node.attributes.get("return_type", "int")
         params = node.attributes.get("params", [])
 
         self.current_function = func_name
@@ -205,13 +205,13 @@ class ASTToCGenerator(ASTVisitor):
         value = node.attributes.get("value", "0")
 
         # Generate assignment instruction
-        instruction = f"(local.set ${target} ...)"
+        instruction = f"(local.set ${target} {value})"
         if self.current_function and self.current_function in self.generator.functions:
             self.generator.functions[self.current_function].body.append(instruction)
 
     def visit_if(self, node: ASTNode) -> None:
         """Visit if statement."""
-        condition = node.attributes.get("condition", "true")
+        # condition = node.attributes.get("condition", "true")
 
         # Then branch
         then_body = []
@@ -305,7 +305,7 @@ class ASTToWasmGenerator(ASTVisitor):
 
     def visit_return(self, node: ASTNode) -> None:
         """Visit return statement."""
-        value = node.attributes.get("value", "0")
+        # value = node.attributes.get("value", "0")
 
         if self.current_function and self.current_function in {f.name for f in self.module.functions.values()}:
             func = self.module.functions[self.current_function]
@@ -358,13 +358,13 @@ class TypeInferencePass(ASTVisitor):
 
         # Infer left and right operand types
         left_type = None
-        right_type = None
+        # right_type = None
 
         for child in node.children:
             if child.attributes.get("position") == "left":
                 left_type = self.visit(child)
             elif child.attributes.get("position") == "right":
-                right_type = self.visit(child)
+                self.visit(child)
 
         # Apply operator typing rules
         if op in ["+", "-", "*", "/"]:

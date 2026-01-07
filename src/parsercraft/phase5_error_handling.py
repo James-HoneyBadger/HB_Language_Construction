@@ -265,7 +265,7 @@ class ASTHealthCheck(HealthCheckProvider):
         start_time = time.time()
         try:
             # Test basic AST operation
-            sample_code = "int x = 5;"
+            # sample_code = "int x = 5;"
             # Just verify it doesn't crash
             response_time = (time.time() - start_time) * 1000
 

@@ -340,7 +340,7 @@ class RemotePackageRegistry:
         Returns:
             RegistryResponse
         """
-        url = f"{self.registry_url}/packages/{package_name}/{version}/download"
+        # url = f"{self.registry_url}/packages/{package_name}/{version}/download"
 
         try:
             # Create package directory

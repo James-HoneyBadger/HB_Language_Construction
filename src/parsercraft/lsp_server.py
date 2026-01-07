@@ -37,7 +37,7 @@ from pathlib import Path
 from typing import Any, Optional, Union
 
 from .language_config import LanguageConfig
-from .parser_generator import Lexer, ASTNode, Token, TokenType
+from .parser_generator import Lexer, ASTNode, Token
 from .language_validator import LanguageValidator
 
 
@@ -232,7 +232,7 @@ class LanguageServerAnalyzer:
         diagnostics = []
 
         try:
-            tokens = self.tokenize(content)
+            # tokens = self.tokenize(content)
 
             # Check for syntax errors
             lines = content.split("\n")

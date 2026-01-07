@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "name": "Custom Language",
-    "version": "2.0.0",
+    "name": "Stack-Based Forth-Like",
+    "version": "2.0",
     "description": "A customizable programming language",
     "author": "",
     "target_interpreter": "python"
@@ -9,13 +9,13 @@
   "keywords": {
     "if": {
       "original": "if",
-      "custom": "cuando",
+      "custom": "IF",
       "category": "control",
       "description": "Conditional statement"
     },
     "else": {
       "original": "else",
-      "custom": "else",
+      "custom": "ELSE",
       "category": "control",
       "description": "Else clause"
     },
@@ -27,7 +27,7 @@
     },
     "while": {
       "original": "while",
-      "custom": "while",
+      "custom": "BEGIN",
       "category": "control",
       "description": "While loop"
     },
@@ -69,13 +69,13 @@
     },
     "function": {
       "original": "function",
-      "custom": "function",
+      "custom": ":",
       "category": "function",
       "description": "Function definition"
     },
     "return": {
       "original": "return",
-      "custom": "return",
+      "custom": ";",
       "category": "function",
       "description": "Return value"
     },
@@ -177,7 +177,7 @@
     },
     "then": {
       "original": "then",
-      "custom": "then",
+      "custom": "THEN",
       "category": "control",
       "description": "Then clause"
     }
@@ -232,6 +232,56 @@
       "min_args": -1,
       "max_args": -1,
       "alias": null
+    },
+    "DUP": {
+      "name": "DUP",
+      "arity": 0,
+      "implementation": "builtin.dup",
+      "description": "",
+      "enabled": true,
+      "min_args": 0,
+      "max_args": 0,
+      "alias": "dup"
+    },
+    "DROP": {
+      "name": "DROP",
+      "arity": 0,
+      "implementation": "builtin.drop",
+      "description": "",
+      "enabled": true,
+      "min_args": 0,
+      "max_args": 0,
+      "alias": "drop"
+    },
+    "SWAP": {
+      "name": "SWAP",
+      "arity": 0,
+      "implementation": "builtin.swap",
+      "description": "",
+      "enabled": true,
+      "min_args": 0,
+      "max_args": 0,
+      "alias": "swap"
+    },
+    "OVER": {
+      "name": "OVER",
+      "arity": 0,
+      "implementation": "builtin.over",
+      "description": "",
+      "enabled": true,
+      "min_args": 0,
+      "max_args": 0,
+      "alias": "over"
+    },
+    ".": {
+      "name": ".",
+      "arity": 1,
+      "implementation": "builtin.print",
+      "description": "",
+      "enabled": true,
+      "min_args": 1,
+      "max_args": 1,
+      "alias": "print"
     }
   },
   "operators": {
@@ -308,7 +358,7 @@
     "flexible_quoting": true,
     "string_interpolation": true,
     "interpolation_symbol": "$",
-    "single_line_comment": "//",
+    "single_line_comment": "\\",
     "multi_line_comment_start": null,
     "multi_line_comment_end": null,
     "require_semicolons": false,

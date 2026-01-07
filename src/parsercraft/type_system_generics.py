@@ -132,7 +132,7 @@ class GenericsTypeChecker:
 
         # Check if it's a generic function
         if generic_name in self.generic_functions:
-            gen_func = self.generic_functions[generic_name]
+            # gen_func = self.generic_functions[generic_name]
             type_params = self.type_parameters.get(generic_name, [])
 
             if len(type_args) != len(type_params):
@@ -154,7 +154,7 @@ class GenericsTypeChecker:
 
         # Check if it's a generic class
         if generic_name in self.generic_classes:
-            gen_class = self.generic_classes[generic_name]
+            # gen_class = self.generic_classes[generic_name]
             type_params = self.type_parameters.get(generic_name, [])
 
             if len(type_args) != len(type_params):
@@ -189,7 +189,7 @@ class GenericsTypeChecker:
             return [], errors
 
         # Use generic checker to infer types
-        gen_func = self.generic_functions[generic_name]
+        # gen_func = self.generic_functions[generic_name]
         type_params = self.type_parameters.get(generic_name, [])
 
         for param in type_params:
@@ -217,7 +217,7 @@ class GenericsTypeChecker:
         if generic_name not in self.generic_functions:
             return False, f"Unknown generic: {generic_name}"
 
-        gen_func = self.generic_functions[generic_name]
+        # gen_func = self.generic_functions[generic_name]
         type_params = self.type_parameters.get(generic_name, [])
 
         if position >= len(type_params):

@@ -60,6 +60,9 @@ class FunctionConfig:
     implementation: Optional[str] = None  # Python code as string, or reference
     description: str = ""
     enabled: bool = True
+    min_args: int = -1
+    max_args: int = -1
+    alias: Optional[str] = None
 
 
 @dataclass
@@ -249,6 +252,13 @@ class LanguageConfig:
             "var": KeywordMapping("var", "var", "variable", "Variable declaration"),
             # Object-oriented
             "class": KeywordMapping("class", "class", "oop", "Class definition"),
+            # Logical operators (often used as keywords)
+            "and": KeywordMapping("and", "and", "logic", "Logical AND"),
+            "or": KeywordMapping("or", "or", "logic", "Logical OR"),
+            "not": KeywordMapping("not", "not", "logic", "Logical NOT"),
+            # Common keywords in other languages
+            "let": KeywordMapping("let", "let", "variable", "Variable declaration"),
+            "then": KeywordMapping("then", "then", "control", "Then clause"),
         }
         self.keyword_mappings = default_keywords
 
@@ -296,7 +306,9 @@ class LanguageConfig:
         # Validate new name
         from .identifier_validator import IdentifierValidator
 
-        is_valid, warnings = IdentifierValidator.validate_identifier(new_name)
+        is_valid, warnings = IdentifierValidator.validate_identifier(
+            new_name, allow_reserved=True, allow_symbols=True
+        )
         if not is_valid:
             raise ValueError(f"Invalid keyword name '{new_name}': {warnings[0]}")
 
@@ -309,7 +321,9 @@ class LanguageConfig:
         from .identifier_validator import IdentifierValidator
 
         # Validate name
-        is_valid, warnings = IdentifierValidator.validate_identifier(name)
+        is_valid, warnings = IdentifierValidator.validate_identifier(
+            name, allow_reserved=True, allow_symbols=True
+        )
         if not is_valid:
             raise ValueError(f"Invalid keyword name '{name}': {warnings[0]}")
 
@@ -337,13 +351,47 @@ class LanguageConfig:
     def add_function(
         self,
         name: str,
-        arity: int,
+        alias_or_arity: Union[str, int, None] = None,
         implementation: Optional[str] = None,
         description: str = "",
+        min_args: int = -1,
+        max_args: int = -1,
     ) -> None:
-        """Add a custom built-in function."""
-        self.builtin_functions[name] = FunctionConfig(
-            name, arity, implementation, description, True
+        """Add a custom built-in function.
+
+        Arguments:
+            name: Internal name or implementation reference (e.g., 'print')
+            alias_or_arity: Function arity (int) OR exposed name (str)
+            implementation: Python implementation path (optional)
+            description: Function help text
+            min_args: Minimum arguments
+            max_args: Maximum arguments
+        """
+        exposed_name = name
+        arity = -1
+
+        if alias_or_arity is not None:
+            if isinstance(alias_or_arity, str):
+                exposed_name = alias_or_arity
+                # If implementation missing, assume internal name maps to builtin.{name}
+                if implementation is None:
+                    implementation = f"builtin.{name}"
+            else:
+                arity = alias_or_arity
+
+        # Use max_args as arity if not specified
+        if arity == -1 and max_args != -1:
+            arity = max_args
+
+        self.builtin_functions[exposed_name] = FunctionConfig(
+            name=exposed_name,
+            arity=arity,
+            implementation=implementation,
+            description=description,
+            enabled=True,
+            min_args=min_args,
+            max_args=max_args,
+            alias=name if exposed_name != name else None
         )
 
     def rename_function(self, original: str, new_name: str) -> None:
