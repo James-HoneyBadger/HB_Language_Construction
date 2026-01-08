@@ -304,13 +304,7 @@ Example programs and demos in `demos/`:
 
 Test files in `tests/`:
 
-- **test_phase5_integration.py** - Integration tests
-- **test_phase6_optimizations.py** - Optimization tests
-- **test_phase7_production.py** - Production feature tests
-- **test_phase8_web_ide.py** - Web IDE tests
-- **test_phase9_mobile_cloud.py** - Mobile/cloud tests
-- **test_phase10_enterprise.py** - Enterprise feature tests
-- **test_phase11_advanced.py** - Advanced feature tests
+- **test_ide_features.py** - IDE feature verification and integration tests
 
 See [Developer Guide: Testing](DEVELOPER_GUIDE.md#testing-strategy) for running tests.
 

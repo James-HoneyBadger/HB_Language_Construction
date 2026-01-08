@@ -31,7 +31,8 @@ keywords:
   or: "or_else"
   not: "opposite"
   in: "inside"
-  is: "equals"
+  # is: "equals" # 'is' translates to identity check, but we want usage to be equality
+  "==": "equals"
 
 # Built-in functions - educational naming
 functions:

@@ -136,13 +136,8 @@ ParserCraft/
 │       └── codex_components.py
 │
 ├── tests/                     # Test suite
-│   ├── test_phase5_integration.py
-│   ├── test_phase6_optimizations.py
-│   ├── test_phase7_production.py
-│   ├── test_phase8_web_ide.py
-│   ├── test_phase9_mobile_cloud.py
-│   ├── test_phase10_enterprise.py
-│   └── test_phase11_advanced.py
+│   ├── test_ide_features.py   # IDE feature verification
+│   └── data/                  # Test data fixtures
 │
 ├── configs/                   # Language configurations
 │   ├── teachscript.yaml
@@ -307,7 +302,7 @@ class TestMyFeature:
 python -m pytest tests/ -v
 
 # Run specific test file
-python -m pytest tests/test_phase5_integration.py -v
+python -m pytest tests/test_ide_features.py -v
 
 # Run with coverage
 python -m pytest tests/ --cov=src/parsercraft --cov-report=html

@@ -85,8 +85,8 @@
       "custom": "inside",
       "category": "operator"
     },
-    "is": {
-      "original": "is",
+    "==": {
+      "original": "==",
       "custom": "equals",
       "category": "operator"
     }

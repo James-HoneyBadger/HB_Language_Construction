@@ -3154,7 +3154,7 @@ Features:
 • Syntax highlighting and code completion
 • Export/import capabilities
 
-Copyright © 2026 ParserCraft Project
+Copyright © 2026 Honey Badger Universe
 All rights reserved."""
 
         messagebox.showinfo("About", about_text)

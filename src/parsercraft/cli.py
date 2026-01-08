@@ -1228,21 +1228,20 @@ def cmd_lsp(args):
 
     try:
         server = create_lsp_server(str(config_path))
-        print(f"✓ LSP Server started for {server.config.name}")
-        print(f"  Port: {args.port}")
-        print(f"  Mode: {'stdio' if args.stdio else 'socket'}")
-        print("\nServer capabilities:")
-        for cap in server.server_capabilities:
-            print(f"  • {cap}")
+        print(f"✓ LSP Server started for {server.config.name}", file=sys.stderr)
+        print(f"  Port: {args.port}", file=sys.stderr)
+        print(f"  Mode: {'stdio' if args.stdio else 'socket'}", file=sys.stderr)
+        
+        if args.stdio:
+            server.run_stdio()
+        else:
+            # Socket mode not yet implemented
+            print("Socket mode not yet implemented. Please use --stdio.", file=sys.stderr)
+            return 1
 
-        # TODO: Implement actual server loop (socket or stdio)
-        print("\nNote: Full LSP server implementation requires:")
-        print("  - JSON-RPC 2.0 message protocol")
-        print("  - Async I/O for multiple clients")
-        print("  - See lsp_server.py for API details")
         return 0
     except CONFIG_LOAD_ERRORS as error:
-        print(f"Error loading config: {error}")
+        print(f"Error loading config: {error}", file=sys.stderr)
         return 1
 
 

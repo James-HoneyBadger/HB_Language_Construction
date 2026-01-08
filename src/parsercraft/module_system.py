@@ -180,9 +180,14 @@ class ModuleMetadata:
         try:
             content = path.read_text()
             if path.suffix in [".yaml", ".yml"]:
-                # Would use yaml library
-                import json
-                data = json.loads(content)  # Placeholder
+                try:
+                    import yaml
+                    data = yaml.safe_load(content)
+                except ImportError:
+                    # Fallback to json if yaml not available or just fail
+                    # Since we are mocking, let's assume json if yaml missing
+                    # But we use the global json import
+                    data = json.loads(content)
             else:
                 data = json.loads(content)
 

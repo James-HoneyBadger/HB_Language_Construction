@@ -41,7 +41,7 @@ ParserCraft is a **custom programming language construction framework** that ena
 
 ### Testing Patterns
 - Tests use `pytest` framework (run: `python -m pytest tests/`)
-- Fixtures in `tests/test_phase5_integration.py` show typical config mocking
+- Fixtures in `tests/test_ide_features.py` show typical config mocking
 - **Pattern**: Mock `LanguageConfig` using `SimpleNamespace` with minimal required fields
 
 ## Developer Workflows
@@ -132,7 +132,7 @@ config = runtime.get_config()
 python -m pytest tests/
 
 # Run specific test file
-python -m pytest tests/test_phase5_integration.py
+python -m pytest tests/test_ide_features.py
 
 # Run with verbose output
 python -m pytest tests/ -v
@@ -176,4 +176,4 @@ python -m pytest tests/ -v
 | LSP server logic | `lsp_server.py` → `LSPServer.handle_*()` methods |
 | Parser generation | `parser_generator.py` → `ParserGenerator.generate()` |
 | CLI commands | `cli.py` → `main()` with argparse subcommands |
-| Test examples | `tests/test_phase5_integration.py` for integration patterns |
+| Test examples | `tests/test_ide_features.py` for integration patterns |

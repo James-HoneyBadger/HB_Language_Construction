@@ -523,6 +523,47 @@ class LanguageConfig:
             config.syntax_options.require_semicolons = True
             config.disable_satirical_keywords()
 
+        elif preset_name == "functional":
+            config.name = "Functional Lambda"
+            config.description = "A functional language based on lambda calculus"
+            config.rename_keyword("if", "cond")
+            config.rename_keyword("def", "define")
+            config.rename_keyword("lambda", "lambda")
+            config.rename_keyword("let", "let")
+            config.set_array_indexing(0, False)
+            config.syntax_options.statement_terminator = ""
+            config.disable_satirical_keywords()
+            # Add functional-specific operators if needed, or rely on functions
+
+        elif preset_name == "lisp_like":
+            config.name = "Lisp-like"
+            config.description = "Lisp-inspired parenthesized syntax"
+            config.rename_keyword("if", "if")
+            config.rename_keyword("def", "def")
+            config.rename_keyword("lambda", "lambda")
+            config.set_array_indexing(0, False)
+            config.syntax_options.statement_terminator = ""
+            config.syntax_options.function_call_start = "("
+            config.syntax_options.function_call_end = ")"
+            config.syntax_options.block_start = "("
+            config.syntax_options.block_end = ")"
+            config.disable_satirical_keywords()
+
+        elif preset_name == "basic_like":
+            config.name = "BASIC-like"
+            config.description = "BASIC-inspired syntax"
+            config.rename_keyword("if", "IF")
+            config.rename_keyword("else", "ELSE")
+            config.rename_keyword("for", "FOR")
+            config.rename_keyword("while", "WHILE")
+            # print is a function, not a keyword
+            config.rename_function("print", "PRINT")
+            config.rename_keyword("def", "DEF")
+            config.rename_keyword("return", "RETURN")
+            config.set_array_indexing(1, False)
+            config.syntax_options.statement_terminator = ""
+            config.disable_satirical_keywords()
+
         else:
             raise ValueError(f"Unknown preset: {preset_name}")
 

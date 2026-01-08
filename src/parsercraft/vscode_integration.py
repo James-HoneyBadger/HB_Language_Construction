@@ -86,10 +86,10 @@ def generate_vscode_extension(
     # Generate language-configuration.json
     lang_config = {
         "comments": {
-            "lineComment": config.syntax_options.line_comment_prefix or "#",
+            "lineComment": config.syntax_options.single_line_comment or "//",
             "blockComment": [
-                config.syntax_options.block_comment_start or "/*",
-                config.syntax_options.block_comment_end or "*/",
+                config.syntax_options.multi_line_comment_start or "/*",
+                config.syntax_options.multi_line_comment_end or "*/",
             ],
         },
         "brackets": [
@@ -145,7 +145,7 @@ def generate_vscode_extension(
 def _generate_textmate_grammar(config: LanguageConfig) -> dict:
     """Generate TextMate syntax highlighting grammar."""
     keywords = "|".join(kw.custom for kw in config.keyword_mappings.values())
-    functions = "|".join(fn.name for fn in config.built_in_functions)
+    functions = "|".join(fn.name for fn in config.builtin_functions.values())
 
     return {
         "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
@@ -164,12 +164,12 @@ def _generate_textmate_grammar(config: LanguageConfig) -> dict:
                 "patterns": [
                     {
                         "name": "comment.line",
-                        "match": f"{config.syntax_options.line_comment_prefix}.*$",
+                        "match": f"{config.syntax_options.single_line_comment}.*$",
                     },
                     {
                         "name": "comment.block",
-                        "begin": config.syntax_options.block_comment_start,
-                        "end": config.syntax_options.block_comment_end,
+                        "begin": config.syntax_options.multi_line_comment_start,
+                        "end": config.syntax_options.multi_line_comment_end,
                     },
                 ]
             },
@@ -304,9 +304,8 @@ VS Code extension providing language support for {config.name}.
 
 Create a file with extension `.{config.name[:3].lower()}`:
 ```{config.name.lower()}
-{config.syntax_options.example_code or "// Your " + config.name + " code here"}
-```
-
+    // Your {config.name} code here
+    print("Hello, world!")
 ## Keyboard Shortcuts
 
 - `Ctrl+Space` - Trigger code completion

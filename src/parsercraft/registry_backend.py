@@ -244,7 +244,7 @@ class RemotePackageRegistry:
             # Find best matching version
             matching_versions = [
                 v for v in versions
-                if constraint_obj.is_satisfied_by(Version.parse(v))
+                if constraint_obj.satisfies(Version.parse(v))
             ]
 
             if not matching_versions:

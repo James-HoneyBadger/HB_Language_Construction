@@ -201,6 +201,9 @@ class GenericChecker:
             elif param and param.variance == Variance.CONTRAVARIANT:
                 if src_arg != tgt_arg and tgt_arg != "Any":
                     return False
+            elif param and param.variance == Variance.INVARIANT:
+                if src_arg != tgt_arg and src_arg != "Any" and tgt_arg != "Any":
+                    return False
 
         return True
 

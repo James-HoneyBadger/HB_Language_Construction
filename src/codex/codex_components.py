@@ -319,5 +319,5 @@ class CodeExMenu(tk.Menu):
             "ParserCraft Execution Environment\n\n"
             "Professional IDE for developing and running\n"
             "applications created with ParserCraft.\n\n"
-            "© 2024 ParserCraft Project",
+            "© 2024-2026 Honey Badger Universe",
         )

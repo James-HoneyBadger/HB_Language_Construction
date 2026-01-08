@@ -76,7 +76,7 @@ class GenericsTypeChecker:
         gen_func = GenericFunction(
             name=func_name,
             type_parameters=params,
-            params=[],  # Would be populated from func_def
+            parameter_types={},  # Would be populated from func_def
             return_type="T",
         )
 

@@ -1,21 +1,21 @@
 {
   "metadata": {
-    "name": "My Custom Language",
+    "name": "BASIC-Like Language",
     "version": "2.0",
-    "description": "A custom language variant",
+    "description": "A customizable programming language",
     "author": "",
     "target_interpreter": "python"
   },
   "keywords": {
     "if": {
       "original": "if",
-      "custom": "when",
+      "custom": "IF",
       "category": "control",
       "description": "Conditional statement"
     },
     "else": {
       "original": "else",
-      "custom": "else",
+      "custom": "ELSE",
       "category": "control",
       "description": "Else clause"
     },
@@ -27,13 +27,13 @@
     },
     "while": {
       "original": "while",
-      "custom": "while",
+      "custom": "WHILE",
       "category": "control",
       "description": "While loop"
     },
     "for": {
       "original": "for",
-      "custom": "for",
+      "custom": "FOR",
       "category": "control",
       "description": "For loop"
     },
@@ -69,13 +69,13 @@
     },
     "function": {
       "original": "function",
-      "custom": "def",
+      "custom": "DEF",
       "category": "function",
       "description": "Function definition"
     },
     "return": {
       "original": "return",
-      "custom": "give",
+      "custom": "RETURN",
       "category": "function",
       "description": "Return value"
     },
@@ -171,13 +171,13 @@
     },
     "let": {
       "original": "let",
-      "custom": "let",
+      "custom": "LET",
       "category": "variable",
       "description": "Variable declaration"
     },
     "then": {
       "original": "then",
-      "custom": "then",
+      "custom": "THEN",
       "category": "control",
       "description": "Then clause"
     }
@@ -232,6 +232,66 @@
       "min_args": -1,
       "max_args": -1,
       "alias": null
+    },
+    "PRINT": {
+      "name": "PRINT",
+      "arity": -1,
+      "implementation": "builtin.print",
+      "description": "",
+      "enabled": true,
+      "min_args": -1,
+      "max_args": -1,
+      "alias": "print"
+    },
+    "INPUT": {
+      "name": "INPUT",
+      "arity": 1,
+      "implementation": "builtin.input",
+      "description": "",
+      "enabled": true,
+      "min_args": -1,
+      "max_args": 1,
+      "alias": "input"
+    },
+    "LEN": {
+      "name": "LEN",
+      "arity": 1,
+      "implementation": "builtin.len",
+      "description": "",
+      "enabled": true,
+      "min_args": 1,
+      "max_args": 1,
+      "alias": "len"
+    },
+    "INT": {
+      "name": "INT",
+      "arity": 1,
+      "implementation": "builtin.int",
+      "description": "",
+      "enabled": true,
+      "min_args": 1,
+      "max_args": 1,
+      "alias": "int"
+    },
+    "STR$": {
+      "name": "STR$",
+      "arity": 1,
+      "implementation": "builtin.str",
+      "description": "",
+      "enabled": true,
+      "min_args": 1,
+      "max_args": 1,
+      "alias": "str"
+    },
+    "ABS": {
+      "name": "ABS",
+      "arity": 1,
+      "implementation": "builtin.abs",
+      "description": "",
+      "enabled": true,
+      "min_args": 1,
+      "max_args": 1,
+      "alias": "abs"
     }
   },
   "operators": {
@@ -303,12 +363,12 @@
     }
   },
   "syntax_options": {
-    "array_start_index": 0,
-    "allow_fractional_indexing": false,
+    "array_start_index": 1,
+    "allow_fractional_indexing": true,
     "flexible_quoting": true,
     "string_interpolation": true,
     "interpolation_symbol": "$",
-    "single_line_comment": "//",
+    "single_line_comment": "REM",
     "multi_line_comment_start": null,
     "multi_line_comment_end": null,
     "require_semicolons": false,

@@ -70,6 +70,10 @@ class Type:
         if self.kind == TypeKind.GENERIC and self.type_args:
             args_str = ", ".join(str(arg) for arg in self.type_args)
             return f"{self.name}[{args_str}]"
+        # Fix: Need to handle List/Dict/Set which are generic-like
+        if self.kind in (TypeKind.LIST, TypeKind.DICT, TypeKind.SET, TypeKind.TUPLE) and self.type_args:
+            args_str = ", ".join(str(arg) for arg in self.type_args)
+            return f"{self.name}[{args_str}]"
         if self.kind == TypeKind.UNION and self.type_args:
             args_str = " | ".join(str(arg) for arg in self.type_args)
             return f"({args_str})"

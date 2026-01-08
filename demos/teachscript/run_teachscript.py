@@ -27,7 +27,7 @@ KEYWORD_MAP = {
     "or_else": "or",
     "opposite": "not",
     "inside": "in",
-    "equals": "is",
+    "equals": "==",
 }
 
 # Function name mapping

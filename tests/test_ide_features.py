@@ -101,7 +101,8 @@ class TestAdvancedIDE(unittest.TestCase):
         
         with patch('tkinter.messagebox.showinfo') as mock_info:
             self.ide._git_init()
-            mock_run.assert_called_with(['git', 'init'], cwd=self.test_dir, capture_output=True, text=True)
+            # _git_init also calls _update_git_status, so we check for any call, not the last call
+            mock_run.assert_any_call(['git', 'init'], cwd=self.test_dir, capture_output=True, text=True)
             mock_info.assert_called()
 
         # Test Git Status
